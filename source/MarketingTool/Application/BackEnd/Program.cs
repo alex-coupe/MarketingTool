@@ -18,6 +18,11 @@ namespace ApplicationLayer
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
+                .ConfigureAppConfiguration((context,config) =>
+                {
+                    string env = context.HostingEnvironment.EnvironmentName;
+                    config.AddJsonFile($"appsettings.{env}.json", optional: true);
+                })
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();

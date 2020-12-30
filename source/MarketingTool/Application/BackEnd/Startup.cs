@@ -10,6 +10,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace ApplicationLayer
 {
@@ -26,6 +28,10 @@ namespace ApplicationLayer
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddDbContext<DatabaseContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                x => x.MigrationsAssembly("DataAccess")));
+                
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
