@@ -10,9 +10,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEnd", "Application\Back
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccess", "Application\DataAccess\DataAccess.csproj", "{12522572-8FA2-4D24-8E35-2152B909CE27}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "FrontEnd", "Application\FrontEnd\FrontEnd.csproj", "{F1795A6A-891B-4C83-9767-AD54E710EB5E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FrontEnd", "Application\FrontEnd\FrontEnd.csproj", "{F1795A6A-891B-4C83-9767-AD54E710EB5E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BackgroundService", "Support\BackgroundService\BackgroundService.csproj", "{5230EEA0-D132-42EF-AEAB-7952CEDAE128}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackgroundService", "Support\BackgroundService\BackgroundService.csproj", "{5230EEA0-D132-42EF-AEAB-7952CEDAE128}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MarketingToolTests", "Support\MarketingToolTests\MarketingToolTests.csproj", "{9A4681A3-FACC-452C-BD8F-72B3FBEC33FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -36,6 +38,10 @@ Global
 		{5230EEA0-D132-42EF-AEAB-7952CEDAE128}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5230EEA0-D132-42EF-AEAB-7952CEDAE128}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5230EEA0-D132-42EF-AEAB-7952CEDAE128}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9A4681A3-FACC-452C-BD8F-72B3FBEC33FA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9A4681A3-FACC-452C-BD8F-72B3FBEC33FA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9A4681A3-FACC-452C-BD8F-72B3FBEC33FA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9A4681A3-FACC-452C-BD8F-72B3FBEC33FA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
