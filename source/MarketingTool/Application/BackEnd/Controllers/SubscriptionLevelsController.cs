@@ -34,5 +34,39 @@ namespace BackEnd.Controllers
 
             return Ok(subLevel);
         }
+
+        [HttpPost]
+        public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
+        {
+            if (ModelState.IsValid)
+            {
+                _repository.Add(subscriptionLevel);
+
+                await _repository.SaveChangesAsync();
+                return CreatedAtAction("PostSubscriptionLevel", new { id = subscriptionLevel.Id }, subscriptionLevel);
+            }
+
+            return BadRequest(ModelState);
+        }
+
+        [HttpPut]
+        public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
+        {
+            _repository.Edit(subscriptionLevel);
+            await _repository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
+        [HttpDelete]
+        public async Task<ActionResult<SubscriptionLevel>> DeleteSubscriptionLevel(int id)
+        {
+            _repository.Remove(id);
+
+            await _repository.SaveChangesAsync();
+
+            return NoContent();
+        }
+
     }
 }
