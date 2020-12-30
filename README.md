@@ -20,7 +20,7 @@ Initially the frontend will be a mock up just to test features i.e. the login sc
 
 ## Planning
 
-Entity diagram will be linked here when I do it
+[Entity diagram](https://drive.google.com/file/d/1Cv-6_tlSqsJOHNXnE-5vJpTMmRlgHa8D/view?usp=sharing)
 
 Dev will be in sprints and these will be planned here
 
