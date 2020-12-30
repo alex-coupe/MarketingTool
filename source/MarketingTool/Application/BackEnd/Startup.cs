@@ -6,6 +6,8 @@ using Microsoft.Extensions.Hosting;
 using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
+using DataAccess.Interfaces;
+using DataAccess.Repositories;
 
 namespace ApplicationLayer
 {
@@ -29,6 +31,8 @@ namespace ApplicationLayer
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MarketingAppAPI", Version = "v1" });
             });
+
+            services.AddTransient<IRepository<SubscriptionLevel>, SubscriptionLevelRepository>();
                 
         }
 
