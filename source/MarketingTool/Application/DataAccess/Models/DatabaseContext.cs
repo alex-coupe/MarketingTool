@@ -17,5 +17,7 @@ namespace DataAccess.Models
 
         
         public DbSet<SubscriptionLevel> SubscriptionLevels {get; set;}
+
+        public DbSet<Client> Clients { get; set; }
     }
 }
