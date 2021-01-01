@@ -57,10 +57,8 @@ namespace DataAccess.Repositories
 
         public async Task<SubscriptionLevel> GetAsync(int id)
         {
-            var subscriptionLevel = await _context.SubscriptionLevels.AsNoTracking()
+            return await _context.SubscriptionLevels.AsNoTracking()
                 .SingleOrDefaultAsync(x => x.Id == id);
-
-                return subscriptionLevel;
         }
 
         public void Remove(int id)
