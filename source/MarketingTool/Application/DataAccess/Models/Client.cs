@@ -50,7 +50,5 @@ namespace DataAccess.Models
 
         public int SubscriptionLevelId { get; set; }
 
-        [ForeignKey("SubscriptionLevelId")]
-        public SubscriptionLevel SubscriptionLevel { get; set; }
     }
 }

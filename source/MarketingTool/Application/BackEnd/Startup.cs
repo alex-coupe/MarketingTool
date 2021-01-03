@@ -33,6 +33,7 @@ namespace ApplicationLayer
             });
 
             services.AddTransient<IRepository<SubscriptionLevel>, SubscriptionLevelRepository>();
+            services.AddTransient<IRepository<Client>, ClientRepository>();
                 
         }
 
