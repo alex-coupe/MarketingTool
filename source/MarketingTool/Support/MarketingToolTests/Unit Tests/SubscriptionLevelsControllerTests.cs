@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MarketingToolTests.API_Tests
+namespace MarketingToolTests.Unit_Tests
 {
     public class SubscriptionLevelsControllerTests
     {
@@ -94,7 +94,7 @@ namespace MarketingToolTests.API_Tests
         }
 
         [Fact]
-        public async Task post_adds_new_sunscription_level()
+        public async Task post_adds_new_subscription_level()
         {
             SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
             var level = new SubscriptionLevel
@@ -130,7 +130,7 @@ namespace MarketingToolTests.API_Tests
         }
 
         [Fact]
-        public async Task edit_alters_sunscription_level()
+        public async Task edit_alters_subscription_level()
         {
             SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
             var level = new SubscriptionLevel
@@ -155,7 +155,7 @@ namespace MarketingToolTests.API_Tests
         }
 
         [Fact]
-        public async Task delete_removes_sunscription_level()
+        public async Task delete_removes_subscription_level()
         {
             SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
             var level = new SubscriptionLevel
