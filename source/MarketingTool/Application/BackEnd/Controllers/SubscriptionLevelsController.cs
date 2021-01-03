@@ -32,7 +32,10 @@ namespace BackEnd.Controllers
         {
             var subLevel = await _repository.GetAsync(id);
 
-            return Ok(subLevel);
+            if (subLevel != null)
+                return Ok(subLevel);
+
+            return NotFound();
         }
 
         [HttpPost]

@@ -68,7 +68,7 @@ namespace MarketingToolTests.API_Tests
         }
 
         [Fact]
-        public async Task get__by_id_returns_correct_subscription_level()
+        public async Task get_by_id_returns_correct_subscription_level()
         {
             SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
 
@@ -79,6 +79,18 @@ namespace MarketingToolTests.API_Tests
             Assert.NotNull(level);
             Assert.Equal("Pro", level.Name);
             _subscriptionLevelRepositoryMock.Verify(r => r.GetAsync(level.Id));
+        }
+
+        [Fact]
+        public async Task get_by_id_returns_not_found()
+        {
+            SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
+
+            var result = await _controller.GetSubscriptionLevel(4);
+
+            var actionResult = Assert.IsType<NotFoundResult>(result.Result);
+          
+            _subscriptionLevelRepositoryMock.Verify(r => r.GetAsync(4));
         }
 
         [Fact]
