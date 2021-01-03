@@ -15,7 +15,7 @@ namespace MarketingToolTests.API_Tests
     public class SubscriptionLevelsControllerTests
     {
         Mock<IRepository<SubscriptionLevel>> _subscriptionLevelRepositoryMock;
-        private int getId = 2;
+        private int _getId = 2;
 
         public SubscriptionLevelsControllerTests()
         {
@@ -38,7 +38,7 @@ namespace MarketingToolTests.API_Tests
             }
             });
 
-            _subscriptionLevelRepositoryMock.Setup(x => x.GetAsync(getId)).Returns(Task.FromResult(new SubscriptionLevel
+            _subscriptionLevelRepositoryMock.Setup(x => x.GetAsync(_getId)).Returns(Task.FromResult(new SubscriptionLevel
             {
           
                 Name = "Pro",
@@ -47,6 +47,9 @@ namespace MarketingToolTests.API_Tests
                 MaxUsers = 20
             
             }));
+
+            _subscriptionLevelRepositoryMock.Setup(r => r.Edit(It.IsAny<SubscriptionLevel>()));
+            _subscriptionLevelRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
         }
           
         [Fact]
@@ -61,7 +64,7 @@ namespace MarketingToolTests.API_Tests
             var level = returnValue.FirstOrDefault();
             Assert.Equal("Free", level.Name);
             Assert.Equal(2, returnValue.Count());
-
+            _subscriptionLevelRepositoryMock.Verify(r => r.GetAllAsync());
         }
 
         [Fact]
@@ -69,12 +72,95 @@ namespace MarketingToolTests.API_Tests
         {
             SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
 
-            var result = await _controller.GetSubscriptionLevel(2);
+            var result = await _controller.GetSubscriptionLevel(_getId);
 
             var actionResult = Assert.IsType<OkObjectResult>(result.Result);
             var level = Assert.IsType<SubscriptionLevel>(actionResult.Value);
             Assert.NotNull(level);
             Assert.Equal("Pro", level.Name);
+            _subscriptionLevelRepositoryMock.Verify(r => r.GetAsync(level.Id));
+        }
+
+        [Fact]
+        public async Task post_adds_new_sunscription_level()
+        {
+            SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
+            var level = new SubscriptionLevel
+            {
+                Name = "Free",
+                Cost = 0.00M,
+                MaxUsers = 5
+            };
+
+            var result = await _controller.PostSubscriptionLevel(level);
+
+            var actionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
+            var response = Assert.IsType<SubscriptionLevel>(actionResult.Value);
+            Assert.NotNull(response);
+            Assert.Equal("Free", response.Name);
+            _subscriptionLevelRepositoryMock.Verify(r => r.Add(level));
+        }
+
+        [Fact]
+        public async Task post_invalid_model_returns_bad_request()
+        {
+            SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
+            var level = new SubscriptionLevel
+            {
+                Name = "Free",
+                Cost = 0.00M,
+            };
+
+            var result = await _controller.PostSubscriptionLevel(level);
+
+            Assert.IsType<BadRequestObjectResult>(result.Result);
+           
+        }
+
+        [Fact]
+        public async Task edit_alters_sunscription_level()
+        {
+            SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
+            var level = new SubscriptionLevel
+            {
+                Name = "Free",
+                Cost = 0.00M,
+                MaxUsers = 5
+            };
+
+            await _controller.PostSubscriptionLevel(level);
+
+            level.Name = "Not Free";
+
+            var result = await _controller.PutSubscriptionLevel(level);
+
+            var actionResult = Assert.IsType<OkObjectResult>(result.Result);
+            var response = Assert.IsType<SubscriptionLevel>(actionResult.Value);
+            Assert.NotNull(response);
+            Assert.Equal("Not Free", response.Name);
+            _subscriptionLevelRepositoryMock.Verify(r => r.Edit(level));
+
+        }
+
+        [Fact]
+        public async Task delete_removes_sunscription_level()
+        {
+            SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
+            var level = new SubscriptionLevel
+            {
+                Name = "Free",
+                Cost = 0.00M,
+                MaxUsers = 5
+            };
+
+            await _controller.PostSubscriptionLevel(level);
+
+
+
+            var result = await _controller.DeleteSubscriptionLevel(level.Id);
+
+            var actionResult = Assert.IsType<NoContentResult>(result.Result);
+            _subscriptionLevelRepositoryMock.Verify(r => r.Remove(level.Id));
         }
     }
 }

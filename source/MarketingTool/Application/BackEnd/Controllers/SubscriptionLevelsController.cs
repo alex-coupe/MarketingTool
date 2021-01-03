@@ -38,7 +38,7 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            if (ModelState.IsValid)
+            if (!string.IsNullOrEmpty(subscriptionLevel.Name) && subscriptionLevel.MaxUsers > 0)
             {
                 _repository.Add(subscriptionLevel);
 
@@ -55,7 +55,7 @@ namespace BackEnd.Controllers
             _repository.Edit(subscriptionLevel);
             await _repository.SaveChangesAsync();
 
-            return NoContent();
+            return Ok(subscriptionLevel);
         }
 
         [HttpDelete]
