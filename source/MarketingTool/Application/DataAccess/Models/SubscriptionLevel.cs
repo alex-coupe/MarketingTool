@@ -14,12 +14,10 @@ namespace DataAccess.Models
         public int Id { get; init; }
 
         [MaxLength(20)]
-        [MinLength(5)]
         [Required]
         public string Name { get; set; }
 
         [Required]
-        [Range(5,100)]
         public int MaxUsers { get; set; }
 
         [Required]

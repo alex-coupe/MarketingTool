@@ -1,4 +1,5 @@
-﻿using DataAccess.Interfaces;
+﻿using BackEnd.Validators;
+using DataAccess.Interfaces;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,7 +15,7 @@ namespace BackEnd.Controllers
     public class SubscriptionLevelsController : ControllerBase
     {
         private readonly IRepository<SubscriptionLevel> _repository;
-
+      
         public SubscriptionLevelsController(IRepository<SubscriptionLevel> repository)
         {
             _repository = repository;
@@ -41,7 +42,8 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            if (!string.IsNullOrEmpty(subscriptionLevel.Name) && subscriptionLevel.MaxUsers > 0)
+            IValidator<SubscriptionLevel> _validator = new SubscriptionLevelValidator();
+            if (_validator.Valid(subscriptionLevel))
             {
                 _repository.Add(subscriptionLevel);
 

@@ -1,4 +1,5 @@
-﻿using DataAccess.Interfaces;
+﻿using BackEnd.Validators;
+using DataAccess.Interfaces;
 using DataAccess.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -41,7 +42,8 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<Client>> PostClient(Client client)
         {
-            if (ModelState.IsValid)
+            IValidator<Client> _validator = new ClientValidator();
+            if (_validator.Valid(client))
             {
                 _repository.Add(client);
 
