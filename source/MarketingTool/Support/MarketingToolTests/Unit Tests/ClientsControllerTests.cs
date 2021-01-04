@@ -1,12 +1,10 @@
 ﻿using BackEnd.Controllers;
-using DataAccess.Interfaces;
 using DataAccess.Models;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -26,24 +24,14 @@ namespace MarketingToolTests.Unit_Tests
             {
                 Id = 1,
                 Name = "Creative Inc",
-                AddressOne = "123 Fake Street",
-                City = "Fakeland",
-                State = "Fakersville",
-                EmailAddress = "admin@creative.com",
-                PostalCode = "1123 554",
-                TelephoneOne = "00112 111000",
+
                 SubscriptionLevelId = 1
             },
              new Client
             {
                 Id = 2,
                 Name = "Big Bad Barry Inc",
-                AddressOne = "123 Fake Street",
-                City = "Fakeland",
-                State = "Fakersville",
-                EmailAddress = "admin@bbbi.com",
-                PostalCode = "1123 554",
-                TelephoneOne = "00112 111000",
+
                 SubscriptionLevelId = 1
 
             }});
@@ -52,12 +40,8 @@ namespace MarketingToolTests.Unit_Tests
             {
                 Id = 1,
                 Name = "Creative Inc",
-                AddressOne = "123 Fake Street",
-                City = "Fakeland",
-                State = "Fakersville",
-                EmailAddress = "admin@creative.com",
-                PostalCode = "1123 554",
-                TelephoneOne = "00112 111000",
+
+
                 SubscriptionLevelId = 1
             }));
 
@@ -113,12 +97,7 @@ namespace MarketingToolTests.Unit_Tests
             var client = new Client
             {
                 Name = "Creative Inc",
-                AddressOne = "123 Fake Street",
-                City = "Fakeland",
-                State = "Fakersville",
-                EmailAddress = "admin@creative.com",
-                PostalCode = "1123 554",
-                TelephoneOne = "00112 111000",
+
                 SubscriptionLevelId = 1
             };
 
@@ -137,10 +116,6 @@ namespace MarketingToolTests.Unit_Tests
             ClientsController _controller = new ClientsController(_clientRepositoryMock.Object);
             var client = new Client
             {
-                
-                
-                PostalCode = "1123 554",
-                TelephoneOne = "00112 111000",
                 SubscriptionLevelId = 1
             };
 
@@ -157,12 +132,6 @@ namespace MarketingToolTests.Unit_Tests
             var client = new Client
             {
                 Name = "Creative Inc",
-                AddressOne = "123 Fake Street",
-                City = "Fakeland",
-                State = "Fakersville",
-                EmailAddress = "admin@creative.com",
-                PostalCode = "1123 554",
-                TelephoneOne = "00112 111000",
                 SubscriptionLevelId = 1
             };
 
@@ -187,12 +156,6 @@ namespace MarketingToolTests.Unit_Tests
             var client = new Client
             {
                 Name = "Creative Inc",
-                AddressOne = "123 Fake Street",
-                City = "Fakeland",
-                State = "Fakersville",
-                EmailAddress = "admin@creative.com",
-                PostalCode = "1123 554",
-                TelephoneOne = "00112 111000",
                 SubscriptionLevelId = 1
             };
 

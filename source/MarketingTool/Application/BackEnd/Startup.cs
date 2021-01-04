@@ -1,13 +1,12 @@
+using DataAccess.Models;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using DataAccess.Models;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
-using DataAccess.Interfaces;
-using DataAccess.Repositories;
 
 namespace ApplicationLayer
 {
@@ -25,7 +24,7 @@ namespace ApplicationLayer
         {
             services.AddControllers();
             services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"), 
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
                 x => x.MigrationsAssembly("DataAccess")));
             services.AddSwaggerGen(c =>
             {
@@ -34,7 +33,7 @@ namespace ApplicationLayer
 
             services.AddTransient<IRepository<SubscriptionLevel>, SubscriptionLevelRepository>();
             services.AddTransient<IRepository<Client>, ClientRepository>();
-                
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

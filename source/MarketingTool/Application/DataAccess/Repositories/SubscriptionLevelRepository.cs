@@ -1,10 +1,7 @@
-﻿using DataAccess.Interfaces;
-using DataAccess.Models;
+﻿using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
@@ -52,7 +49,7 @@ namespace DataAccess.Repositories
         {
             return await _context.SubscriptionLevels.AsNoTracking()
                 .ToListAsync();
-          
+
         }
 
         public async Task<SubscriptionLevel> GetAsync(int id)

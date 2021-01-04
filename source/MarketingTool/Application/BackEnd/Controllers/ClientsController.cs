@@ -1,11 +1,8 @@
 ﻿using BackEnd.Validators;
-using DataAccess.Interfaces;
 using DataAccess.Models;
-using Microsoft.AspNetCore.Http;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace BackEnd.Controllers

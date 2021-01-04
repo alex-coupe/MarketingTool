@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DataAccess.Models
 {
@@ -15,8 +10,8 @@ namespace DataAccess.Models
 
         }
 
-        
-        public DbSet<SubscriptionLevel> SubscriptionLevels {get; set;}
+
+        public DbSet<SubscriptionLevel> SubscriptionLevels { get; set; }
 
         public DbSet<Client> Clients { get; set; }
     }

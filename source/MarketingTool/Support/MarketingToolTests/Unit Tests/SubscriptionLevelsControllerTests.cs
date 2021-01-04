@@ -1,12 +1,10 @@
 ﻿using BackEnd.Controllers;
-using DataAccess.Interfaces;
 using DataAccess.Models;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -21,7 +19,7 @@ namespace MarketingToolTests.Unit_Tests
         {
             _subscriptionLevelRepositoryMock = new Mock<IRepository<SubscriptionLevel>>();
 
-            _subscriptionLevelRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<SubscriptionLevel> { 
+            _subscriptionLevelRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<SubscriptionLevel> {
             new SubscriptionLevel
             {
                 Name = "Free",
@@ -40,18 +38,18 @@ namespace MarketingToolTests.Unit_Tests
 
             _subscriptionLevelRepositoryMock.Setup(x => x.GetAsync(_getId)).Returns(Task.FromResult(new SubscriptionLevel
             {
-          
+
                 Name = "Pro",
                 Cost = 20.99M,
                 Id = 2,
                 MaxUsers = 20
-            
+
             }));
 
             _subscriptionLevelRepositoryMock.Setup(r => r.Edit(It.IsAny<SubscriptionLevel>()));
             _subscriptionLevelRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
         }
-          
+
         [Fact]
         public async Task get_returns_all_subscription_levels()
         {
@@ -89,7 +87,7 @@ namespace MarketingToolTests.Unit_Tests
             var result = await _controller.GetSubscriptionLevel(4);
 
             var actionResult = Assert.IsType<NotFoundResult>(result.Result);
-          
+
             _subscriptionLevelRepositoryMock.Verify(r => r.GetAsync(4));
         }
 
@@ -126,7 +124,7 @@ namespace MarketingToolTests.Unit_Tests
             var result = await _controller.PostSubscriptionLevel(level);
 
             Assert.IsType<BadRequestObjectResult>(result.Result);
-           
+
         }
 
         [Fact]
