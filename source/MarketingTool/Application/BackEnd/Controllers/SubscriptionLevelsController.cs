@@ -1,6 +1,7 @@
 ﻿using BackEnd.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace BackEnd.Controllers
             _repository = repository;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SubscriptionLevel>>> GetSubscriptionLevels()
         {
