@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -19,20 +20,20 @@ namespace BackEnd.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly DatabaseContext _context;
+        private readonly IRepository<User> _repository;
 
-        public AuthenticationController(IConfiguration config, DatabaseContext context)
+        public AuthenticationController(IConfiguration config, IRepository<User> repository)
         {
             _config = config;
-            _context = context;
+            _repository = repository;
         }
 
         [AllowAnonymous]
         [HttpGet]
         [Route("Login")]
-        public ActionResult Login(string email, string password)
+        public async Task<ActionResult> Login(string email, string password)
         {
-            var user = AuthenticateUser(email, password);
+            var user = await AuthenticateUser(email, password);
 
             if (user != null)
             {
@@ -49,8 +50,8 @@ namespace BackEnd.Controllers
         {
             user.Password = CryptoHelper.Crypto.HashPassword(user.Password);
            
-            _context.Add(user);
-            await _context.SaveChangesAsync();
+            _repository.Add(user);
+            await _repository.SaveChangesAsync();
 
             return CreatedAtAction("Register", new { id = user.Id }, user);
         }
@@ -74,10 +75,10 @@ namespace BackEnd.Controllers
             return token;
         }
 
-        private User AuthenticateUser(string email, string password)
+        private async Task<User> AuthenticateUser(string email, string password)
         {
-            var hash = CryptoHelper.Crypto.HashPassword(password);
-            var user = _context.Users.Where(x => x.EmailAddress == email).FirstOrDefault();
+            var users = await _repository.GetAllAsync();
+            var user = users.Where(x => x.EmailAddress == email).FirstOrDefault();
 
             if (user != null && CryptoHelper.Crypto.VerifyHashedPassword(user.Password, password))
             {
