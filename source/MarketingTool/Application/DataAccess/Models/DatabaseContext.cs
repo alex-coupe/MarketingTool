@@ -16,5 +16,9 @@ namespace DataAccess.Models
         public DbSet<Client> Clients { get; set; }
 
         public DbSet<User> Users { get; set; }
+
+        public DbSet<List> Lists { get; set; }
+
+        public DbSet<Recipient> Recipients { get; set; }
     }
 }
