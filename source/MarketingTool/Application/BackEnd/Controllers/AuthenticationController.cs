@@ -1,4 +1,5 @@
-﻿using DataAccess.Models;
+﻿using BackEnd.Validators;
+using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -48,12 +49,17 @@ namespace BackEnd.Controllers
         [Route("Register")]
         public async Task<ActionResult> Register(User user)
         {
-            user.Password = CryptoHelper.Crypto.HashPassword(user.Password);
-           
-            _repository.Add(user);
-            await _repository.SaveChangesAsync();
+            IValidator<User> _validator = new UserValidator();
+            if (_validator.Valid(user))
+            {
+                user.Password = CryptoHelper.Crypto.HashPassword(user.Password);
 
-            return CreatedAtAction("Register", new { id = user.Id }, user);
+                _repository.Add(user);
+                await _repository.SaveChangesAsync();
+
+                return CreatedAtAction("Register", new { id = user.Id }, user);
+            }
+            return BadRequest(user);
         }
 
         private JwtSecurityToken GenerateJSONWebToken(User user)

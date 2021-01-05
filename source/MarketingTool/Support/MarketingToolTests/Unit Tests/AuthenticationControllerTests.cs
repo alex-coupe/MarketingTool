@@ -48,7 +48,7 @@ namespace MarketingToolTests.Unit_Tests
                 Password = CryptoHelper.Crypto.HashPassword("Testing123")
 
             }});
-
+            _userRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _configurationMock.SetupGet(x => x[It.IsAny<string>()]).Returns("Iqg3LSKql9HyXsOu1iP4");
         }
 
@@ -72,6 +72,46 @@ namespace MarketingToolTests.Unit_Tests
             var actionResult = Assert.IsType<UnauthorizedObjectResult>(result);
             Assert.Equal("Email Address or Password Incorrect", actionResult.Value);
             _userRepositoryMock.Verify(r => r.GetAllAsync());
+        }
+
+        [Fact]
+        public async Task well_formed_user_is_registered()
+        {
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            var user = new User
+            {
+
+                EmailAddress = "garry@test.com",
+                FirstName = "Garry",
+                LastName = "Beaverton",
+                Admin = true,
+                Archived = false,
+                ClientId = 1,
+                Password = "Testing123"
+            };
+
+            var result = await _controller.Register(user);
+            var actionResult = Assert.IsType<CreatedAtActionResult>(result);
+            var response = Assert.IsType<User>(actionResult.Value);
+            Assert.NotNull(response);
+            Assert.Equal("garry@test.com", response.EmailAddress);
+            _userRepositoryMock.Verify(r => r.Add(user));
+            _userRepositoryMock.Verify(r => r.SaveChangesAsync());
+        }
+
+        [Fact]
+        public async Task malformed_user_is_not_registered()
+        {
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            var user = new User
+            {
+                Admin = true,
+                Archived = false,
+                ClientId = 1,
+            };
+
+            var result = await _controller.Register(user);
+            Assert.IsType<BadRequestObjectResult>(result);
         }
     }
 }

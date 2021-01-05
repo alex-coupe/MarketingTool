@@ -2,6 +2,6 @@
 {
     public interface IValidator<T>
     {
-        bool Valid(T type);
+        bool Valid(T model);
     }
 }
