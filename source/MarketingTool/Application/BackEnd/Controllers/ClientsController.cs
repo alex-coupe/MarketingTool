@@ -1,6 +1,7 @@
 ﻿using BackEnd.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -18,6 +19,7 @@ namespace BackEnd.Controllers
             _repository = repository;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client>>> GetClients()
         {
@@ -25,6 +27,7 @@ namespace BackEnd.Controllers
             return Ok(clients);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetClient(int id)
         {
@@ -36,6 +39,7 @@ namespace BackEnd.Controllers
             return NotFound();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Client>> PostClient(Client client)
         {
@@ -51,6 +55,7 @@ namespace BackEnd.Controllers
             return BadRequest(ModelState);
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult<Client>> PutClient(Client client)
         {
@@ -60,6 +65,7 @@ namespace BackEnd.Controllers
             return Ok(client);
         }
 
+        [Authorize]
         [HttpDelete]
         public async Task<ActionResult<Client>> DeleteClient(int id)
         {

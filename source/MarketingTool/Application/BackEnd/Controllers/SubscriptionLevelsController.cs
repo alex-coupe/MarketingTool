@@ -27,6 +27,7 @@ namespace BackEnd.Controllers
             return Ok(subLevels);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<SubscriptionLevel>> GetSubscriptionLevel(int id)
         {
@@ -38,6 +39,7 @@ namespace BackEnd.Controllers
             return NotFound();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
@@ -53,6 +55,7 @@ namespace BackEnd.Controllers
             return BadRequest(ModelState);
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
@@ -62,6 +65,7 @@ namespace BackEnd.Controllers
             return Ok(subscriptionLevel);
         }
 
+        [Authorize]
         [HttpDelete]
         public async Task<ActionResult<SubscriptionLevel>> DeleteSubscriptionLevel(int id)
         {
