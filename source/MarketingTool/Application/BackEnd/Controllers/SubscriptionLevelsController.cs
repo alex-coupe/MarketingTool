@@ -52,7 +52,7 @@ namespace BackEnd.Controllers
                 return CreatedAtAction("PostSubscriptionLevel", new { id = subscriptionLevel.Id }, subscriptionLevel);
             }
 
-            return BadRequest(ModelState);
+            return BadRequest(subscriptionLevel);
         }
 
         [Authorize]
@@ -68,7 +68,7 @@ namespace BackEnd.Controllers
                 return Ok(subscriptionLevel);
             }
 
-            return BadRequest(ModelState);
+            return BadRequest(subscriptionLevel);
         }
 
         [Authorize]

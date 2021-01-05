@@ -4,9 +4,9 @@ namespace BackEnd.Validators
 {
     public class ClientValidator : IValidator<Client>
     {
-        public bool Valid(Client type)
+        public bool Valid(Client model)
         {
-            return  (!string.IsNullOrEmpty(type.Name) && type.SubscriptionLevelId > 0);
+            return  (!string.IsNullOrEmpty(model.Name) && model.SubscriptionLevelId > 0);
         }
     }
 }

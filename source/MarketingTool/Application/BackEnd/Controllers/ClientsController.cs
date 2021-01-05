@@ -52,7 +52,7 @@ namespace BackEnd.Controllers
                 return CreatedAtAction("PostClient", new { id = client.Id }, client);
             }
 
-            return BadRequest(ModelState);
+            return BadRequest(client);
         }
 
         [Authorize]
@@ -68,7 +68,7 @@ namespace BackEnd.Controllers
                 return Ok(client);
             }
 
-            return BadRequest(ModelState);
+            return BadRequest(client);
         }
 
         [Authorize]

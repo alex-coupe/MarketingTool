@@ -4,9 +4,9 @@ namespace BackEnd.Validators
 {
     public class SubscriptionLevelValidator : IValidator<SubscriptionLevel>
     {
-        public bool Valid(SubscriptionLevel type)
+        public bool Valid(SubscriptionLevel model)
         {
-            return (!string.IsNullOrEmpty(type.Name) && type.MaxUsers > 0);
+            return (!string.IsNullOrEmpty(model.Name) && model.MaxUsers > 0);
 
         }
     }
