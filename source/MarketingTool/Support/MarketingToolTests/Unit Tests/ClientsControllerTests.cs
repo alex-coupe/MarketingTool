@@ -45,6 +45,7 @@ namespace MarketingToolTests.Unit_Tests
                 SubscriptionLevelId = 1
             }));
 
+            _clientRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _clientRepositoryMock.Setup(r => r.Edit(It.IsAny<Client>()));
             _clientRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
         }
@@ -108,6 +109,7 @@ namespace MarketingToolTests.Unit_Tests
             Assert.NotNull(response);
             Assert.Equal("Creative Inc", response.Name);
             _clientRepositoryMock.Verify(r => r.Add(client));
+            _clientRepositoryMock.Verify(r => r.SaveChangesAsync());
         }
 
         [Fact]
@@ -146,7 +148,26 @@ namespace MarketingToolTests.Unit_Tests
             Assert.NotNull(response);
             Assert.Equal("Creative Industries", response.Name);
             _clientRepositoryMock.Verify(r => r.Edit(client));
+            _clientRepositoryMock.Verify(r => r.SaveChangesAsync());
+        }
 
+        [Fact]
+        public async Task malformed_edit_fails()
+        {
+            ClientsController _controller = new ClientsController(_clientRepositoryMock.Object);
+            var client = new Client
+            {
+                Name = "Creative Inc",
+                SubscriptionLevelId = 1
+            };
+
+            await _controller.PostClient(client);
+
+            client.Name = "";
+
+            var result = await _controller.PutClient(client);
+
+            Assert.IsType<BadRequestObjectResult>(result.Result);
         }
 
         [Fact]

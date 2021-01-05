@@ -59,10 +59,16 @@ namespace BackEnd.Controllers
         [HttpPut]
         public async Task<ActionResult<Client>> PutClient(Client client)
         {
-            _repository.Edit(client);
-            await _repository.SaveChangesAsync();
+            IValidator<Client> _validator = new ClientValidator();
+            if (_validator.Valid(client))
+            {
+                _repository.Edit(client);
+                await _repository.SaveChangesAsync();
 
-            return Ok(client);
+                return Ok(client);
+            }
+
+            return BadRequest(ModelState);
         }
 
         [Authorize]

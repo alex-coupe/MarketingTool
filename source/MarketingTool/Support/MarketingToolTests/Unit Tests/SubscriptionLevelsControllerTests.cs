@@ -45,7 +45,7 @@ namespace MarketingToolTests.Unit_Tests
                 MaxUsers = 20
 
             }));
-
+            _subscriptionLevelRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _subscriptionLevelRepositoryMock.Setup(r => r.Edit(It.IsAny<SubscriptionLevel>()));
             _subscriptionLevelRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
         }
@@ -109,6 +109,7 @@ namespace MarketingToolTests.Unit_Tests
             Assert.NotNull(response);
             Assert.Equal("Free", response.Name);
             _subscriptionLevelRepositoryMock.Verify(r => r.Add(level));
+            _subscriptionLevelRepositoryMock.Verify(r => r.SaveChangesAsync());
         }
 
         [Fact]
@@ -149,7 +150,27 @@ namespace MarketingToolTests.Unit_Tests
             Assert.NotNull(response);
             Assert.Equal("Not Free", response.Name);
             _subscriptionLevelRepositoryMock.Verify(r => r.Edit(level));
+            _subscriptionLevelRepositoryMock.Verify(r => r.SaveChangesAsync());
+        }
 
+        [Fact]
+        public async Task malformed_edit_fails()
+        {
+            SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
+            var level = new SubscriptionLevel
+            {
+                Name = "Free",
+                Cost = 0.00M,
+                MaxUsers = 5
+            };
+
+            await _controller.PostSubscriptionLevel(level);
+
+            level.Name = "";
+
+            var result = await _controller.PutSubscriptionLevel(level);
+
+            Assert.IsType<BadRequestObjectResult>(result.Result);
         }
 
         [Fact]

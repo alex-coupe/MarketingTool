@@ -59,10 +59,16 @@ namespace BackEnd.Controllers
         [HttpPut]
         public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            _repository.Edit(subscriptionLevel);
-            await _repository.SaveChangesAsync();
+            IValidator<SubscriptionLevel> _validator = new SubscriptionLevelValidator();
+            if (_validator.Valid(subscriptionLevel))
+            {
+                _repository.Edit(subscriptionLevel);
+                await _repository.SaveChangesAsync();
 
-            return Ok(subscriptionLevel);
+                return Ok(subscriptionLevel);
+            }
+
+            return BadRequest(ModelState);
         }
 
         [Authorize]
