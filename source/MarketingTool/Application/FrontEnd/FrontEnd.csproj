@@ -11,6 +11,10 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.SpaServices.Extensions" Version="5.0.1" />
+    <PackageReference Include="Microsoft.TypeScript.MSBuild" Version="4.1.2">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -21,7 +25,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="ClientApp\src\components\" />
+    <None Remove="ClientApp\src\components\Container.tsx" />
+    <None Remove="ClientApp\src\components\forms\Button.js" />
+    <None Remove="ClientApp\src\components\forms\EmailInput.js" />
+    <None Remove="ClientApp\src\components\forms\PasswordInput.js" />
+    <None Remove="ClientApp\src\components\forms\TextInput.js" />
+    <None Remove="ClientApp\src\components\layout\Card.js" />
+    <None Remove="ClientApp\src\pages\Register.js" />
+    <None Remove="ClientApp\tsconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="ClientApp\src\App.js" />
+    <TypeScriptCompile Include="ClientApp\src\App.test.js" />
+    <TypeScriptCompile Include="ClientApp\src\components\forms\Button.js" />
+    <TypeScriptCompile Include="ClientApp\src\components\forms\EmailInput.js" />
+    <TypeScriptCompile Include="ClientApp\src\components\forms\PasswordInput.js" />
+    <TypeScriptCompile Include="ClientApp\src\components\forms\TextInput.js" />
+    <TypeScriptCompile Include="ClientApp\src\components\layout\Card.js" />
+    <TypeScriptCompile Include="ClientApp\src\components\layout\Container.js" />
+    <TypeScriptCompile Include="ClientApp\src\index.js" />
+    <TypeScriptCompile Include="ClientApp\src\pages\Login.js" />
+    <TypeScriptCompile Include="ClientApp\src\pages\Register.js" />
   </ItemGroup>
 
   <Target Name="DebugEnsureNodeEnv" BeforeTargets="Build" Condition=" '$(Configuration)' == 'Debug' And !Exists('$(SpaRoot)node_modules') ">
