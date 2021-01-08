@@ -1,6 +1,7 @@
 ﻿using BackEnd.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.DataTransferObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -12,6 +13,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
@@ -29,17 +31,24 @@ namespace BackEnd.Controllers
             _repository = repository;
         }
 
-        [AllowAnonymous]
-        [HttpGet]
-        [Route("Login")]
-        public async Task<ActionResult> Login(string email, string password)
+        public class Credentials
         {
-            var user = await AuthenticateUser(email, password);
+            public string Password { get; set; }
+            public string Email { get; set; }
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        [Route("Login")]
+        public async Task<ActionResult> Login([FromBody] Credentials credentials)
+        {
+            var user = await AuthenticateUser(credentials.Email, credentials.Password);
 
             if (user != null)
             {
                 var token = GenerateJSONWebToken(user);
-                return Ok(new { token_type = "Bearer", token = new JwtSecurityTokenHandler().WriteToken(token), expires = token.ValidTo });
+                var authResponse = new AuthenticationResponse { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), Expires = token.ValidTo };
+                return Ok(JsonSerializer.Serialize(authResponse));
             }
             return Unauthorized("Email Address or Password Incorrect");
         }

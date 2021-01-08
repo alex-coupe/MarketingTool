@@ -41,6 +41,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\DataAccess\DataAccess.csproj" />
+    <ProjectReference Include="..\DataTransfer\DataTransfer.csproj" />
   </ItemGroup>
 
 

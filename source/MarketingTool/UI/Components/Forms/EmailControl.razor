@@ -1,2 +1,11 @@
-﻿<input type="email" class="form-control" />
+﻿<input type="email" class="form-control" value="@Email" required/>
 
+@code {
+    [Parameter]
+    public string Email { get; set; }
+
+    [Parameter]
+    public EventCallback<string> EmailChanged { get; set; }
+
+  
+}

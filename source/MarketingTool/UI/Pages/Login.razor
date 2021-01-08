@@ -1,0 +1,36 @@
+﻿@page "/"
+
+@using UI.Components.Layout
+@using UI.Components.Forms
+@using System.Text.Json
+@using DataTransfer.DataTransferObjects
+
+@inject HttpClient client
+@inject NavigationManager nav
+
+<Container>
+    <Label For="EmailField" >Email Address</Label>
+    <input type="email" class="form-control" @bind="Email" required />
+    <Label For="PasswordField">Password</Label>
+    <input type="password" class="form-control" @bind="Password" required />
+    <button class="btn btn-primary" @onclick="@DoLogin">Login</button>
+</Container>
+
+@code {
+    private string Email { get; set; }
+    private string Password { get; set; }
+
+   
+    private async Task DoLogin()
+    {
+        client.BaseAddress = new Uri("https://localhost:44365/");
+        var response = await client.PostAsJsonAsync("api/authentication/login", new { Email, Password });
+
+        var json = await response.Content.ReadFromJsonAsync<AuthenticationResponse>();
+
+        if (response.IsSuccessStatusCode && !string.IsNullOrEmpty(json.Token) && !(json.Expires < DateTime.Now) )
+        {
+            nav.NavigateTo("/dashboard");
+        }
+    }
+}
