@@ -3,23 +3,26 @@
 @using System.Text.Json
 @using DataTransfer.DataTransferObjects
 
-@inject HttpClient client
+@inject HttpClient http
 @inject NavigationManager nav
 
-<div class="container">
-    <EditForm Model="loginRequest" OnValidSubmit="DoLogin">
+<div class="container text-center">
+    <EditForm Model="loginRequest" OnValidSubmit="HandleLogin">
         <label For="EmailField">Email Address</label>
-        <InputText type="email" @bind-Value="loginRequest.Email" required />
+        <InputText id="EmailField" type="email" @bind-Value="loginRequest.Email" />
         <label For="PasswordField">Password</label>
-        <InputText type="password" @bind-Value="loginRequest.Password" required />
+        <InputText id="PasswordField" type="password" @bind-Value="loginRequest.Password" />
         <button type="submit" class="btn btn-primary">Login</button>
         <DataAnnotationsValidator />
         <ValidationSummary />
     </EditForm>
-    @if(!string.IsNullOrEmpty(Error))
+    @if (!string.IsNullOrEmpty(Error))
     {
         <p>@Error</p>
     }
+
+    <p>Forgotten your password? Click <NavLink href="/forgottenpassword">Here</NavLink></p>
+    <p>Not registered yet? Sign up <NavLink href="/register">Here</NavLink></p>
 </div>
 
 @code {
@@ -28,13 +31,10 @@
 
     private string Error { get; set; }
 
-    private async Task DoLogin()
+    private async Task HandleLogin()
     {
 
-        client.BaseAddress = new Uri("https://localhost:44365/");
-
-
-        var response = await client.PostAsJsonAsync("api/authentication/login", loginRequest);
+        var response = await http.PostAsJsonAsync("api/authentication/login", loginRequest);
 
         if (response.IsSuccessStatusCode)
         {

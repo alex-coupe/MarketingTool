@@ -87,6 +87,7 @@ namespace ApplicationLayer
                     builder.WithOrigins("http://localhost:62594",
                                         "https://localhost:44319")
                     .AllowAnyHeader()
+                    .AllowCredentials()
                     .AllowAnyMethod();
                 });
             });
@@ -116,8 +117,11 @@ namespace ApplicationLayer
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
             app.UseCors(MyAllowSpecificOrigins);
+
             app.UseAuthentication();
+
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>
