@@ -55,8 +55,9 @@ namespace BackEnd.Controllers
         [Route("Register")]
         public async Task<ActionResult> Register(User user)
         {
-            IValidator<User> _validator = new UserValidator();
-            if (_validator.Valid(user))
+            Validator<User> _validator = new UserValidator();
+            var errors = _validator.ValidateModel(user);
+            if (errors.Count == 0)
             {
                 user.Password = CryptoHelper.Crypto.HashPassword(user.Password);
 
@@ -65,7 +66,7 @@ namespace BackEnd.Controllers
 
                 return CreatedAtAction("Register", new { id = user.Id }, user);
             }
-            return BadRequest(user);
+            return BadRequest(errors);
         }
 
         private JwtSecurityToken GenerateJSONWebToken(User user)

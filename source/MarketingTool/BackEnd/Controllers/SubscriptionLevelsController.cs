@@ -43,8 +43,9 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            IValidator<SubscriptionLevel> _validator = new SubscriptionLevelValidator();
-            if (_validator.Valid(subscriptionLevel))
+            Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator();
+            var errors = _validator.ValidateModel(subscriptionLevel);
+            if (errors.Count == 0)
             {
                 _repository.Add(subscriptionLevel);
 
@@ -52,15 +53,16 @@ namespace BackEnd.Controllers
                 return CreatedAtAction("PostSubscriptionLevel", new { id = subscriptionLevel.Id }, subscriptionLevel);
             }
 
-            return BadRequest(subscriptionLevel);
+            return BadRequest(errors);
         }
 
         [Authorize]
         [HttpPut]
         public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            IValidator<SubscriptionLevel> _validator = new SubscriptionLevelValidator();
-            if (_validator.Valid(subscriptionLevel))
+            Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator();
+            var errors = _validator.ValidateModel(subscriptionLevel);
+            if (errors.Count == 0)
             {
                 _repository.Edit(subscriptionLevel);
                 await _repository.SaveChangesAsync();
@@ -68,7 +70,7 @@ namespace BackEnd.Controllers
                 return Ok(subscriptionLevel);
             }
 
-            return BadRequest(subscriptionLevel);
+            return BadRequest(errors);
         }
 
         [Authorize]

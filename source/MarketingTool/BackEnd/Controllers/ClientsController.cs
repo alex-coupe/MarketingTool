@@ -42,8 +42,9 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<Client>> PostClient(Client client)
         {
-            IValidator<Client> _validator = new ClientValidator();
-            if (_validator.Valid(client))
+            Validator<Client> _validator = new ClientValidator();
+            var errors = _validator.ValidateModel(client);
+            if (errors.Count == 0)
             {
                 _repository.Add(client);
 
@@ -51,15 +52,16 @@ namespace BackEnd.Controllers
                 return CreatedAtAction("PostClient", new { id = client.Id }, client);
             }
 
-            return BadRequest(client);
+            return BadRequest(errors);
         }
 
         [Authorize]
         [HttpPut]
         public async Task<ActionResult<Client>> PutClient(Client client)
         {
-            IValidator<Client> _validator = new ClientValidator();
-            if (_validator.Valid(client))
+            Validator<Client> _validator = new ClientValidator();
+            var errors = _validator.ValidateModel(client);
+            if (errors.Count == 0)
             {
                 _repository.Edit(client);
                 await _repository.SaveChangesAsync();
@@ -67,7 +69,7 @@ namespace BackEnd.Controllers
                 return Ok(client);
             }
 
-            return BadRequest(client);
+            return BadRequest(errors);
         }
 
         [Authorize]
