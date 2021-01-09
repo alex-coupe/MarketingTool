@@ -1,0 +1,54 @@
+﻿@page "/"
+
+@using System.Text.Json
+@using DataTransfer.DataTransferObjects
+
+@inject HttpClient client
+@inject NavigationManager nav
+
+<div class="container">
+    <EditForm Model="loginRequest" OnValidSubmit="DoLogin">
+        <label For="EmailField">Email Address</label>
+        <InputText type="email" @bind-Value="loginRequest.Email" required />
+        <label For="PasswordField">Password</label>
+        <InputText type="password" @bind-Value="loginRequest.Password" required />
+        <button type="submit" class="btn btn-primary">Login</button>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </EditForm>
+    @if(!string.IsNullOrEmpty(Error))
+    {
+        <p>@Error</p>
+    }
+</div>
+
+@code {
+
+    LoginRequest loginRequest = new LoginRequest();
+
+    private string Error { get; set; }
+
+    private async Task DoLogin()
+    {
+
+        client.BaseAddress = new Uri("https://localhost:44365/");
+
+
+        var response = await client.PostAsJsonAsync("api/authentication/login", loginRequest);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var json = await response.Content.ReadFromJsonAsync<AuthenticationResponse>();
+
+            if (!string.IsNullOrEmpty(json.Token) && !(json.Expires < DateTime.Now))
+                nav.NavigateTo("/dashboard");
+        }
+        else
+        {
+            var error = await response.Content.ReadFromJsonAsync<Error>();
+            Error = error.ErrorMessage;
+        }
+
+
+    }
+} 

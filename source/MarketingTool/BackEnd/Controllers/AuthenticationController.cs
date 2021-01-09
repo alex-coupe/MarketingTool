@@ -41,12 +41,13 @@ namespace BackEnd.Controllers
             if (user != null)
             {
                 var token = GenerateJSONWebToken(user);
-                var authResponse = new AuthenticationResponse { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), Expires = token.ValidTo };
+                var authResponse = new AuthenticationResponse { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), 
+                    Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, isAdmin = user.Admin, isArchived = user.Archived, Name = user.FirstName };
                 return Ok(JsonSerializer.Serialize(authResponse));
             }
 
             var errorResponse = new Error { ErrorMessage = "Email Address or Password Incorrect" };
-            return Unauthorized(JsonSerializer.Serialize(errorResponse));
+            return Unauthorized(errorResponse);
         }
 
         [AllowAnonymous]
