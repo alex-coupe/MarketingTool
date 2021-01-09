@@ -20,5 +20,7 @@ namespace DataAccess.Models
         public DbSet<List> Lists { get; set; }
 
         public DbSet<Recipient> Recipients { get; set; }
+
+        public DbSet<PasswordReset> PasswordResets { get; set; }
     }
 }
