@@ -19,7 +19,7 @@ namespace BackEnd.Controllers
             _repository = repository;
         }
 
-        [Authorize]
+        [AllowAnonymous]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<SubscriptionLevel>>> GetSubscriptionLevels()
         {

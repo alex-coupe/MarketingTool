@@ -31,16 +31,10 @@ namespace BackEnd.Controllers
             _repository = repository;
         }
 
-        public class Credentials
-        {
-            public string Password { get; set; }
-            public string Email { get; set; }
-        }
-
         [AllowAnonymous]
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult> Login([FromBody] Credentials credentials)
+        public async Task<ActionResult> Login([FromBody] LoginRequest credentials)
         {
             var user = await AuthenticateUser(credentials.Email, credentials.Password);
 
@@ -50,7 +44,9 @@ namespace BackEnd.Controllers
                 var authResponse = new AuthenticationResponse { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), Expires = token.ValidTo };
                 return Ok(JsonSerializer.Serialize(authResponse));
             }
-            return Unauthorized("Email Address or Password Incorrect");
+
+            var errorResponse = new Error { ErrorMessage = "Email Address or Password Incorrect" };
+            return Unauthorized(JsonSerializer.Serialize(errorResponse));
         }
 
         [AllowAnonymous]

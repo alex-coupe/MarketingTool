@@ -1,14 +1,18 @@
 ﻿using BackEnd.Controllers;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.DataTransferObjects;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -56,8 +60,11 @@ namespace MarketingToolTests.Unit_Tests
         public async Task user_is_authenticated_with_correct_credentials()
         {
             AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            LoginRequest request = new LoginRequest();
+            request.Email = "test@test.com";
+            request.Password = "Password123";
+            var result = await _controller.Login(request);
 
-            var result = await _controller.Login("test@test.com", "Password123");
             var actionResult = Assert.IsType<OkObjectResult>(result);
             Assert.NotNull(actionResult.Value);
             _userRepositoryMock.Verify(r => r.GetAllAsync());
@@ -67,10 +74,16 @@ namespace MarketingToolTests.Unit_Tests
         public async Task user_is_not_authenticated_with_incorrect_credentials()
         {
             AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            LoginRequest request = new LoginRequest();
+            request.Email = "test@test.com";
+            request.Password = "Password12";
+            var result = await _controller.Login(request);
 
-            var result = await _controller.Login("test@test.com", "Password12");
             var actionResult = Assert.IsType<UnauthorizedObjectResult>(result);
-            Assert.Equal("Email Address or Password Incorrect", actionResult.Value);
+            var errorString = actionResult.Value.ToString();
+            var json = JsonConvert.DeserializeObject<List<Error>>(errorString);
+
+            Assert.Equal("Email Address or Password Incorrect", json.FirstOrDefault().ErrorMessage);
             _userRepositoryMock.Verify(r => r.GetAllAsync());
         }
 

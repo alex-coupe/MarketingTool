@@ -84,8 +84,8 @@ namespace ApplicationLayer
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                 builder =>
                 {
-                    builder.WithOrigins("http://localhost:58082",
-                                        "https://localhost:44345")
+                    builder.WithOrigins("http://localhost:54196",
+                                        "https://localhost:44320")
                     .AllowAnyHeader()
                     .AllowAnyMethod();
                 });
