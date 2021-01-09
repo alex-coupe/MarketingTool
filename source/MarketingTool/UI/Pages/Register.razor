@@ -41,14 +41,46 @@
 
     private async Task HandleRegistration()
     {
-        var response = await http.PostAsJsonAsync("api/authentication/register", registerRequest);
+        var clientId = await PostClient();
 
-        if (response.IsSuccessStatusCode)
+        var userResponse = await PostUser(clientId);
+
+        if (userResponse.IsSuccessStatusCode)
         {
             nav.NavigateTo("/");
         }
-
     }
+
+    private async Task<int> PostClient()
+    {
+        var client = new ClientDTO()
+        {
+            Name = registerRequest.ClientName,
+            SubscriptionLevelId = registerRequest.SubscriptionLevel
+        };
+        var response = await http.PostAsJsonAsync("api/clients/", client);
+        var responseClient = await response.Content.ReadFromJsonAsync<ClientDTO>();
+
+        return responseClient.Id;
+    }
+
+    private async Task<HttpResponseMessage> PostUser(int clientId)
+    {
+        var user = new UserDTO()
+        {
+            Admin = true,
+            FirstName = registerRequest.FirstName,
+            LastName = registerRequest.LastName,
+            EmailAddress = registerRequest.EmailAddress,
+            Password = registerRequest.Password,
+            Archived = false,
+            ClientId = clientId
+        };
+        var userResponse = await http.PostAsJsonAsync("api/authentication/register", user);
+
+        return userResponse;
+    }
+
 
     protected override async Task OnInitializedAsync()
     {
