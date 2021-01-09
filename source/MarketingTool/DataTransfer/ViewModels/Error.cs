@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataTransfer.DataTransferObjects
+namespace DataTransfer.ViewModels
 {
     public class Error
     {

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Text;
 
 
-namespace DataTransfer.ViewModels
+namespace DataTransfer.DataTransferObjects
 {
     public class SubscriptionLevelDTO : SubscriptionLevel
     {

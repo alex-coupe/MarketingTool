@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace DataTransfer.DataTransferObjects
+namespace DataTransfer.ViewModels
 {
     public class LoginRequest
     {

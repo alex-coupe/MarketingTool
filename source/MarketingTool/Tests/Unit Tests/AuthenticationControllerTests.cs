@@ -1,7 +1,7 @@
 ﻿using BackEnd.Controllers;
 using DataAccess.Models;
 using DataAccess.Repositories;
-using DataTransfer.DataTransferObjects;
+using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -21,15 +21,12 @@ namespace MarketingToolTests.Unit_Tests
     public class AuthenticationControllerTests
     {
         Mock<IRepository<User>> _userRepositoryMock;
-        Mock<IRepository<Client>> _clientRepositoryMock;
         Mock<IConfiguration> _configurationMock;
 
         public AuthenticationControllerTests()
         {
             _userRepositoryMock = new Mock<IRepository<User>>();
-            _clientRepositoryMock = new Mock<IRepository<Client>>();
             _configurationMock = new Mock<IConfiguration>();
-
 
             _userRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<User> {
             new User
@@ -56,15 +53,13 @@ namespace MarketingToolTests.Unit_Tests
 
             }});
             _userRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
-            _clientRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _configurationMock.SetupGet(x => x[It.IsAny<string>()]).Returns("Iqg3LSKql9HyXsOu1iP4");
         }
 
         [Fact]
         public async Task user_is_authenticated_with_correct_credentials()
         {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object,
-                _clientRepositoryMock.Object);
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
             LoginRequest request = new LoginRequest();
             request.Email = "test@test.com";
             request.Password = "Password123";
@@ -78,8 +73,7 @@ namespace MarketingToolTests.Unit_Tests
         [Fact]
         public async Task user_is_not_authenticated_with_incorrect_credentials()
         {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object,
-                _clientRepositoryMock.Object);
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
             LoginRequest request = new LoginRequest();
             request.Email = "test@test.com";
             request.Password = "Password12";
@@ -96,39 +90,41 @@ namespace MarketingToolTests.Unit_Tests
         [Fact]
         public async Task well_formed_user_is_registered()
         {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object,
-                _clientRepositoryMock.Object);
-            var request = new RegisterRequest
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            var user = new User
             {
-                ClientName = "Beavertons",
-                SubscriptionLevel = 1,
+
                 EmailAddress = "garry@test.com",
                 FirstName = "Garry",
                 LastName = "Beaverton",
+                Admin = true,
+                Archived = false,
+                ClientId = 1,
                 Password = "Testing123"
             };
 
-            var result = await _controller.Register(request);
+            var result = await _controller.Register(user);
             var actionResult = Assert.IsType<CreatedAtActionResult>(result);
             var response = Assert.IsType<User>(actionResult.Value);
             Assert.NotNull(response);
             Assert.Equal("garry@test.com", response.EmailAddress);
-            _clientRepositoryMock.Verify(r => r.SaveChangesAsync());
+            _userRepositoryMock.Verify(r => r.Add(user));
+            _userRepositoryMock.Verify(r => r.SaveChangesAsync());
         }
 
         [Fact]
         public async Task malformed_user_is_not_registered()
         {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object,
-                _clientRepositoryMock.Object);
-            var request = new RegisterRequest
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            var user = new User
             {
-                SubscriptionLevel = 1,
-                EmailAddress = "garry@test.com"
+                Admin = true,
+                Archived = false,
+                ClientId = 1,
             };
 
-            var result = await _controller.Register(request);
-            Assert.IsType<BadRequestResult>(result);
+            var result = await _controller.Register(user);
+            Assert.IsType<BadRequestObjectResult>(result);
         }
     }
 }

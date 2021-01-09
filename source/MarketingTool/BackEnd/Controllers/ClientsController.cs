@@ -39,7 +39,6 @@ namespace BackEnd.Controllers
             return NotFound();
         }
 
-        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Client>> PostClient(Client client)
         {

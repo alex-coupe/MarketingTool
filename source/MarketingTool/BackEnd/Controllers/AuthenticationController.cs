@@ -1,7 +1,7 @@
 ﻿using BackEnd.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
-using DataTransfer.DataTransferObjects;
+using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,14 +23,12 @@ namespace BackEnd.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly IRepository<Client> _clientRepository;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<User> _repository;
 
-        public AuthenticationController(IConfiguration config, IRepository<User> userRepository, IRepository<Client> clientRepository)
+        public AuthenticationController(IConfiguration config, IRepository<User> repository)
         {
             _config = config;
-            _clientRepository = clientRepository;
-            _userRepository = userRepository;
+            _repository = repository;
         }
 
         [AllowAnonymous]
@@ -55,42 +53,19 @@ namespace BackEnd.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult> Register(RegisterRequest request)
+        public async Task<ActionResult> Register(User user)
         {
-            IValidator<User> _userValidator = new UserValidator();
-            IValidator<Client> _clientValidator = new ClientValidator();
-
-            Client client = new Client()
+            IValidator<User> _validator = new UserValidator();
+            if (_validator.Valid(user))
             {
-                Name = request.ClientName,
-                SubscriptionLevelId = request.SubscriptionLevel
-            };
-         
-            if (_clientValidator.Valid(client) )
-            {
-                _clientRepository.Add(client);
-                await _clientRepository.SaveChangesAsync();
+                user.Password = CryptoHelper.Crypto.HashPassword(user.Password);
 
-                User user = new User()
-                {
-                    ClientId = client.Id,
-                    FirstName = request.FirstName,
-                    LastName = request.LastName,
-                    Password = CryptoHelper.Crypto.HashPassword(request.Password),
-                    EmailAddress = request.EmailAddress,
-                    Admin = true,
-                    Archived = false
-                };
-
-                if (_userValidator.Valid(user))
-                {
-                    _userRepository.Add(user);
-                    await _userRepository.SaveChangesAsync();
-                }
+                _repository.Add(user);
+                await _repository.SaveChangesAsync();
 
                 return CreatedAtAction("Register", new { id = user.Id }, user);
             }
-            return BadRequest();
+            return BadRequest(user);
         }
 
         private JwtSecurityToken GenerateJSONWebToken(User user)
@@ -114,7 +89,7 @@ namespace BackEnd.Controllers
 
         private async Task<User> AuthenticateUser(string email, string password)
         {
-            var users = await _userRepository.GetAllAsync();
+            var users = await _repository.GetAllAsync();
             var user = users.Where(x => x.EmailAddress == email).FirstOrDefault();
 
             if (user != null && CryptoHelper.Crypto.VerifyHashedPassword(user.Password, password))
