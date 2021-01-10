@@ -19,7 +19,5 @@ namespace DataAccess.Models
         [MaxLength(50)]
         public string Token { get; set; }
 
-        [Required]
-        public bool ResetIssued { get; set; }
     }
 }

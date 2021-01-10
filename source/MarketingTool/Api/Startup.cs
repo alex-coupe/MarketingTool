@@ -1,3 +1,4 @@
+using ApiServices;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -95,7 +96,9 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<SubscriptionLevel>, SubscriptionLevelRepository>();
             services.AddTransient<IRepository<Client>, ClientRepository>();
             services.AddTransient<IRepository<User>, UserRepository>();
-
+            services.AddTransient<IRepository<PasswordReset>, PasswordResetRepository>();
+            services.AddScoped<PasswordResetService>();
+            services.AddSingleton<EmailService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

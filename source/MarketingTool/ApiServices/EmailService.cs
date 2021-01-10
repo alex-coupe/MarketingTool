@@ -6,8 +6,7 @@ using System.Threading.Tasks;
 
 namespace ApiServices
 {
-    public interface IService
+    public class EmailService
     {
-        public Task Process();
     }
 }
