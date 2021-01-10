@@ -1,10 +1,13 @@
-﻿using BackEnd.Controllers;
+﻿using Api.Controllers;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,12 +17,12 @@ namespace MarketingToolTests.BackendTests
     {
         Mock<IRepository<Client>> _clientRepositoryMock;
         private int _getId = 1;
+        List<Client> clientList;
 
         public ClientsControllerTests()
         {
             _clientRepositoryMock = new Mock<IRepository<Client>>();
-
-            _clientRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<Client> {
+            clientList = new List<Client> {
             new Client
             {
                 Id = 1,
@@ -34,7 +37,7 @@ namespace MarketingToolTests.BackendTests
 
                 SubscriptionLevelId = 1
 
-            }});
+            }};
 
             _clientRepositoryMock.Setup(x => x.GetAsync(_getId)).Returns(Task.FromResult(new Client
             {
@@ -44,10 +47,14 @@ namespace MarketingToolTests.BackendTests
 
                 SubscriptionLevelId = 1
             }));
+            _clientRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(clientList);
 
             _clientRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _clientRepositoryMock.Setup(r => r.Edit(It.IsAny<Client>()));
             _clientRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
+            _clientRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<Client, bool>>>()))
+              .Returns(clientList);
+            _clientRepositoryMock.Setup(x => x.ToList()).Returns(clientList);
         }
 
         [Fact]
@@ -97,7 +104,7 @@ namespace MarketingToolTests.BackendTests
             ClientsController _controller = new ClientsController(_clientRepositoryMock.Object);
             var client = new Client
             {
-                Name = "Creative Inc",
+                Name = "Not Very Creative Inc",
 
                 SubscriptionLevelId = 1
             };
@@ -107,7 +114,7 @@ namespace MarketingToolTests.BackendTests
             var actionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             var response = Assert.IsType<Client>(actionResult.Value);
             Assert.NotNull(response);
-            Assert.Equal("Creative Inc", response.Name);
+            Assert.Equal("Not Very Creative Inc", response.Name);
             _clientRepositoryMock.Verify(r => r.Add(client));
             _clientRepositoryMock.Verify(r => r.SaveChangesAsync());
         }
@@ -131,14 +138,7 @@ namespace MarketingToolTests.BackendTests
         public async Task edit_alters_client()
         {
             ClientsController _controller = new ClientsController(_clientRepositoryMock.Object);
-            var client = new Client
-            {
-                Name = "Creative Inc",
-                SubscriptionLevelId = 1
-            };
-
-            await _controller.PostClient(client);
-
+            var client = clientList.Where(x => x.Id == 1).FirstOrDefault();
             client.Name = "Creative Industries";
 
             var result = await _controller.PutClient(client);
@@ -155,14 +155,9 @@ namespace MarketingToolTests.BackendTests
         public async Task malformed_edit_fails()
         {
             ClientsController _controller = new ClientsController(_clientRepositoryMock.Object);
-            var client = new Client
-            {
-                Name = "Creative Inc",
-                SubscriptionLevelId = 1
-            };
 
-            await _controller.PostClient(client);
-
+            var client = clientList.Where(x => x.Id == 1).FirstOrDefault();
+           
             client.Name = "";
 
             var result = await _controller.PutClient(client);
@@ -176,6 +171,7 @@ namespace MarketingToolTests.BackendTests
             ClientsController _controller = new ClientsController(_clientRepositoryMock.Object);
             var client = new Client
             {
+                Id = 1, 
                 Name = "Creative Inc",
                 SubscriptionLevelId = 1
             };

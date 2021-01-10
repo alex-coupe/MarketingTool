@@ -1,7 +1,8 @@
-﻿using BackEnd.Controllers;
+﻿using Api.Controllers;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using DataTransfer.ViewModels;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
@@ -134,10 +135,10 @@ namespace MarketingToolTests.BackendTests
 
             var result = await _controller.Register(user);
             var actionResult = Assert.IsType<BadRequestObjectResult>(result);
-            var errorString = Assert.IsType<List<Error>>(actionResult.Value);
+            var errorString = Assert.IsType<List<ValidationFailure>>(actionResult.Value);
             var json = errorString.FirstOrDefault().ErrorMessage;
 
-            Assert.Equal("Email is already in use", json);
+            Assert.Equal("An account with that email address already exists", json);
         }
 
         [Fact]

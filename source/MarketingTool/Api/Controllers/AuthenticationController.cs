@@ -1,4 +1,4 @@
-﻿using BackEnd.Validators;
+﻿using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using DataTransfer.ViewModels;
@@ -16,7 +16,7 @@ using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 
-namespace BackEnd.Controllers
+namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -55,9 +55,9 @@ namespace BackEnd.Controllers
         [Route("Register")]
         public async Task<ActionResult> Register(User user)
         {
-            Validator<User> _validator = new UserValidator(_repository);
-            var errors = _validator.ValidateModel(user, Validators.Type.Post);
-            if (!errors.Any())
+            NewUserValidator _validator = new NewUserValidator(_repository);
+            var validationResult = _validator.Validate(user);
+            if (validationResult.IsValid)
             {
                 user.Password = CryptoHelper.Crypto.HashPassword(user.Password);
 
@@ -66,7 +66,7 @@ namespace BackEnd.Controllers
 
                 return CreatedAtAction("Register", new { id = user.Id }, user);
             }
-            return BadRequest(errors);
+            return BadRequest(validationResult.Errors);
         }
 
         private JwtSecurityToken GenerateJSONWebToken(User user)

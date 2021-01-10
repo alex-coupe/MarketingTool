@@ -1,4 +1,4 @@
-﻿using BackEnd.Validators;
+﻿using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BackEnd.Controllers
+namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -44,9 +44,9 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator(_repository);
-            var errors = _validator.ValidateModel(subscriptionLevel, Type.Post);
-            if (!errors.Any())
+            NewSubscriptionLevelValidator _validator = new NewSubscriptionLevelValidator(_repository);
+            var validationResult = _validator.Validate(subscriptionLevel);
+            if (validationResult.IsValid)
             {
                 _repository.Add(subscriptionLevel);
 
@@ -54,16 +54,16 @@ namespace BackEnd.Controllers
                 return CreatedAtAction("PostSubscriptionLevel", new { id = subscriptionLevel.Id }, subscriptionLevel);
             }
 
-            return BadRequest(errors);
+            return BadRequest(validationResult.Errors);
         }
 
         [Authorize]
         [HttpPut]
         public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator(_repository);
-            var errors = _validator.ValidateModel(subscriptionLevel, Type.Put);
-            if (!errors.Any())
+            EditSubscriptionLevelValidator _validator = new EditSubscriptionLevelValidator(_repository);
+            var validationResult = _validator.Validate(subscriptionLevel);
+            if (validationResult.IsValid)
             {
                 _repository.Edit(subscriptionLevel);
                 await _repository.SaveChangesAsync();
@@ -71,7 +71,7 @@ namespace BackEnd.Controllers
                 return Ok(subscriptionLevel);
             }
 
-            return BadRequest(errors);
+            return BadRequest(validationResult.Errors);
         }
 
         [Authorize]

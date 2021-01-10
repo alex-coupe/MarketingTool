@@ -1,4 +1,4 @@
-﻿using BackEnd.Validators;
+﻿using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace BackEnd.Controllers
+namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -43,9 +43,9 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<Client>> PostClient(Client client)
         {
-            Validator<Client> _validator = new ClientValidator(_repository);
-            var errors = _validator.ValidateModel(client, Type.Post);
-            if (!errors.Any())
+            NewClientValidator _validator = new NewClientValidator();
+            var validationResult = await _validator.ValidateAsync(client);
+            if (validationResult.IsValid)
             {
                 _repository.Add(client);
 
@@ -53,16 +53,16 @@ namespace BackEnd.Controllers
                 return CreatedAtAction("PostClient", new { id = client.Id }, client);
             }
 
-            return BadRequest(errors);
+            return BadRequest(validationResult.Errors);
         }
 
         [Authorize]
         [HttpPut]
         public async Task<ActionResult<Client>> PutClient(Client client)
         {
-            Validator<Client> _validator = new ClientValidator(_repository);
-            var errors = _validator.ValidateModel(client, Type.Put);
-            if (errors.Any())
+            EditClientValidator _validator = new EditClientValidator();
+            var validationResult = await _validator.ValidateAsync(client);
+            if (validationResult.IsValid)
             {
                 _repository.Edit(client);
                 await _repository.SaveChangesAsync();
@@ -70,7 +70,7 @@ namespace BackEnd.Controllers
                 return Ok(client);
             }
 
-            return BadRequest(errors);
+            return BadRequest(validationResult.Errors);
         }
 
         [Authorize]

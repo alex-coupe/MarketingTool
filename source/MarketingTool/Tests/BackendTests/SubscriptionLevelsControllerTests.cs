@@ -1,10 +1,12 @@
-﻿using BackEnd.Controllers;
+﻿using Api.Controllers;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Xunit;
 
@@ -14,12 +16,10 @@ namespace MarketingToolTests.BackendTests
     {
         Mock<IRepository<SubscriptionLevel>> _subscriptionLevelRepositoryMock;
         private int _getId = 2;
-
+        List<SubscriptionLevel> subscriptionLevels;
         public SubscriptionLevelsControllerTests()
         {
-            _subscriptionLevelRepositoryMock = new Mock<IRepository<SubscriptionLevel>>();
-
-            _subscriptionLevelRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<SubscriptionLevel> {
+            subscriptionLevels = new List<SubscriptionLevel> {
             new SubscriptionLevel
             {
                 Name = "Free",
@@ -33,8 +33,11 @@ namespace MarketingToolTests.BackendTests
                 Cost = 20.99M,
                 Id = 2,
                 MaxUsers = 20
-            }
-            });
+            }};
+
+            _subscriptionLevelRepositoryMock = new Mock<IRepository<SubscriptionLevel>>();
+
+            _subscriptionLevelRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(subscriptionLevels);
 
             _subscriptionLevelRepositoryMock.Setup(x => x.GetAsync(_getId)).Returns(Task.FromResult(new SubscriptionLevel
             {
@@ -48,6 +51,11 @@ namespace MarketingToolTests.BackendTests
             _subscriptionLevelRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _subscriptionLevelRepositoryMock.Setup(r => r.Edit(It.IsAny<SubscriptionLevel>()));
             _subscriptionLevelRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
+            _subscriptionLevelRepositoryMock.Setup(x => x.ToList()).Returns(subscriptionLevels);
+            _subscriptionLevelRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
+
+            _subscriptionLevelRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<SubscriptionLevel, bool>>>()))
+                .Returns(subscriptionLevels);
         }
 
         [Fact]
@@ -63,6 +71,7 @@ namespace MarketingToolTests.BackendTests
             Assert.Equal("Free", level.Name);
             Assert.Equal(2, returnValue.Count());
             _subscriptionLevelRepositoryMock.Verify(r => r.GetAllAsync());
+           
         }
 
         [Fact]
@@ -97,7 +106,7 @@ namespace MarketingToolTests.BackendTests
             SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
             var level = new SubscriptionLevel
             {
-                Name = "Free",
+                Name = "Semi Pro",
                 Cost = 0.00M,
                 MaxUsers = 5
             };
@@ -107,7 +116,7 @@ namespace MarketingToolTests.BackendTests
             var actionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
             var response = Assert.IsType<SubscriptionLevel>(actionResult.Value);
             Assert.NotNull(response);
-            Assert.Equal("Free", response.Name);
+            Assert.Equal("Semi Pro", response.Name);
             _subscriptionLevelRepositoryMock.Verify(r => r.Add(level));
             _subscriptionLevelRepositoryMock.Verify(r => r.SaveChangesAsync());
         }
@@ -158,15 +167,8 @@ namespace MarketingToolTests.BackendTests
         public async Task malformed_edit_fails()
         {
             SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
-            var level = new SubscriptionLevel
-            {
-                Name = "Free",
-                Cost = 0.00M,
-                MaxUsers = 5
-            };
 
-            await _controller.PostSubscriptionLevel(level);
-
+            var level = subscriptionLevels.FirstOrDefault();
             level.Name = "";
 
             var result = await _controller.PutSubscriptionLevel(level);
@@ -178,21 +180,13 @@ namespace MarketingToolTests.BackendTests
         public async Task delete_removes_subscription_level()
         {
             SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
-            var level = new SubscriptionLevel
-            {
-                Name = "Free",
-                Cost = 0.00M,
-                MaxUsers = 5
-            };
 
-            await _controller.PostSubscriptionLevel(level);
+            var id = subscriptionLevels.FirstOrDefault().Id;
 
-
-
-            var result = await _controller.DeleteSubscriptionLevel(level.Id);
+            var result = await _controller.DeleteSubscriptionLevel(id);
 
             var actionResult = Assert.IsType<NoContentResult>(result.Result);
-            _subscriptionLevelRepositoryMock.Verify(r => r.Remove(level.Id));
+            _subscriptionLevelRepositoryMock.Verify(r => r.Remove(id));
         }
     }
 }
