@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30804.86
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BackEnd", "BackEnd\BackEnd.csproj", "{AB3E56BF-1DFC-466C-88D3-556995F016B7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Api", "Api\Api.csproj", "{AB3E56BF-1DFC-466C-88D3-556995F016B7}"
 	ProjectSection(ProjectDependencies) = postProject
 		{12522572-8FA2-4D24-8E35-2152B909CE27} = {12522572-8FA2-4D24-8E35-2152B909CE27}
 	EndProjectSection
@@ -16,7 +16,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataTransfer", "DataTransfe
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "UI\UI.csproj", "{C911AC37-11D1-4B59-B4D3-8FF626EC2B82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ServiceApi", "ServiceApi\ServiceApi.csproj", "{CA415CD1-071A-495D-84FD-B3E193FA1AB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ApiServices", "ApiServices\ApiServices.csproj", "{80B04833-5801-4327-A990-C81A79D68613}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -44,10 +44,10 @@ Global
 		{C911AC37-11D1-4B59-B4D3-8FF626EC2B82}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C911AC37-11D1-4B59-B4D3-8FF626EC2B82}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C911AC37-11D1-4B59-B4D3-8FF626EC2B82}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CA415CD1-071A-495D-84FD-B3E193FA1AB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CA415CD1-071A-495D-84FD-B3E193FA1AB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CA415CD1-071A-495D-84FD-B3E193FA1AB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CA415CD1-071A-495D-84FD-B3E193FA1AB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80B04833-5801-4327-A990-C81A79D68613}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80B04833-5801-4327-A990-C81A79D68613}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80B04833-5801-4327-A990-C81A79D68613}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80B04833-5801-4327-A990-C81A79D68613}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

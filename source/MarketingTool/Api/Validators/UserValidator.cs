@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using DataAccess.Repositories;
 using DataTransfer.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -10,13 +11,24 @@ namespace BackEnd.Validators
 {
     public class UserValidator : Validator<User>
     {
-        public UserValidator()
+        private IRepository<User> _repository;
+        public UserValidator(IRepository<User> repository)
+            : base()
         {
-            errors = new List<Error>();
+            _repository = repository;
         }
         
         public override List<Error> ValidateModel(User model)
         {
+            var existingUsersWithEmail = _repository.Where(x => x.EmailAddress.ToLower() == model.EmailAddress.ToLower()).Count();
+
+            if (existingUsersWithEmail > 0)
+            {
+                {
+                    errors.Add(new Error { ErrorMessage = "Email is already in use" });
+                }
+            }
+
             if (string.IsNullOrEmpty(model.EmailAddress) || !Regex.IsMatch(model.EmailAddress,
                 @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-0-9a-z]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$",

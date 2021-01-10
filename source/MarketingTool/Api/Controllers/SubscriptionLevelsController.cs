@@ -43,7 +43,7 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator();
+            Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator(_repository);
             var errors = _validator.ValidateModel(subscriptionLevel);
             if (errors.Count == 0)
             {
@@ -60,7 +60,7 @@ namespace BackEnd.Controllers
         [HttpPut]
         public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator();
+            Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator(_repository);
             var errors = _validator.ValidateModel(subscriptionLevel);
             if (errors.Count == 0)
             {

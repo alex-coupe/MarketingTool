@@ -11,24 +11,25 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MarketingToolTests.Unit_Tests
+namespace MarketingToolTests.BackendTests
 {
     public class AuthenticationControllerTests
     {
         Mock<IRepository<User>> _userRepositoryMock;
         Mock<IConfiguration> _configurationMock;
-
+    
         public AuthenticationControllerTests()
         {
             _userRepositoryMock = new Mock<IRepository<User>>();
             _configurationMock = new Mock<IConfiguration>();
 
-            _userRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(new List<User> {
+            var userList = new List<User> {
             new User
             {
                 Id = 1,
@@ -51,40 +52,44 @@ namespace MarketingToolTests.Unit_Tests
                 ClientId = 1,
                 Password = CryptoHelper.Crypto.HashPassword("Testing123")
 
-            }});
+            }};
+            _userRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(userList);
             _userRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
+
+            _userRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<User, bool>>>()))
+                .Returns(new Func<Expression<Func<User, bool>>, IQueryable<User>>(
+                 expr => userList.Where(expr.Compile()).AsQueryable()));
+
             _configurationMock.SetupGet(x => x[It.IsAny<string>()]).Returns("Iqg3LSKql9HyXsOu1iP4");
         }
 
         [Fact]
-        public async Task user_is_authenticated_with_correct_credentials()
+        public void user_is_authenticated_with_correct_credentials()
         {
             AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
             LoginRequest request = new LoginRequest();
             request.Email = "test@test.com";
             request.Password = "Password123";
-            var result = await _controller.Login(request);
+            var result =  _controller.Login(request);
 
             var actionResult = Assert.IsType<OkObjectResult>(result);
             Assert.NotNull(actionResult.Value);
-            _userRepositoryMock.Verify(r => r.GetAllAsync());
         }
 
         [Fact]
-        public async Task user_is_not_authenticated_with_incorrect_credentials()
+        public void user_is_not_authenticated_with_incorrect_credentials()
         {
             AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
             LoginRequest request = new LoginRequest();
             request.Email = "test@test.com";
             request.Password = "Password12";
-            var result = await _controller.Login(request);
+            var result = _controller.Login(request);
 
             var actionResult = Assert.IsType<UnauthorizedObjectResult>(result);
             var errorString = Assert.IsType<Error>(actionResult.Value);
             var json = errorString.ErrorMessage;
 
             Assert.Equal("Email Address or Password Incorrect", json);
-            _userRepositoryMock.Verify(r => r.GetAllAsync());
         }
 
         [Fact]

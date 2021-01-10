@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
@@ -72,6 +74,11 @@ namespace DataAccess.Repositories
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
+        }
+
+        public IEnumerable<SubscriptionLevel> Where(Expression<Func<SubscriptionLevel, bool>> predicate)
+        {
+            return _context.SubscriptionLevels.Where(predicate);
         }
     }
 }

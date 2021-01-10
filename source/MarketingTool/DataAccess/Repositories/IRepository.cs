@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading.Tasks;
 
 namespace DataAccess.Repositories
@@ -17,5 +18,7 @@ namespace DataAccess.Repositories
         Task<int> SaveChangesAsync();
 
         void SaveChanges();
+
+        IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
     }
 }

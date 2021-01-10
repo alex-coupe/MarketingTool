@@ -76,5 +76,10 @@ namespace DataAccess.Repositories
             return await _context.SaveChangesAsync();
         }
 
+        public IEnumerable<User> Where(Expression<Func<User, bool>> predicate)
+        {
+            return _context.Users.Where(predicate);
+        }
+
     }
 }

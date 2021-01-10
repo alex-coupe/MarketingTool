@@ -34,9 +34,9 @@ namespace BackEnd.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Login")]
-        public async Task<ActionResult> Login([FromBody] LoginRequest credentials)
+        public ActionResult Login([FromBody] LoginRequest credentials)
         {
-            var user = await AuthenticateUser(credentials.Email, credentials.Password);
+            var user = AuthenticateUser(credentials.Email, credentials.Password);
 
             if (user != null)
             {
@@ -55,7 +55,7 @@ namespace BackEnd.Controllers
         [Route("Register")]
         public async Task<ActionResult> Register(User user)
         {
-            Validator<User> _validator = new UserValidator();
+            Validator<User> _validator = new UserValidator(_repository);
             var errors = _validator.ValidateModel(user);
             if (errors.Count == 0)
             {
@@ -88,10 +88,9 @@ namespace BackEnd.Controllers
             return token;
         }
 
-        private async Task<User> AuthenticateUser(string email, string password)
+        private User AuthenticateUser(string email, string password)
         {
-            var users = await _repository.GetAllAsync();
-            var user = users.Where(x => x.EmailAddress == email).FirstOrDefault();
+            var user = _repository.Where(x => x.EmailAddress == email).FirstOrDefault();
 
             if (user != null && CryptoHelper.Crypto.VerifyHashedPassword(user.Password, password))
             {

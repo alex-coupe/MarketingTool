@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Xunit;
 
-namespace MarketingToolTests.Unit_Tests
+namespace MarketingToolTests.BackendTests
 {
     public class SubscriptionLevelsControllerTests
     {

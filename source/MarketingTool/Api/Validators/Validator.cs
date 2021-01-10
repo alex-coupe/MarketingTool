@@ -5,7 +5,7 @@ namespace BackEnd.Validators
 {
     public abstract class Validator<T>
     {
-        protected List<Error> errors;
+        protected List<Error> errors = new List<Error>();
         public abstract List<Error> ValidateModel(T model);
       
     }

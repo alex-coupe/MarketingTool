@@ -42,7 +42,7 @@ namespace BackEnd.Controllers
         [HttpPost]
         public async Task<ActionResult<Client>> PostClient(Client client)
         {
-            Validator<Client> _validator = new ClientValidator();
+            Validator<Client> _validator = new ClientValidator(_repository);
             var errors = _validator.ValidateModel(client);
             if (errors.Count == 0)
             {
@@ -59,7 +59,7 @@ namespace BackEnd.Controllers
         [HttpPut]
         public async Task<ActionResult<Client>> PutClient(Client client)
         {
-            Validator<Client> _validator = new ClientValidator();
+            Validator<Client> _validator = new ClientValidator(_repository);
             var errors = _validator.ValidateModel(client);
             if (errors.Count == 0)
             {

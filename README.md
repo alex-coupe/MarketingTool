@@ -14,9 +14,7 @@ Possible future features may include the management of a twitter, facebook and i
 
 The plan is to use Azure for hosting of the app and the automation of the email sending i.e. the automation will utilise Azure functions and make use of Azure email servers whilst the app will be hosted in a VM so they can take care of all the load balancing etc.
 
-The stack is C#/.Net 5 for backend based on an Ubuntu 18 platform with Apache acting as a reverse proxy, frontend will be built in React, dev environment is Ubuntu based in a Vagrant VM.
-
-Initially the frontend will be a mock up just to test features i.e. the login screen will not actually do any login logic at the beginning but just take you to the dashboard of the test account.
+The stack is C#/.Net 5 with Blazor WASM for UI and then deployed to Azure
 
 ## Planning
 
