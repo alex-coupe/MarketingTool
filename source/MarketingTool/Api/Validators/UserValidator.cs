@@ -18,14 +18,18 @@ namespace BackEnd.Validators
             _repository = repository;
         }
         
-        public override List<Error> ValidateModel(User model)
+        public override List<Error> ValidateModel(User model, Type type)
         {
-            var existingUsersWithEmail = _repository.Where(x => x.EmailAddress.ToLower() == model.EmailAddress.ToLower()).Count();
-
-            if (existingUsersWithEmail > 0)
+            if (type == Type.Post)
             {
+                var existingUsersWithEmail = _repository.ToList().Where(x => x.EmailAddress.ToLower() == model.EmailAddress?.ToLower()).Any();
+
+               
+                if (existingUsersWithEmail)
                 {
-                    errors.Add(new Error { ErrorMessage = "Email is already in use" });
+                    {
+                        errors.Add(new Error { ErrorMessage = "Email is already in use" });
+                    }
                 }
             }
 
@@ -57,6 +61,13 @@ namespace BackEnd.Validators
                 errors.Add(new Error { ErrorMessage = "Password is required" });
             }
 
+            if (type == Type.Put)
+            {
+                if (model.Id <= 0)
+                {
+                    errors.Add(new Error { ErrorMessage = "Id is required" });
+                }
+            }
 
             return errors;
         }

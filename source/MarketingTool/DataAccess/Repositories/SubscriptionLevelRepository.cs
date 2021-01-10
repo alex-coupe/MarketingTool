@@ -80,5 +80,10 @@ namespace DataAccess.Repositories
         {
             return _context.SubscriptionLevels.Where(predicate);
         }
+
+        public List<SubscriptionLevel> ToList()
+        {
+            return _context.SubscriptionLevels.ToList();
+        }
     }
 }

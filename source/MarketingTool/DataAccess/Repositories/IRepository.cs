@@ -20,5 +20,7 @@ namespace DataAccess.Repositories
         void SaveChanges();
 
         IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
+
+        List<T> ToList();
     }
 }

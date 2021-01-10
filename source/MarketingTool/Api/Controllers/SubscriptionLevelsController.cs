@@ -4,6 +4,7 @@ using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
@@ -44,8 +45,8 @@ namespace BackEnd.Controllers
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
             Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator(_repository);
-            var errors = _validator.ValidateModel(subscriptionLevel);
-            if (errors.Count == 0)
+            var errors = _validator.ValidateModel(subscriptionLevel, Type.Post);
+            if (!errors.Any())
             {
                 _repository.Add(subscriptionLevel);
 
@@ -61,8 +62,8 @@ namespace BackEnd.Controllers
         public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
             Validator<SubscriptionLevel> _validator = new SubscriptionLevelValidator(_repository);
-            var errors = _validator.ValidateModel(subscriptionLevel);
-            if (errors.Count == 0)
+            var errors = _validator.ValidateModel(subscriptionLevel, Type.Put);
+            if (!errors.Any())
             {
                 _repository.Edit(subscriptionLevel);
                 await _repository.SaveChangesAsync();

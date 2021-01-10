@@ -4,6 +4,7 @@ using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace BackEnd.Controllers
@@ -43,8 +44,8 @@ namespace BackEnd.Controllers
         public async Task<ActionResult<Client>> PostClient(Client client)
         {
             Validator<Client> _validator = new ClientValidator(_repository);
-            var errors = _validator.ValidateModel(client);
-            if (errors.Count == 0)
+            var errors = _validator.ValidateModel(client, Type.Post);
+            if (!errors.Any())
             {
                 _repository.Add(client);
 
@@ -60,8 +61,8 @@ namespace BackEnd.Controllers
         public async Task<ActionResult<Client>> PutClient(Client client)
         {
             Validator<Client> _validator = new ClientValidator(_repository);
-            var errors = _validator.ValidateModel(client);
-            if (errors.Count == 0)
+            var errors = _validator.ValidateModel(client, Type.Put);
+            if (errors.Any())
             {
                 _repository.Edit(client);
                 await _repository.SaveChangesAsync();

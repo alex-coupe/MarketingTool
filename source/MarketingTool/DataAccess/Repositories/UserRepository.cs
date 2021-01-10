@@ -81,5 +81,9 @@ namespace DataAccess.Repositories
             return _context.Users.Where(predicate);
         }
 
+        public List<User> ToList()
+        {
+            return _context.Users.ToList();
+        }
     }
 }

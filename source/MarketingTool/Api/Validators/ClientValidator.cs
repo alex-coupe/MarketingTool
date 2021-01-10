@@ -14,14 +14,17 @@ namespace BackEnd.Validators
         {
             _repository = repository;
         }
-        public override List<Error> ValidateModel(Client model)
+        public override List<Error> ValidateModel(Client model, Type type)
         {
-            var existingClientsWithName = _repository.Where(x => x.Name.ToLower() == model.Name.ToLower()).Count();
-
-            if (existingClientsWithName > 0)
+            if (type == Type.Post)
             {
+                var existingClientsWithName = _repository.Where(x => x.Name.ToLower() == model.Name.ToLower()).Any();
+
+                if (existingClientsWithName)
                 {
-                    errors.Add(new Error { ErrorMessage = "Client already exists" });
+                    {
+                        errors.Add(new Error { ErrorMessage = "Client already exists" });
+                    }
                 }
             }
 
@@ -33,6 +36,14 @@ namespace BackEnd.Validators
             if (model.SubscriptionLevelId <= 0)
             {
                 errors.Add(new Error { ErrorMessage = "Subscription level id is required" });
+            }
+
+            if (type == Type.Put)
+            {
+                if (model.Id <= 0)
+                {
+                    errors.Add(new Error { ErrorMessage = "Id is required" });
+                }
             }
             return errors;
         }

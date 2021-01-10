@@ -15,13 +15,16 @@ namespace BackEnd.Validators
             _repository = repository;
         }
        
-        public override List<Error> ValidateModel(SubscriptionLevel model)
+        public override List<Error> ValidateModel(SubscriptionLevel model, Type type)
         {
-            var existingSubscriptionLevels = _repository.Where(x => x.Name.ToLower() == model.Name.ToLower()).Count();
-
-            if (existingSubscriptionLevels > 0)
+            if (type == Type.Post)
             {
-                errors.Add(new Error { ErrorMessage = "Subscription level already exists" });
+                var existingSubscriptionLevels = _repository.Where(x => x.Name.ToLower() == model.Name.ToLower()).Any();
+
+                if (existingSubscriptionLevels)
+                {
+                    errors.Add(new Error { ErrorMessage = "Subscription level already exists" });
+                }
             }
 
             if (string.IsNullOrEmpty(model.Name))
@@ -32,6 +35,14 @@ namespace BackEnd.Validators
             if (model.MaxUsers <= 0)
             {
                 errors.Add(new Error { ErrorMessage = "Max users cannot be less than 1" });
+            }
+
+            if (type == Type.Put)
+            {
+                if (model.Id < 1)
+                {
+                    errors.Add(new Error { ErrorMessage = "Id is required" });
+                }
             }
 
             return errors;

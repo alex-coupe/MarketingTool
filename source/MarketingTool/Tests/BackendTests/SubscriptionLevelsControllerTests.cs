@@ -134,6 +134,7 @@ namespace MarketingToolTests.BackendTests
             SubscriptionLevelsController _controller = new SubscriptionLevelsController(_subscriptionLevelRepositoryMock.Object);
             var level = new SubscriptionLevel
             {
+                Id = 1,
                 Name = "Free",
                 Cost = 0.00M,
                 MaxUsers = 5

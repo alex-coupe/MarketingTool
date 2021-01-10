@@ -57,9 +57,8 @@ namespace MarketingToolTests.BackendTests
             _userRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
             _userRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<User, bool>>>()))
-                .Returns(new Func<Expression<Func<User, bool>>, IQueryable<User>>(
-                 expr => userList.Where(expr.Compile()).AsQueryable()));
-
+                .Returns(userList);
+            _userRepositoryMock.Setup(x => x.ToList()).Returns(userList);
             _configurationMock.SetupGet(x => x[It.IsAny<string>()]).Returns("Iqg3LSKql9HyXsOu1iP4");
         }
 
@@ -99,8 +98,8 @@ namespace MarketingToolTests.BackendTests
             var user = new User
             {
 
-                EmailAddress = "garry@test.com",
-                FirstName = "Garry",
+                EmailAddress = "barry@test.com",
+                FirstName = "Barry",
                 LastName = "Beaverton",
                 Admin = true,
                 Archived = false,
@@ -112,9 +111,33 @@ namespace MarketingToolTests.BackendTests
             var actionResult = Assert.IsType<CreatedAtActionResult>(result);
             var response = Assert.IsType<User>(actionResult.Value);
             Assert.NotNull(response);
-            Assert.Equal("garry@test.com", response.EmailAddress);
+            Assert.Equal("barry@test.com", response.EmailAddress);
             _userRepositoryMock.Verify(r => r.Add(user));
             _userRepositoryMock.Verify(r => r.SaveChangesAsync());
+        }
+
+        [Fact]
+        public async Task using_existing_email_does_not_register()
+        {
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            var user = new User
+            {
+
+                EmailAddress = "garry@test.com",
+                FirstName = "Garry",
+                LastName = "Beaverton",
+                Admin = true,
+                Archived = false,
+                ClientId = 1,
+                Password = "Testing123"
+            };
+
+            var result = await _controller.Register(user);
+            var actionResult = Assert.IsType<BadRequestObjectResult>(result);
+            var errorString = Assert.IsType<List<Error>>(actionResult.Value);
+            var json = errorString.FirstOrDefault().ErrorMessage;
+
+            Assert.Equal("Email is already in use", json);
         }
 
         [Fact]

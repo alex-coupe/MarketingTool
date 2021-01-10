@@ -56,8 +56,8 @@ namespace BackEnd.Controllers
         public async Task<ActionResult> Register(User user)
         {
             Validator<User> _validator = new UserValidator(_repository);
-            var errors = _validator.ValidateModel(user);
-            if (errors.Count == 0)
+            var errors = _validator.ValidateModel(user, Validators.Type.Post);
+            if (!errors.Any())
             {
                 user.Password = CryptoHelper.Crypto.HashPassword(user.Password);
 
