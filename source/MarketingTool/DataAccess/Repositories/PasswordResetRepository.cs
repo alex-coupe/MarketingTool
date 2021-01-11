@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -45,9 +46,9 @@ namespace DataAccess.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<PasswordReset>> GetAllAsync()
+        public async Task<IEnumerable<PasswordReset>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.PasswordResets.AsNoTracking().ToListAsync();
         }
 
         public Task<PasswordReset> GetAsync(int id)
@@ -78,7 +79,7 @@ namespace DataAccess.Repositories
 
         public IEnumerable<PasswordReset> Where(Expression<Func<PasswordReset, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _context.PasswordResets.Where(predicate);
         }
     }
 }
