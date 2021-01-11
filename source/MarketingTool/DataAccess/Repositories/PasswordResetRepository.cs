@@ -73,7 +73,7 @@ namespace DataAccess.Repositories
 
         public List<PasswordReset> ToList()
         {
-            throw new NotImplementedException();
+            return _context.PasswordResets.ToList();
         }
 
         public IEnumerable<PasswordReset> Where(Expression<Func<PasswordReset, bool>> predicate)

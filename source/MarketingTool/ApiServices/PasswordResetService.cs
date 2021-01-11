@@ -3,6 +3,7 @@ using DataAccess.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -19,17 +20,26 @@ namespace ApiServices
         }
         public async Task GenerateNewPasswordResetRequest(string email)
         {
-            var token = GenerateToken();
+            var Token = GenerateToken();
 
             _repository.Add(new PasswordReset
             {
                 EmailAddress = email,
-                Token = token
+                Token = Token,
+                DateCreated = DateTime.Now
             });
             await _repository.SaveChangesAsync();
-            
 
-            //issue email
+
+            _emailService.Send(new MailAddress(email), new MailMessage
+            {
+                Subject = "Your Password Reset Request",
+                IsBodyHtml = true,
+                Body = $"<html><body><a href='https://localhost:44319/resetpassword/{Token}'>Reset Now</a></body></html>",
+                BodyEncoding = Encoding.Unicode,
+               
+               
+            });
             
         }
 

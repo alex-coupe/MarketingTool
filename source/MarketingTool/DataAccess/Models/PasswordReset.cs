@@ -19,5 +19,9 @@ namespace DataAccess.Models
         [MaxLength(50)]
         public string Token { get; set; }
 
+        [Required]
+
+        public DateTime DateCreated { get; set; }
+
     }
 }

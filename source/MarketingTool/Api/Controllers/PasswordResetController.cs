@@ -1,4 +1,6 @@
 ﻿using ApiServices;
+using DataAccess.Models;
+using DataAccess.Repositories;
 using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -14,9 +16,11 @@ namespace Api.Controllers
     public class PasswordResetController : ControllerBase
     {
         private PasswordResetService _passwordService;
-        public PasswordResetController(PasswordResetService service)
+        private IRepository<PasswordReset> _repository;
+        public PasswordResetController(PasswordResetService service, IRepository<PasswordReset> repository)
         {
             _passwordService = service;
+            _repository = repository;
         }    
 
         [Route("resetpassword")]
@@ -25,6 +29,15 @@ namespace Api.Controllers
         {
             await _passwordService.GenerateNewPasswordResetRequest(request.Email);
             return Ok();
+        }
+
+        [Route("resetpassword/{Token}")]
+        [HttpGet]
+        public ActionResult<PasswordReset> GetResetRequest([FromRoute]string Token)
+        {
+            var request = _repository.ToList().Where(x => x.Token == Token).FirstOrDefault();
+
+            return Ok(request);
         }
     }
 }
