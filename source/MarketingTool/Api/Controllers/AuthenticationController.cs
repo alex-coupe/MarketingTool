@@ -46,8 +46,7 @@ namespace Api.Controllers
                 return Ok(JsonSerializer.Serialize(authResponse));
             }
 
-            var errorResponse = new Error { ErrorMessage = "Email Address or Password Incorrect" };
-            return Unauthorized(errorResponse);
+            return Unauthorized(new {ErrorMessage = "Email Address or Password Incorrect" });
         }
 
         [AllowAnonymous]

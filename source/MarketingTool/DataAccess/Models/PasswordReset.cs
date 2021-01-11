@@ -20,8 +20,10 @@ namespace DataAccess.Models
         public string Token { get; set; }
 
         [Required]
-
         public DateTime DateCreated { get; set; }
+
+        [Required]
+        public int UserId { get; set; }
 
     }
 }

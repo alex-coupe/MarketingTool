@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DataTransfer.ViewModels
 {
+    /// <summary>
+    /// Represents a login request from the user
+    /// </summary>
     public class LoginRequest
     {
         [Required]

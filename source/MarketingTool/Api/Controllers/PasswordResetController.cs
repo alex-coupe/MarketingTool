@@ -21,7 +21,23 @@ namespace Api.Controllers
         {
             _passwordService = service;
             _repository = repository;
-        }    
+        }
+
+        [Route("resetpassword/{Token}")]
+        [HttpGet]
+        public ActionResult<PasswordResetData> GetResetRequest([FromRoute] string Token)
+        {
+            var request = _repository.ToList().Where(x => x.Token == Token).FirstOrDefault();
+
+            var resetData = new PasswordResetData
+            {
+                EmailAddress = request.EmailAddress,
+                IsTokenValid = request.DateCreated.AddMinutes(30) < DateTime.Now ? true : false,
+                UserId = request.UserId
+            };
+
+            return Ok(resetData);
+        }
 
         [Route("resetpassword")]
         [HttpPost]
@@ -31,13 +47,21 @@ namespace Api.Controllers
             return Ok();
         }
 
-        [Route("resetpassword/{Token}")]
-        [HttpGet]
-        public ActionResult<PasswordReset> GetResetRequest([FromRoute]string Token)
+        [Route("updatepassword")]
+        [HttpPost]
+        public async Task<ActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request, IRepository<User> _userRepository)
         {
-            var request = _repository.ToList().Where(x => x.Token == Token).FirstOrDefault();
-
-            return Ok(request);
+            var user = _userRepository.Where(x => x.Id == request.UserId && x.EmailAddress == request.EmailAddress).FirstOrDefault();
+           
+            if (user != null)
+            {
+                user.Password = CryptoHelper.Crypto.HashPassword(request.Password);
+                await _userRepository.SaveChangesAsync();
+                return Ok();
+            }
+            return BadRequest(new { ErrorMessage = "A user could not be found" });
         }
+
+
     }
 }

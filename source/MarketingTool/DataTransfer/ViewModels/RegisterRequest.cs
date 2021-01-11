@@ -5,6 +5,9 @@ using System.Text;
 
 namespace DataTransfer.ViewModels
 {
+    /// <summary>
+    /// Represents a registration request from a user
+    /// </summary>
     public class RegisterRequest
     {
         [Required]
@@ -24,5 +27,8 @@ namespace DataTransfer.ViewModels
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        public string ConfirmPassword { get; set; }
     }
 }
