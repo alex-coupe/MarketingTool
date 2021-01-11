@@ -23,11 +23,13 @@ namespace MarketingToolTests.BackendTests
     public class AuthenticationControllerTests
     {
         Mock<IRepository<User>> _userRepositoryMock;
+        Mock<IRepository<PasswordReset>> _passwordResetMock;
         Mock<IConfiguration> _configurationMock;
     
         public AuthenticationControllerTests()
         {
             _userRepositoryMock = new Mock<IRepository<User>>();
+            _passwordResetMock = new Mock<IRepository<PasswordReset>>();
             _configurationMock = new Mock<IConfiguration>();
 
             var userList = new List<User> {
@@ -66,7 +68,8 @@ namespace MarketingToolTests.BackendTests
         [Fact]
         public void user_is_authenticated_with_correct_credentials()
         {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
+                ,_passwordResetMock.Object);
             LoginRequest request = new LoginRequest();
             request.Email = "test@test.com";
             request.Password = "Password123";
@@ -79,7 +82,8 @@ namespace MarketingToolTests.BackendTests
         [Fact]
         public void user_is_not_authenticated_with_incorrect_credentials()
         {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
+                 , _passwordResetMock.Object);
             LoginRequest request = new LoginRequest();
             request.Email = "test@test.com";
             request.Password = "Password12";
@@ -95,7 +99,8 @@ namespace MarketingToolTests.BackendTests
         [Fact]
         public async Task well_formed_user_is_registered()
         {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
+                 , _passwordResetMock.Object);
             var user = new User
             {
 
@@ -120,7 +125,8 @@ namespace MarketingToolTests.BackendTests
         [Fact]
         public async Task using_existing_email_does_not_register()
         {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
+                 , _passwordResetMock.Object);
             var user = new User
             {
 
@@ -144,7 +150,8 @@ namespace MarketingToolTests.BackendTests
         [Fact]
         public async Task malformed_user_is_not_registered()
         {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object);
+            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
+                 , _passwordResetMock.Object);
             var user = new User
             {
                 Admin = true,
