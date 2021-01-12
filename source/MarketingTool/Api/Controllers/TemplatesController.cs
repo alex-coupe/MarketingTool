@@ -28,7 +28,7 @@ namespace Api.Controllers
         public async Task<ActionResult<IEnumerable<Template>>> GetTemplates()
         {
             IEnumerable<Template> templates;
-            if (HttpContext.User.HasClaim(claim => claim.Type == "Email").Equals("acoupe@gmail.com"))
+            if (HttpContext.User.HasClaim(claim => claim.Type == "Email" && claim.Value == "acoupe@gmail.com"))
             {
                 templates = await _templateRepository.GetAllAsync();
             }

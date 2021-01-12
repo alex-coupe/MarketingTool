@@ -26,14 +26,14 @@ namespace DataAccess.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<IEnumerable<Template>> GetAllAsync()
+        public async Task<IEnumerable<Template>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.Templates.ToListAsync();
         }
 
-        public Task<Template> GetAsync(int id)
+        public async Task<Template> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.Templates.Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
