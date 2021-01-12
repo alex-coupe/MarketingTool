@@ -90,10 +90,9 @@ namespace MarketingToolTests.BackendTests
             var result = _controller.Login(request);
 
             var actionResult = Assert.IsType<UnauthorizedObjectResult>(result);
-            var errorString = Assert.IsType<string>(actionResult.Value);
-            var json = errorString;
-
-            Assert.Equal("Email Address or Password Incorrect", json);
+            var errorString = actionResult.Value;
+            
+            Assert.Equal("{ ErrorMessage = Email Address or Password Incorrect }", errorString.ToString());
         }
 
         [Fact]

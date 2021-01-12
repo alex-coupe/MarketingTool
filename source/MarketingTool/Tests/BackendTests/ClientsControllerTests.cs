@@ -180,7 +180,7 @@ namespace MarketingToolTests.BackendTests
 
             var result = await _controller.DeleteClient(client.Id);
 
-            var actionResult = Assert.IsType<NoContentResult>(result.Result);
+            Assert.IsType<NoContentResult>(result);
             _clientRepositoryMock.Verify(r => r.Remove(client.Id));
         }
     }

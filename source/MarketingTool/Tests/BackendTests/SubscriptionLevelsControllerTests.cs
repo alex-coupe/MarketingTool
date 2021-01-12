@@ -185,7 +185,7 @@ namespace MarketingToolTests.BackendTests
 
             var result = await _controller.DeleteSubscriptionLevel(id);
 
-            var actionResult = Assert.IsType<NoContentResult>(result.Result);
+             Assert.IsType<NoContentResult>(result);
             _subscriptionLevelRepositoryMock.Verify(r => r.Remove(id));
         }
     }
