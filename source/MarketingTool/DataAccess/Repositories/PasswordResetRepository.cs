@@ -81,5 +81,15 @@ namespace DataAccess.Repositories
         {
             return _context.PasswordResets.Where(predicate);
         }
+
+        public Task<IEnumerable<PasswordReset>> GetAllAsync(Expression<Func<PasswordReset, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<PasswordReset> GetAsync(Expression<Func<PasswordReset, bool>> predicate, int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

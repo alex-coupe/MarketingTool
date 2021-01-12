@@ -85,5 +85,15 @@ namespace DataAccess.Repositories
         {
             return _context.SubscriptionLevels.ToList();
         }
+
+        public Task<IEnumerable<SubscriptionLevel>> GetAllAsync(Expression<Func<SubscriptionLevel, bool>> predicate)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<SubscriptionLevel> GetAsync(Expression<Func<SubscriptionLevel, bool>> predicate, int id)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

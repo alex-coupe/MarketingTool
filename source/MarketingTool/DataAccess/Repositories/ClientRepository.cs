@@ -83,5 +83,15 @@ namespace DataAccess.Repositories
         {
             return _context.Clients.ToList();
         }
+
+        public async Task<IEnumerable<Client>> GetAllAsync(Expression<Func<Client, bool>> predicate)
+        {
+            return await _context.Clients.Where(predicate).ToListAsync();
+        }
+
+        public async Task<Client> GetAsync(Expression<Func<Client, bool>> predicate, int id)
+        {
+            return await _context.Clients.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+        }
     }
 }

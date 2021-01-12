@@ -97,6 +97,7 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<Client>, ClientRepository>();
             services.AddTransient<IRepository<User>, UserRepository>();
             services.AddTransient<IRepository<PasswordReset>, PasswordResetRepository>();
+            services.AddTransient<IRepository<Template>, TemplateRepository>();
             services.AddScoped<PasswordResetService>();
             services.AddSingleton<EmailService>();
         }

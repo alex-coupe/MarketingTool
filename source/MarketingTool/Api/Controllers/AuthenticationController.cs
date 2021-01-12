@@ -78,7 +78,10 @@ namespace Api.Controllers
             var claims = new[]
             {
                 new Claim("Admin", user.Admin.ToString()),
-                new Claim("Archived", user.Archived.ToString())
+                new Claim("Archived", user.Archived.ToString()),
+                new Claim("ClientId", user.ClientId.ToString()),
+                new Claim("UserId", user.Id.ToString()),
+                new Claim("Email", user.EmailAddress)
             };
 
             var token = new JwtSecurityToken(null,
