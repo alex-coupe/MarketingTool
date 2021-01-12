@@ -14,6 +14,10 @@ namespace DataAccess.Models
 
         public string Content { get; set; }
 
+        public int CreatorId { get; set; }
+
+        public DateTime CreatedDate { get; set; }
+
         public int Version { get; set; }
     }
 }

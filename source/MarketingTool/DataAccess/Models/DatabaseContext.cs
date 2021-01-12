@@ -24,5 +24,7 @@ namespace DataAccess.Models
         public DbSet<PasswordReset> PasswordResets { get; set; }
 
         public DbSet<Template> Templates { get; set; }
+
+        public DbSet<TemplateHistory> TemplateHistory { get; set; }
     }
 }
