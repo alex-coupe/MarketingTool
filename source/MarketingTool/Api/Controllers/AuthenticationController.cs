@@ -1,4 +1,5 @@
-﻿using Api.Services;
+﻿using Api.Helpers;
+using Api.Services;
 using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
@@ -127,7 +128,7 @@ namespace Api.Controllers
             if (user != null)
             {
                 //generating token here for test purposes
-                var token = GenerateToken();
+                var token = AuthHelper.GenerateToken();
 
                 _passwordResetRepository.Add(new PasswordReset
                 {
@@ -180,13 +181,6 @@ namespace Api.Controllers
             return NoContent();
         }
 
-        private string GenerateToken()
-        {
-            Random random = new Random();
-            const string chars = "abcdefghijklmnopqrstuvwxyz0123456789";
-            return new string(Enumerable.Repeat(chars, 50)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
-        }
 
         private User AuthenticateUser(string email, string password)
         {

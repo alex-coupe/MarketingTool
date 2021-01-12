@@ -75,7 +75,7 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpDelete]
-        public async Task<ActionResult<Client>> DeleteClient(int id)
+        public async Task<ActionResult> DeleteClient(int id)
         {
             _repository.Remove(id);
 

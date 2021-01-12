@@ -1,4 +1,5 @@
 ﻿using Api.Helpers;
+using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -49,6 +50,50 @@ namespace Api.Controllers
                 return Ok(template);
            
             return NotFound();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Template>> PostTemplate(Template template)
+        {
+            NewTemplateValidator _validator = new NewTemplateValidator();
+            var validationResult = await _validator.ValidateAsync(template);
+            if (validationResult.IsValid)
+            {
+                _templateRepository.Add(template);
+
+                await _templateRepository.SaveChangesAsync();
+                return CreatedAtAction("PostClient", new { id = template.Id }, template);
+            }
+
+            return BadRequest(validationResult.Errors);
+        }
+
+        [Authorize]
+        [HttpPut]
+        public async Task<ActionResult<Template>> PutTemplate(Template template)
+        {
+            EditTemplateValidator _validator = new EditTemplateValidator();
+            var validationResult = await _validator.ValidateAsync(template);
+            if (validationResult.IsValid)
+            {
+                _templateRepository.Edit(template);
+                await _templateRepository.SaveChangesAsync();
+
+                return Ok(template);
+            }
+
+            return BadRequest(validationResult.Errors);
+        }
+
+        [Authorize]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteTemplate(int id)
+        {
+            _templateRepository.Remove(id);
+
+            await _templateRepository.SaveChangesAsync();
+
+            return NoContent();
         }
     }
 }

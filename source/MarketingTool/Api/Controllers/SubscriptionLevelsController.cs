@@ -76,7 +76,7 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpDelete]
-        public async Task<ActionResult<SubscriptionLevel>> DeleteSubscriptionLevel(int id)
+        public async Task<ActionResult> DeleteSubscriptionLevel(int id)
         {
             _repository.Remove(id);
 
