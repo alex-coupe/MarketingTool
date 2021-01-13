@@ -38,5 +38,7 @@ namespace DataAccess.Models
         public DbSet<Template> Templates { get; set; }
 
         public DbSet<TemplateHistory> TemplateHistory { get; set; }
+
+        public DbSet<Campaign> Campaigns { get; set; }
     }
 }

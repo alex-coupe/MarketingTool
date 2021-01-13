@@ -19,6 +19,9 @@ namespace DataAccess.Models
         [Required]
         public int ClientId { get; set; }
 
+        [Required]
+        public string Name { get; set; }
+
         public string Notes { get; set; }
 
         public ICollection<List> Lists { get; set; }
