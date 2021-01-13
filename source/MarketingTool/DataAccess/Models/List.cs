@@ -19,6 +19,16 @@ namespace DataAccess.Models
         [Required]
         public int ClientId { get; set; }
 
+        [Required]
+        public int CreatorId { get; set; }
+
+        public int ModifierId { get; set; }
+
+        [Required]
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime ModifiedDate { get; set; }
+
         public ICollection<Recipient> Recipients { get; set; }
     }
 }
