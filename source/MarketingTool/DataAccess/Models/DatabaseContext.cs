@@ -23,7 +23,9 @@ namespace DataAccess.Models
             builder.Entity<EmailStatus>().HasData(new EmailStatus { Id = 1, Name = "Pending" }, new EmailStatus { Id = 2, Name = "Sent" }, new EmailStatus { Id = 3, Name = "Failed" });
         }
 
+        public DbSet<EmailJob> EmailJobs { get; set; }
 
+        public DbSet<EmailJobHistory> EmailJobHistory { get; set; }
         public DbSet<TimeStep> TimeSteps { get; set; }
 
         public DbSet<EmailStatus> EmailStatuses { get; set; }

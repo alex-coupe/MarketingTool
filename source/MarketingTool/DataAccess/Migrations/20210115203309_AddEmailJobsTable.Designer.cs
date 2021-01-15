@@ -4,14 +4,16 @@ using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210115203309_AddEmailJobsTable")]
+    partial class AddEmailJobsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -100,31 +102,6 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EmailJobs");
-                });
-
-            modelBuilder.Entity("DataAccess.Models.EmailJobHistory", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("CampaignId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("EmailStatusId")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("ProcessedTimestamp")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("RecipientEmail")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("EmailJobHistory");
                 });
 
             modelBuilder.Entity("DataAccess.Models.EmailStatus", b =>
