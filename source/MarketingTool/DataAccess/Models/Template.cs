@@ -10,7 +10,7 @@ namespace DataAccess.Models
     public class Template
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         [Required]
         public int ClientId { get; set; }
@@ -20,6 +20,9 @@ namespace DataAccess.Models
 
         [Required]
         public string Content { get; set; }
+
+        [Required]
+        public string Subject { get; set; }
 
         [Required]
         public int CreatorId { get; set; }

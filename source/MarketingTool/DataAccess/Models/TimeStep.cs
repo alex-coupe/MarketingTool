@@ -10,7 +10,7 @@ namespace DataAccess.Models
     public class TimeStep
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         public string Name { get; set; }
 

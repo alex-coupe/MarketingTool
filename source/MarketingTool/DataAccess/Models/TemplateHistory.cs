@@ -10,7 +10,7 @@ namespace DataAccess.Models
     public class TemplateHistory
     {
         [Key]
-        public int Id { get; set; }
+        public int Id { get; init; }
 
         [Required]
         public int TemplateId { get; set; }
