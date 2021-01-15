@@ -19,10 +19,14 @@ namespace DataAccess.Models
                 Name = "Monthly",
                 Hours = 730
             });
+
+            builder.Entity<EmailStatus>().HasData(new EmailStatus { Id = 1, Name = "Pending" }, new EmailStatus { Id = 2, Name = "Sent" }, new EmailStatus { Id = 3, Name = "Failed" });
         }
 
 
         public DbSet<TimeStep> TimeSteps { get; set; }
+
+        public DbSet<EmailStatus> EmailStatuses { get; set; }
         public DbSet<SubscriptionLevel> SubscriptionLevels { get; set; }
 
         public DbSet<Client> Clients { get; set; }
