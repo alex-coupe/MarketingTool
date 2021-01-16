@@ -10,14 +10,34 @@ namespace DataAccess.Repositories
 {
     public class UserInviteRepository : IRepository<UserInvite>
     {
-        public void Add(UserInvite item)
+        private DatabaseContext _context;
+        public UserInviteRepository(DatabaseContext context)
         {
-            throw new NotImplementedException();
+            _context = context;
+        }
+        public void Add(User item)
+        {
+            _context.Users.Add(item);
+        }
+
+        private bool disposed = false;
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!this.disposed)
+            {
+                if (disposing)
+                {
+                    _context.Dispose();
+                }
+            }
+            this.disposed = true;
         }
 
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
 
         public void Edit(UserInvite item)
@@ -47,7 +67,8 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            var user = _context.Users.Find(id);
+            _context.Users.Remove(user);
         }
 
         public void SaveChanges()
@@ -55,9 +76,9 @@ namespace DataAccess.Repositories
             throw new NotImplementedException();
         }
 
-        public Task<int> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync();
         }
 
         public List<UserInvite> ToList()
