@@ -29,7 +29,7 @@ namespace DataAccess.Models
 
         public DbSet<UserInvite> UserInvites { get; set; }
 
-        // public DbSet<TemplateSynonym> TemplateSynonyms { get; set; }
+        public DbSet<TemplateSynonym> TemplateSynonyms { get; set; }
 
         public DbSet<TimeStep> TimeSteps { get; set; }
 
