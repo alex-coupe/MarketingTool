@@ -26,6 +26,11 @@ namespace DataAccess.Models
         public DbSet<EmailJob> EmailJobs { get; set; }
 
         public DbSet<EmailJobHistory> EmailJobHistory { get; set; }
+
+        public DbSet<UserInvite> UserInvites { get; set; }
+
+        // public DbSet<TemplateSynonym> TemplateSynonyms { get; set; }
+
         public DbSet<TimeStep> TimeSteps { get; set; }
 
         public DbSet<EmailStatus> EmailStatuses { get; set; }
