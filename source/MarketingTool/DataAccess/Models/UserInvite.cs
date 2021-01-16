@@ -20,5 +20,8 @@ namespace DataAccess.Models
 
         [Required]
         public int InvitingUserId { get; set; }
+
+        [Required]
+        public bool InviteSent { get; set; }
     }
 }
