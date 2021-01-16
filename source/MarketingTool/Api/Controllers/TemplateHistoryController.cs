@@ -26,7 +26,7 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TemplateHistory>>> GetTemplateHistory(int templateId)
         {
-            var clientId = UserHelper.GetClientId(HttpContext.User.Claims);
+            var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var history = await _repository.GetAllAsync(x => x.TemplateId == templateId);
             return Ok(history);
         }

@@ -33,7 +33,7 @@ namespace Api.Controllers
                 templates = await _templateRepository.GetAllAsync();
             }
 
-            var clientId = UserHelper.GetClientId(HttpContext.User.Claims);
+            var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             templates = await _templateRepository.GetAllAsync(x => x.ClientId == clientId);
 
             return Ok(templates);
@@ -41,9 +41,9 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<IEnumerable<Template>>> GetTemplate(int id)
+        public async Task<ActionResult<Template>> GetTemplate(int id)
         {
-            var clientId = UserHelper.GetClientId(HttpContext.User.Claims);
+            var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var template = await _templateRepository.GetAsync(x => x.ClientId == clientId,id);
             
             if (template != null)
@@ -52,6 +52,7 @@ namespace Api.Controllers
             return NotFound();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<Template>> PostTemplate(Template template)
         {
@@ -62,7 +63,7 @@ namespace Api.Controllers
                 _templateRepository.Add(template);
 
                 await _templateRepository.SaveChangesAsync();
-                return CreatedAtAction("PostClient", new { id = template.Id }, template);
+                return CreatedAtAction("PostTemplate", new { id = template.Id }, template);
             }
 
             return BadRequest(validationResult.Errors);
