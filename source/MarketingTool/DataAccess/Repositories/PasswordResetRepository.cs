@@ -43,7 +43,7 @@ namespace DataAccess.Repositories
 
         public void Edit(PasswordReset item)
         {
-            throw new NotImplementedException();
+            _context.Entry(item).State = EntityState.Modified;
         }
 
         public async Task<IEnumerable<PasswordReset>> GetAllAsync()
@@ -51,9 +51,10 @@ namespace DataAccess.Repositories
             return await _context.PasswordResets.AsNoTracking().ToListAsync();
         }
 
-        public Task<PasswordReset> GetAsync(int id)
+        public async Task<PasswordReset> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.PasswordResets.AsNoTracking()
+             .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public void Remove(int id)
@@ -64,7 +65,7 @@ namespace DataAccess.Repositories
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
 
         public Task<int> SaveChangesAsync()
@@ -82,14 +83,15 @@ namespace DataAccess.Repositories
             return _context.PasswordResets.Where(predicate);
         }
 
-        public Task<IEnumerable<PasswordReset>> GetAllAsync(Expression<Func<PasswordReset, bool>> predicate)
+        public async Task<IEnumerable<PasswordReset>> GetAllAsync(Expression<Func<PasswordReset, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await _context.PasswordResets.AsNoTracking()
+               .ToListAsync();
         }
 
-        public Task<PasswordReset> GetAsync(Expression<Func<PasswordReset, bool>> predicate, int id)
+        public async Task<PasswordReset> GetAsync(Expression<Func<PasswordReset, bool>> predicate, int id)
         {
-            throw new NotImplementedException();
+            return await _context.PasswordResets.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
     }
 }
