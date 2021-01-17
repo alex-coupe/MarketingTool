@@ -103,6 +103,10 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<Campaign>, CampaignRepository>();
             services.AddTransient<IRepository<CampaignJob>, CampaignJobRepository>();
             services.AddTransient<IRepository<CampaignJobHistory>, CampaignJobHistoryRepository>();
+            services.AddTransient<IRepository<EmailStatus>, EmailStatusRepository>();
+
+
+
             services.AddSingleton<EmailService>();
             services.AddSingleton<PasswordResetService>();
             services.AddHostedService(provider => provider.GetService<PasswordResetService>());
