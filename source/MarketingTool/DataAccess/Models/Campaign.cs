@@ -51,5 +51,7 @@ namespace DataAccess.Models
         public virtual Template Template { get; set; }
 
         public bool IsActive { get; set; } = true;
+
+        public DateTime? LastSent { get; set; }
     }
 }
