@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -42,27 +43,29 @@ namespace DataAccess.Repositories
 
         public void Edit(UserInvite item)
         {
-            throw new NotImplementedException();
+            _context.Entry(item).State = EntityState.Modified;
         }
 
-        public Task<IEnumerable<UserInvite>> GetAllAsync()
+        public async Task<IEnumerable<UserInvite>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.UserInvites.AsNoTracking()
+                .ToListAsync();
         }
 
-        public Task<IEnumerable<UserInvite>> GetAllAsync(Expression<Func<UserInvite, bool>> predicate)
+        public async Task<IEnumerable<UserInvite>> GetAllAsync(Expression<Func<UserInvite, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await _context.UserInvites.Where(predicate).ToListAsync();
         }
 
-        public Task<UserInvite> GetAsync(int id)
+        public async Task<UserInvite> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.UserInvites.AsNoTracking()
+             .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<UserInvite> GetAsync(Expression<Func<UserInvite, bool>> predicate, int id)
+        public async Task<UserInvite> GetAsync(Expression<Func<UserInvite, bool>> predicate, int id)
         {
-            throw new NotImplementedException();
+            return await _context.UserInvites.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -73,7 +76,7 @@ namespace DataAccess.Repositories
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
 
         public async Task<int> SaveChangesAsync()
@@ -83,7 +86,7 @@ namespace DataAccess.Repositories
 
         public List<UserInvite> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.UserInvites.ToList();
         }
 
         public IEnumerable<UserInvite> Where(Expression<Func<UserInvite, bool>> predicate)
