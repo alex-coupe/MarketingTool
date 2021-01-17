@@ -93,18 +93,20 @@ namespace ApplicationLayer
                 });
             });
 
-            services.AddTransient<IRepository<SubscriptionLevel>, SubscriptionLevelRepository>();
-            services.AddTransient<IRepository<Client>, ClientRepository>();
-            services.AddTransient<IRepository<User>, UserRepository>();
-            services.AddTransient<IRepository<PasswordReset>, PasswordResetRepository>();
-            services.AddTransient<IRepository<Template>, TemplateRepository>();
-            services.AddTransient<IRepository<TemplateHistory>, TemplateHistoryRepository>();
-            services.AddTransient<IRepository<UserInvite>, UserInviteRepository>();
-            services.AddTransient<IRepository<Campaign>, CampaignRepository>();
-            services.AddTransient<IRepository<CampaignJob>, CampaignJobRepository>();
             services.AddTransient<IRepository<CampaignJobHistory>, CampaignJobHistoryRepository>();
+            services.AddTransient<IRepository<CampaignJob>, CampaignJobRepository>();
+            services.AddTransient<IRepository<Campaign>, CampaignRepository>();
+            services.AddTransient<IRepository<Client>, ClientRepository>();
             services.AddTransient<IRepository<EmailStatus>, EmailStatusRepository>();
             services.AddTransient<IRepository<List>, ListRepository>();
+            services.AddTransient<IRepository<PasswordReset>, PasswordResetRepository>();
+            //Space for Recipients
+            services.AddTransient<IRepository<SubscriptionLevel>, SubscriptionLevelRepository>();
+            services.AddTransient<IRepository<Template>, TemplateRepository>();
+            services.AddTransient<IRepository<TemplateHistory>, TemplateHistoryRepository>();
+            services.AddTransient<IRepository<TemplateSynonym>, TemplateSynonymRepository>();
+            services.AddTransient<IRepository<User>, UserRepository>();
+            services.AddTransient<IRepository<UserInvite>, UserInviteRepository>();
 
 
             services.AddSingleton<EmailService>();
