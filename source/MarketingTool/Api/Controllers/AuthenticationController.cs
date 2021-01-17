@@ -110,7 +110,7 @@ namespace Api.Controllers
 
             if (user != null)
             {
-                await resetService.Push(request.Email);
+                await resetService.Push(request.Email, user.Id);
                
                 return Ok();
             }

@@ -1,6 +1,7 @@
 ﻿using Api.Helpers;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -14,32 +15,36 @@ namespace Api.Services
 {
     public class PasswordResetService : BackgroundService
     {
-        IRepository<PasswordReset> _repository;
+        IServiceScopeFactory _serviceScopeFactory;
         EmailService _emailService;
-        public PasswordResetService(IRepository<PasswordReset> repository, EmailService emailService)
+        public PasswordResetService(IServiceScopeFactory serviceScopeFactory, EmailService emailService)
         {
-            _repository = repository;
+            _serviceScopeFactory = serviceScopeFactory;
             _emailService = emailService;
         }
 
         public async void ProcessQueue()
         {
-            var resets = _repository.Where(x => x.ResetSent == false).ToList();
-
-            foreach (var reset in resets)
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var resettingUser = reset.User;
-                _emailService.Send(new MailAddress(reset.EmailAddress), new MailMessage
+                var context = scope.ServiceProvider.GetService<IRepository<PasswordReset>>();
+
+                var resets = context.Where(x => x.EmailSent == false).ToList();
+
+                foreach (var reset in resets)
                 {
-                    IsBodyHtml = true,
-                    Subject = "Your Password Reset Request",
-                    Body = $"Hi {resettingUser.FirstName}, You've requested a password reset on your blabla.com account " +
-                    $"Click <a href='https://localhost:44319/resetpassword/{reset.Token}>Here</a> To reset "
-                });
-                reset.ResetSent = true;
-                await _repository.SaveChangesAsync();
+                    
+                    _emailService.Send(new MailAddress(reset.EmailAddress), new MailMessage
+                    {
+                        IsBodyHtml = true,
+                        Subject = "Your Password Reset Request",
+                        Body = $"Hi, You've requested a password reset on your blabla.com account " +
+                        $"Click <a href='https://localhost:44319/resetpassword/{reset.Token}>Here</a> To reset "
+                    });
+                    reset.EmailSent = true;
+                    await context.SaveChangesAsync();
+                }
             }
-            
         }
 
         protected override Task ExecuteAsync(CancellationToken token)
@@ -49,24 +54,27 @@ namespace Api.Services
                 while (!token.IsCancellationRequested)
                 {
                     ProcessQueue();
-                    await Task.Delay(TimeSpan.FromSeconds(300), token);
+                    await Task.Delay(TimeSpan.FromSeconds(150), token);
                 }
             }, token);
 
         }
 
-        public async Task Push(string email)
+        public async Task Push(string email, int userId)
         {
             var Token = AuthHelper.GenerateToken();
-
-            _repository.Add(new PasswordReset
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                EmailAddress = email,
-                Token = Token,
-                DateCreated = DateTime.Now
-            });
-            await _repository.SaveChangesAsync();
-
+                var context = scope.ServiceProvider.GetService<IRepository<PasswordReset>>();
+                context.Add(new PasswordReset
+                {
+                    EmailAddress = email,
+                    Token = Token,
+                    DateCreated = DateTime.Now,
+                    UserId = userId
+                });
+                await context.SaveChangesAsync();
+            }
         }
 
         
