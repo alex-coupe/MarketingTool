@@ -101,6 +101,7 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<TemplateHistory>, TemplateHistoryRepository>();
             services.AddTransient<IRepository<UserInvite>, UserInviteRepository>();
             services.AddTransient<IRepository<Campaign>, CampaignRepository>();
+            services.AddTransient<IRepository<CampaignJob>, CampaignJobRepository>();
 
             services.AddSingleton<EmailService>();
             services.AddSingleton<PasswordResetService>();
