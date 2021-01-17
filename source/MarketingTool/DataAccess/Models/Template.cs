@@ -33,12 +33,12 @@ namespace DataAccess.Models
         public int CreatorId { get; set; }
 
         [ForeignKey("ModifyingUser")]
-        public int ModifierId { get; set; }
+        public int? ModifierId { get; set; }
 
         [Required]
         public DateTime CreatedDate { get; set; }
 
-        public DateTime ModifiedDate { get; set; }
+        public DateTime? ModifiedDate { get; set; }
 
         [Required]
         public int Version { get; set; }

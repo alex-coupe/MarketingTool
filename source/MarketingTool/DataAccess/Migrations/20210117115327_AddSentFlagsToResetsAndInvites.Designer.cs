@@ -4,14 +4,16 @@ using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210117115327_AddSentFlagsToResetsAndInvites")]
+    partial class AddSentFlagsToResetsAndInvites
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,10 +44,10 @@ namespace DataAccess.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ModifierId")
+                    b.Property<int>("ModifierId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -194,10 +196,10 @@ namespace DataAccess.Migrations
                     b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ModifierId")
+                    b.Property<int>("ModifierId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -319,10 +321,10 @@ namespace DataAccess.Migrations
                     b.Property<int>("CreatorId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime?>("ModifiedDate")
+                    b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("datetime2");
 
-                    b.Property<int?>("ModifierId")
+                    b.Property<int>("ModifierId")
                         .HasColumnType("int");
 
                     b.Property<string>("Name")
@@ -568,7 +570,9 @@ namespace DataAccess.Migrations
 
                     b.HasOne("DataAccess.Models.User", "ModifyingUser")
                         .WithMany()
-                        .HasForeignKey("ModifierId");
+                        .HasForeignKey("ModifierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("DataAccess.Models.Template", "Template")
                         .WithMany()
@@ -650,7 +654,9 @@ namespace DataAccess.Migrations
 
                     b.HasOne("DataAccess.Models.User", "ModifyingUser")
                         .WithMany()
-                        .HasForeignKey("ModifierId");
+                        .HasForeignKey("ModifierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Client");
 
@@ -697,7 +703,9 @@ namespace DataAccess.Migrations
 
                     b.HasOne("DataAccess.Models.User", "ModifyingUser")
                         .WithMany()
-                        .HasForeignKey("ModifierId");
+                        .HasForeignKey("ModifierId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Client");
 
