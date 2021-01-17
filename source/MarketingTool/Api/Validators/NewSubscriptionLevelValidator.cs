@@ -22,7 +22,7 @@ namespace Api.Validators
 
         private bool IsDuplicate(string name)
         {
-            return _repository.ToList().Any(x => x.Name.ToLower() == name?.ToLower());
+            return _repository.GetAll().Any(x => x.Name.ToLower() == name?.ToLower());
         }
 
 

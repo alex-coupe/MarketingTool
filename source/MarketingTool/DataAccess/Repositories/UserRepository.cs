@@ -81,7 +81,7 @@ namespace DataAccess.Repositories
             return _context.Users.Where(predicate);
         }
 
-        public List<User> ToList()
+        public List<User> GetAll()
         {
             return _context.Users.ToList();
         }

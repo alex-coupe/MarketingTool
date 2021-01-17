@@ -61,7 +61,7 @@ namespace MarketingToolTests.BackendTests
 
             _userRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<User, bool>>>()))
                 .Returns(userList);
-            _userRepositoryMock.Setup(x => x.ToList()).Returns(userList);
+            _userRepositoryMock.Setup(x => x.GetAll()).Returns(userList);
             _configurationMock.SetupGet(x => x[It.IsAny<string>()]).Returns("Iqg3LSKql9HyXsOu1iP4");
         }
 

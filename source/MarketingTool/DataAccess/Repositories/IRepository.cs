@@ -25,6 +25,6 @@ namespace DataAccess.Repositories
 
         IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
 
-        List<T> ToList();
+        List<T> GetAll();
     }
 }

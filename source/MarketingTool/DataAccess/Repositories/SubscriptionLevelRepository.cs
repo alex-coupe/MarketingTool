@@ -81,7 +81,7 @@ namespace DataAccess.Repositories
             return _context.SubscriptionLevels.Where(predicate);
         }
 
-        public List<SubscriptionLevel> ToList()
+        public List<SubscriptionLevel> GetAll()
         {
             return _context.SubscriptionLevels.ToList();
         }

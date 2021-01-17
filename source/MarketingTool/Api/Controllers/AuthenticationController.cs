@@ -79,7 +79,7 @@ namespace Api.Controllers
         [HttpGet]
         public ActionResult<PasswordResetData> GetResetRequest([FromRoute] string Token)
         {
-            var request = _passwordResetRepository.ToList().Where(x => x.Token == Token).FirstOrDefault();
+            var request = _passwordResetRepository.GetAll().Where(x => x.Token == Token).FirstOrDefault();
 
             var resetData = new PasswordResetData
             {

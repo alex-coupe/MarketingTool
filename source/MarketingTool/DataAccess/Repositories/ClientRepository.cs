@@ -79,7 +79,7 @@ namespace DataAccess.Repositories
             return _context.Clients.Where(predicate);
         }
 
-        public List<Client> ToList()
+        public List<Client> GetAll()
         {
             return _context.Clients.ToList();
         }

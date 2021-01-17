@@ -51,7 +51,7 @@ namespace MarketingToolTests.BackendTests
             _subscriptionLevelRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _subscriptionLevelRepositoryMock.Setup(r => r.Edit(It.IsAny<SubscriptionLevel>()));
             _subscriptionLevelRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
-            _subscriptionLevelRepositoryMock.Setup(x => x.ToList()).Returns(subscriptionLevels);
+            _subscriptionLevelRepositoryMock.Setup(x => x.GetAll()).Returns(subscriptionLevels);
             _subscriptionLevelRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
             _subscriptionLevelRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<SubscriptionLevel, bool>>>()))

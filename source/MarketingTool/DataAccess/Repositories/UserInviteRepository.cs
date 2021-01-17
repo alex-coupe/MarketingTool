@@ -81,7 +81,7 @@ namespace DataAccess.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public List<UserInvite> ToList()
+        public List<UserInvite> GetAll()
         {
             throw new NotImplementedException();
         }

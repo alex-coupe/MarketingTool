@@ -51,7 +51,7 @@ namespace DataAccess.Repositories
             throw new NotImplementedException();
         }
 
-        public List<Template> ToList()
+        public List<Template> GetAll()
         {
             throw new NotImplementedException();
         }

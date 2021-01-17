@@ -27,7 +27,7 @@ namespace Api.Validators
 
         private bool IsDuplicate(string email)
         {
-            return _repository.ToList().Any(x => x.EmailAddress.ToLower() == email?.ToLower());
+            return _repository.GetAll().Any(x => x.EmailAddress.ToLower() == email?.ToLower());
         }
     }
 }

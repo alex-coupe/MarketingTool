@@ -54,7 +54,7 @@ namespace MarketingToolTests.BackendTests
             _clientRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
             _clientRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<Client, bool>>>()))
               .Returns(clientList);
-            _clientRepositoryMock.Setup(x => x.ToList()).Returns(clientList);
+            _clientRepositoryMock.Setup(x => x.GetAll()).Returns(clientList);
         }
 
         [Fact]

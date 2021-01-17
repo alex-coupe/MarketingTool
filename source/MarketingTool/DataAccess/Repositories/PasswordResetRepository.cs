@@ -72,7 +72,7 @@ namespace DataAccess.Repositories
             return _context.SaveChangesAsync();
         }
 
-        public List<PasswordReset> ToList()
+        public List<PasswordReset> GetAll()
         {
             return _context.PasswordResets.ToList();
         }
