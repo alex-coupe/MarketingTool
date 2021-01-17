@@ -1,6 +1,7 @@
 ﻿using Api.Helpers;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Collections.Generic;
@@ -12,26 +13,29 @@ namespace Api.Services
 {
     public class UserInviteService  : BackgroundService
     {
-        IRepository<UserInvite> _userInviteRepository;
+        IServiceScopeFactory _serviceScopeFactory;
         EmailService _emailService;
       
-        public UserInviteService(IRepository<UserInvite> userInviterepository, EmailService emailService)
+        public UserInviteService(IServiceScopeFactory serviceScopeFactory, EmailService emailService)
         {
-            _userInviteRepository = userInviterepository;
+            _serviceScopeFactory = serviceScopeFactory;
             _emailService = emailService;
         }
-        public async Task<int> Push(string emailAddress, int invitingUserId)
+        public async Task Push(string emailAddress, int invitingUserId)
         {
-            _userInviteRepository.Add(new UserInvite
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                EmailAddress = emailAddress,
-                Token = AuthHelper.GenerateToken(),
-                InvitingUserId = invitingUserId
-            });
+                var _userInviteRepository = scope.ServiceProvider.GetService<IRepository<UserInvite>>();
+                _userInviteRepository.Add(new UserInvite
+                {
+                    EmailAddress = emailAddress,
+                    Token = AuthHelper.GenerateToken(),
+                    InvitingUserId = invitingUserId
+                });
 
-            var result = await _userInviteRepository.SaveChangesAsync();
-
-            return result;
+                await _userInviteRepository.SaveChangesAsync();
+            }
+           
         }
 
       
@@ -42,7 +46,7 @@ namespace Api.Services
                 while (!token.IsCancellationRequested)
                 {
                     ProcessQueue();
-                    await Task.Delay(TimeSpan.FromSeconds(300), token);
+                    await Task.Delay(TimeSpan.FromSeconds(100), token);
                 }
              }, token);
 
@@ -50,20 +54,27 @@ namespace Api.Services
 
         public async void ProcessQueue()
         {
-            var invites = _userInviteRepository.Where(x => x.InviteSent == false).ToList();
-
-            foreach (var invite in invites)
+            using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var invitingUser = invite.InvitingUser;
-                _emailService.Send(new System.Net.Mail.MailAddress(invite.EmailAddress), new System.Net.Mail.MailMessage
+                var _userInviteRepository = scope.ServiceProvider.GetService<IRepository<UserInvite>>();
+                var _userRepository = scope.ServiceProvider.GetService<IRepository<User>>();
+                var _clientRepository = scope.ServiceProvider.GetService<IRepository<Client>>();
+                var invites = _userInviteRepository.Where(x => x.InviteSent == false).ToList();
+              
+                foreach (var invite in invites)
                 {
-                    Subject = "You've been invited",
-                    Body = $"You've been invited to join {invitingUser.Client.Name}'s blabla.com account by {invitingUser.FirstName} {invitingUser.LastName}." +
-                    $"Click here to join {invite.Token} "
-                });
+                    var invitingUser = _userRepository.Where(x => x.Id == invite.InvitingUserId).FirstOrDefault();
+                    var invitingClient = _clientRepository.Where(x => x.Id == invitingUser.ClientId).FirstOrDefault();
+                    _emailService.Send(new System.Net.Mail.MailAddress(invite.EmailAddress), new System.Net.Mail.MailMessage
+                    {
+                        Subject = "You've been invited",
+                        Body = $"You've been invited to join {invitingClient.Name}'s blabla.com account by {invitingUser.FirstName} {invitingUser.LastName}." +
+                        $"Click here to join {invite.Token} "
+                    });
 
-                invite.InviteSent = true;
-                await _userInviteRepository.SaveChangesAsync();
+                    invite.InviteSent = true;
+                    await _userInviteRepository.SaveChangesAsync();
+                }
             }
         }
     }

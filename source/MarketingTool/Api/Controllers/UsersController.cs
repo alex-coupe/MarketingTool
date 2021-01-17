@@ -3,6 +3,7 @@ using Api.Services;
 using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -55,10 +56,10 @@ namespace Api.Controllers
         [Authorize]
         [Route("Invite")]
         [HttpPost]
-        public async Task<ActionResult> PostUserInvite([FromBody] string emailAddress, [FromServices] UserInviteService userInviteService)
+        public async Task<ActionResult> PostUserInvite([FromBody] PasswordResetRequest request, [FromServices] UserInviteService userInviteService)
         {
             var userId = AuthHelper.GetUserId(HttpContext.User.Claims);
-            await userInviteService.Push(emailAddress, userId);
+            await userInviteService.Push(request.Email, userId);
 
             return Ok();
         }

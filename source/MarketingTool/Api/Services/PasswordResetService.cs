@@ -27,9 +27,9 @@ namespace Api.Services
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var context = scope.ServiceProvider.GetService<IRepository<PasswordReset>>();
+                var _repository = scope.ServiceProvider.GetService<IRepository<PasswordReset>>();
 
-                var resets = context.Where(x => x.EmailSent == false).ToList();
+                var resets = _repository.Where(x => x.EmailSent == false).ToList();
 
                 foreach (var reset in resets)
                 {
@@ -42,7 +42,7 @@ namespace Api.Services
                         $"Click <a href='https://localhost:44319/resetpassword/{reset.Token}>Here</a> To reset "
                     });
                     reset.EmailSent = true;
-                    await context.SaveChangesAsync();
+                    await _repository.SaveChangesAsync();
                 }
             }
         }
@@ -65,15 +65,15 @@ namespace Api.Services
             var Token = AuthHelper.GenerateToken();
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var context = scope.ServiceProvider.GetService<IRepository<PasswordReset>>();
-                context.Add(new PasswordReset
+                var _repository = scope.ServiceProvider.GetService<IRepository<PasswordReset>>();
+                _repository.Add(new PasswordReset
                 {
                     EmailAddress = email,
                     Token = Token,
                     DateCreated = DateTime.Now,
                     UserId = userId
                 });
-                await context.SaveChangesAsync();
+                await _repository.SaveChangesAsync();
             }
         }
 

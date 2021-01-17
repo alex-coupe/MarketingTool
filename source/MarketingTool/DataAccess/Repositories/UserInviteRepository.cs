@@ -88,7 +88,7 @@ namespace DataAccess.Repositories
 
         public IEnumerable<UserInvite> Where(Expression<Func<UserInvite, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _context.UserInvites.Where(predicate);
         }
     }
 }

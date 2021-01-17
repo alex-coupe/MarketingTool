@@ -100,10 +100,13 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<Template>, TemplateRepository>();
             services.AddTransient<IRepository<TemplateHistory>, TemplateHistoryRepository>();
             services.AddTransient<IRepository<UserInvite>, UserInviteRepository>();
+
             services.AddSingleton<EmailService>();
             services.AddSingleton<PasswordResetService>();
             services.AddHostedService(provider => provider.GetService<PasswordResetService>());
-            services.AddScoped<UserInviteService>();
+            services.AddSingleton<UserInviteService>();
+            services.AddHostedService(provider => provider.GetService<UserInviteService>());
+            
             
         }
 
