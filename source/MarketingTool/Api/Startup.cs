@@ -102,7 +102,7 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<UserInvite>, UserInviteRepository>();
             services.AddTransient<IRepository<Campaign>, CampaignRepository>();
             services.AddTransient<IRepository<CampaignJob>, CampaignJobRepository>();
-
+            services.AddTransient<IRepository<CampaignJobHistory>, CampaignJobHistoryRepository>();
             services.AddSingleton<EmailService>();
             services.AddSingleton<PasswordResetService>();
             services.AddHostedService(provider => provider.GetService<PasswordResetService>());
