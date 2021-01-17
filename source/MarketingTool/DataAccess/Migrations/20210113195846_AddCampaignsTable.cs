@@ -21,7 +21,7 @@ namespace DataAccess.Migrations
                     ModifierId = table.Column<int>(type: "int", nullable: true),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    TimeStepId = table.Column<int>(type: "int", nullable: false),
+                    TimestepId = table.Column<int>(type: "int", nullable: false),
                     IsActive = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>

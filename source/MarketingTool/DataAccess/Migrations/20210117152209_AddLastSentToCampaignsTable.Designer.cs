@@ -60,7 +60,7 @@ namespace DataAccess.Migrations
                     b.Property<int>("TemplateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TimeStepId")
+                    b.Property<int>("TimestepId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -73,7 +73,7 @@ namespace DataAccess.Migrations
 
                     b.HasIndex("TemplateId");
 
-                    b.HasIndex("TimeStepId");
+                    b.HasIndex("TimestepId");
 
                     b.ToTable("Campaigns");
                 });
@@ -412,7 +412,7 @@ namespace DataAccess.Migrations
                     b.ToTable("TemplateSynonyms");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.TimeStep", b =>
+            modelBuilder.Entity("DataAccess.Models.Timestep", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -428,7 +428,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeSteps");
+                    b.ToTable("Timesteps");
 
                     b.HasData(
                         new
@@ -581,9 +581,9 @@ namespace DataAccess.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("DataAccess.Models.TimeStep", "TimeStep")
+                    b.HasOne("DataAccess.Models.Timestep", "Timestep")
                         .WithMany()
-                        .HasForeignKey("TimeStepId")
+                        .HasForeignKey("TimestepId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -595,7 +595,7 @@ namespace DataAccess.Migrations
 
                     b.Navigation("Template");
 
-                    b.Navigation("TimeStep");
+                    b.Navigation("Timestep");
                 });
 
             modelBuilder.Entity("DataAccess.Models.Client", b =>

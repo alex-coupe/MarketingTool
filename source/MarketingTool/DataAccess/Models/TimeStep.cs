@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Models
 {
-    public class TimeStep
+    public class Timestep
     {
         [Key]
         public int Id { get; init; }

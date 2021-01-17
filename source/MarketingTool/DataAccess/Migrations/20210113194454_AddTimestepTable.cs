@@ -17,7 +17,7 @@ namespace DataAccess.Migrations
                 oldNullable: true);
 
             migrationBuilder.CreateTable(
-                name: "TimeSteps",
+                name: "Timesteps",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -27,11 +27,11 @@ namespace DataAccess.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_TimeSteps", x => x.Id);
+                    table.PrimaryKey("PK_Timesteps", x => x.Id);
                 });
 
             migrationBuilder.InsertData(
-                table: "TimeSteps",
+                table: "Timesteps",
                 columns: new[] { "Id", "Hours", "Name" },
                 values: new object[,]
                 {
@@ -48,7 +48,7 @@ namespace DataAccess.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "TimeSteps");
+                name: "Timesteps");
 
             migrationBuilder.AlterColumn<string>(
                 name: "Content",

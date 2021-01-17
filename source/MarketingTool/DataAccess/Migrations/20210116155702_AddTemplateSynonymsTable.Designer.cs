@@ -57,7 +57,7 @@ namespace DataAccess.Migrations
                     b.Property<int>("TemplateId")
                         .HasColumnType("int");
 
-                    b.Property<int>("TimeStepId")
+                    b.Property<int>("TimestepId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -363,7 +363,7 @@ namespace DataAccess.Migrations
                     b.ToTable("TemplateSynonyms");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.TimeStep", b =>
+            modelBuilder.Entity("DataAccess.Models.Timestep", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -378,7 +378,7 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("TimeSteps");
+                    b.ToTable("Timesteps");
 
                     b.HasData(
                         new

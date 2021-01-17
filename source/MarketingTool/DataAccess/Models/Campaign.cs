@@ -41,9 +41,9 @@ namespace DataAccess.Models
         public DateTime? ModifiedDate { get; set; }
 
         [Required]
-        public int TimeStepId { get; set; }
+        public int TimestepId { get; set; }
 
-        public virtual TimeStep TimeStep { get; set; }
+        public virtual Timestep Timestep { get; set; }
 
         public virtual User CreatingUser { get; set; }
 

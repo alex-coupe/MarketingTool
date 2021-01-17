@@ -8,7 +8,7 @@ namespace DataAccess.Migrations
         {
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
-                table: "TimeSteps",
+                table: "Timesteps",
                 type: "nvarchar(max)",
                 nullable: false,
                 defaultValue: "",
@@ -136,9 +136,9 @@ namespace DataAccess.Migrations
                 column: "TemplateId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Campaigns_TimeStepId",
+                name: "IX_Campaigns_TimestepId",
                 table: "Campaigns",
-                column: "TimeStepId");
+                column: "TimestepId");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Campaigns_Clients_ClientId",
@@ -157,10 +157,10 @@ namespace DataAccess.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Campaigns_TimeSteps_TimeStepId",
+                name: "FK_Campaigns_Timesteps_TimestepId",
                 table: "Campaigns",
-                column: "TimeStepId",
-                principalTable: "TimeSteps",
+                column: "TimestepId",
+                principalTable: "Timesteps",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 
@@ -328,7 +328,7 @@ namespace DataAccess.Migrations
                 table: "Campaigns");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Campaigns_TimeSteps_TimeStepId",
+                name: "FK_Campaigns_Timesteps_TimestepId",
                 table: "Campaigns");
 
             migrationBuilder.DropForeignKey(
@@ -492,7 +492,7 @@ namespace DataAccess.Migrations
                 table: "Campaigns");
 
             migrationBuilder.DropIndex(
-                name: "IX_Campaigns_TimeStepId",
+                name: "IX_Campaigns_TimestepId",
                 table: "Campaigns");
 
             migrationBuilder.DropColumn(
@@ -505,7 +505,7 @@ namespace DataAccess.Migrations
 
             migrationBuilder.AlterColumn<string>(
                 name: "Name",
-                table: "TimeSteps",
+                table: "Timesteps",
                 type: "nvarchar(max)",
                 nullable: true,
                 oldClrType: typeof(string),

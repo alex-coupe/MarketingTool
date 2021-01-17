@@ -12,8 +12,8 @@ namespace DataAccess.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
-            builder.Entity<TimeStep>().HasData(new TimeStep { Id = 1, Name = "ASAP", Hours = 0 }, new TimeStep { Id = 2, Name = "Hourly", Hours = 1 }, new TimeStep { Id = 3, Name = "Daily", Hours = 24 }
-            , new TimeStep { Id = 4, Name = "Weekly", Hours = 168 }, new TimeStep { Id = 5, Name = "Bi-Weekly", Hours = 336 }, new TimeStep { Id = 6, Name = "4 Weekly", Hours = 672 }, new TimeStep
+            builder.Entity<Timestep>().HasData(new Timestep { Id = 1, Name = "ASAP", Hours = 0 }, new Timestep { Id = 2, Name = "Hourly", Hours = 1 }, new Timestep { Id = 3, Name = "Daily", Hours = 24 }
+            , new Timestep { Id = 4, Name = "Weekly", Hours = 168 }, new Timestep { Id = 5, Name = "Bi-Weekly", Hours = 336 }, new Timestep { Id = 6, Name = "4 Weekly", Hours = 672 }, new Timestep
             {
                 Id = 7,
                 Name = "Monthly",
@@ -31,7 +31,7 @@ namespace DataAccess.Models
 
         public DbSet<TemplateSynonym> TemplateSynonyms { get; set; }
 
-        public DbSet<TimeStep> TimeSteps { get; set; }
+        public DbSet<Timestep> Timesteps { get; set; }
 
         public DbSet<EmailStatus> EmailStatuses { get; set; }
         public DbSet<SubscriptionLevel> SubscriptionLevels { get; set; }
