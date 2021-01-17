@@ -104,7 +104,7 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<CampaignJob>, CampaignJobRepository>();
             services.AddTransient<IRepository<CampaignJobHistory>, CampaignJobHistoryRepository>();
             services.AddTransient<IRepository<EmailStatus>, EmailStatusRepository>();
-
+            services.AddTransient<IRepository<List>, ListRepository>();
 
 
             services.AddSingleton<EmailService>();
