@@ -27,5 +27,7 @@ namespace DataAccess.Models
 
         public virtual User User { get; set; }
 
+        public bool ResetSent { get; set; } = false;
+
     }
 }
