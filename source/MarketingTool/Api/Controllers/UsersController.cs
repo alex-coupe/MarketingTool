@@ -53,6 +53,7 @@ namespace Api.Controllers
         }
 
         [Authorize]
+        [Route("Invite")]
         [HttpPost]
         public async Task<ActionResult> PostUserInvite([FromBody] string emailAddress, [FromServices] UserInviteService userInviteService)
         {
