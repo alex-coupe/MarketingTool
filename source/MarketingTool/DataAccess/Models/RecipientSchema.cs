@@ -1,0 +1,36 @@
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace DataAccess.Models
+{
+    public class RecipientSchema
+    {
+        private string _schemaData = string.Empty;
+
+        [Key]
+        public int Id { get; set; }
+
+        [Required]
+        public int ClientId { get; set; }
+
+        [NotMapped]
+        public JObject Schema 
+        {
+            get
+            {
+                return JsonConvert.DeserializeObject<JObject>(string.IsNullOrEmpty(_schemaData) ? "{}" : _schemaData);
+            }
+            set
+            {
+                _schemaData = value.ToString();
+            }
+        }
+    }
+}

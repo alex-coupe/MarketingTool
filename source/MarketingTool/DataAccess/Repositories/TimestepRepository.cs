@@ -42,7 +42,7 @@ namespace DataAccess.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public void Edit(List item)
+        public void Edit(Timestep item)
         {
             _context.Entry(item).State = EntityState.Modified;
         }
@@ -94,5 +94,6 @@ namespace DataAccess.Repositories
         {
             return _context.Timesteps.Where(predicate);
         }
+
     }
 }

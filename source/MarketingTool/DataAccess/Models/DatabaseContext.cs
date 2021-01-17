@@ -12,6 +12,7 @@ namespace DataAccess.Models
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
+           
             builder.Entity<Timestep>().HasData(new Timestep { Id = 1, Name = "ASAP", Hours = 0 }, new Timestep { Id = 2, Name = "Hourly", Hours = 1 }, new Timestep { Id = 3, Name = "Daily", Hours = 24 }
             , new Timestep { Id = 4, Name = "Weekly", Hours = 168 }, new Timestep { Id = 5, Name = "Bi-Weekly", Hours = 336 }, new Timestep { Id = 6, Name = "4 Weekly", Hours = 672 }, new Timestep
             {
@@ -43,6 +44,8 @@ namespace DataAccess.Models
         public DbSet<List> Lists { get; set; }
 
         public DbSet<Recipient> Recipients { get; set; }
+
+        public DbSet<RecipientSchema> RecipientSchemas { get; set; }
 
         public DbSet<PasswordReset> PasswordResets { get; set; }
 
