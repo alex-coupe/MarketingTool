@@ -100,14 +100,17 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<Template>, TemplateRepository>();
             services.AddTransient<IRepository<TemplateHistory>, TemplateHistoryRepository>();
             services.AddTransient<IRepository<UserInvite>, UserInviteRepository>();
+            services.AddTransient<IRepository<Campaign>, CampaignRepository>();
 
             services.AddSingleton<EmailService>();
             services.AddSingleton<PasswordResetService>();
             services.AddHostedService(provider => provider.GetService<PasswordResetService>());
             services.AddSingleton<UserInviteService>();
             services.AddHostedService(provider => provider.GetService<UserInviteService>());
-            
-            
+            services.AddSingleton<CampaignService>();
+            services.AddHostedService(provider => provider.GetService<CampaignService>());
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

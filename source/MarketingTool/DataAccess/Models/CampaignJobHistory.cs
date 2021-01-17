@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Models
 {
-    public class EmailJob
+    public class CampaignJobHistory
     {
         [Key]
         public int Id { get; init; }
@@ -19,5 +19,13 @@ namespace DataAccess.Models
 
         [Required]
         public string RecipientEmail { get; set; }
+
+        [Required]
+        public DateTime ProcessedTimestamp { get; set; }
+
+        [Required]
+        public int EmailStatusId { get; set; }
+
+        public virtual EmailStatus EmailStatus { get; set; }
     }
 }

@@ -20,6 +20,9 @@ namespace DataAccess.Models
         public string Name { get; set; }
 
         [Required]
+        public string Subject { get; set; }
+
+        [Required]
         public string Description { get; set; }
 
         [Required]

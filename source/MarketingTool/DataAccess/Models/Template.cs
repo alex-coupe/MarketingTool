@@ -26,9 +26,6 @@ namespace DataAccess.Models
         public string Content { get; set; }
 
         [Required]
-        public string Subject { get; set; }
-
-        [Required]
         [ForeignKey("CreatingUser")]
         public int CreatorId { get; set; }
 
