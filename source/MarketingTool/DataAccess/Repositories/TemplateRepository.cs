@@ -18,12 +18,12 @@ namespace DataAccess.Repositories
         }
         public void Add(Template item)
         {
-            throw new NotImplementedException();
+            _context.Templates.Add(item);
         }
 
         public void Edit(Template item)
         {
-            throw new NotImplementedException();
+            _context.Entry(item).State = EntityState.Modified;
         }
 
         public async Task<IEnumerable<Template>> GetAllAsync()
@@ -38,27 +38,28 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            var template = _context.Templates.Find(id);
+            _context.Templates.Remove(template);
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
 
-        public Task<int> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync();
         }
 
         public List<Template> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.Templates.ToList();
         }
 
         public IEnumerable<Template> Where(Expression<Func<Template, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _context.Templates.Where(predicate);
         }
 
         private bool disposed = false;
