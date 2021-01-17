@@ -36,6 +36,6 @@ namespace DataAccess.Models
 
         public bool Archived { get; set; } = false;
 
-
+        public virtual Client Client { get; set; }
     }
 }

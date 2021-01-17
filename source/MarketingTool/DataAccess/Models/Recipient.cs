@@ -25,5 +25,7 @@ namespace DataAccess.Models
         public string Notes { get; set; }
 
         public ICollection<List> Lists { get; set; }
+
+        public virtual Client Client { get; set; }
     }
 }

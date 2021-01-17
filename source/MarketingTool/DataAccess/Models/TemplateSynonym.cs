@@ -17,5 +17,10 @@ namespace DataAccess.Models
 
         [Required]
         public string Value { get; set; }
+
+        [Required]
+        public int ClientId { get; set; }
+
+        public virtual Client Client { get; set; }
     }
 }

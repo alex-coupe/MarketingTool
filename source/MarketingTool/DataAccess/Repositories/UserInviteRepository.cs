@@ -15,9 +15,9 @@ namespace DataAccess.Repositories
         {
             _context = context;
         }
-        public void Add(User item)
+        public void Add(UserInvite item)
         {
-            _context.Users.Add(item);
+            _context.UserInvites.Add(item);
         }
 
         private bool disposed = false;
@@ -67,8 +67,8 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            var user = _context.Users.Find(id);
-            _context.Users.Remove(user);
+            var userInvite = _context.UserInvites.Find(id);
+            _context.UserInvites.Remove(userInvite);
         }
 
         public void SaveChanges()
