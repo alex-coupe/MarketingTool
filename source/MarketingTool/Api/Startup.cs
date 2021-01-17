@@ -105,6 +105,7 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<Template>, TemplateRepository>();
             services.AddTransient<IRepository<TemplateHistory>, TemplateHistoryRepository>();
             services.AddTransient<IRepository<TemplateSynonym>, TemplateSynonymRepository>();
+            services.AddTransient<IRepository<Timestep>, TimestepRepository>();
             services.AddTransient<IRepository<User>, UserRepository>();
             services.AddTransient<IRepository<UserInvite>, UserInviteRepository>();
 
