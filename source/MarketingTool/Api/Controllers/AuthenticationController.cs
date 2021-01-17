@@ -104,7 +104,7 @@ namespace Api.Controllers
         [AllowAnonymous]
         [Route("ResetPassword")]
         [HttpPost]
-        public async Task<ActionResult> IssueReset([FromBody] PasswordResetRequest request, [FromServices]PasswordResetService resetService)
+        public async Task<ActionResult> IssueReset([FromBody] EmailObjectRequest request, [FromServices]PasswordResetService resetService)
         {
             var user = _userRepository.Where(x => x.EmailAddress == request.Email).FirstOrDefault();
 

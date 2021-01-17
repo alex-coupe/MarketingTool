@@ -56,7 +56,7 @@ namespace Api.Controllers
         [Authorize]
         [Route("Invite")]
         [HttpPost]
-        public async Task<ActionResult> PostUserInvite([FromBody] PasswordResetRequest request, [FromServices] UserInviteService userInviteService)
+        public async Task<ActionResult> PostUserInvite([FromBody] EmailObjectRequest request, [FromServices] UserInviteService userInviteService)
         {
             var userId = AuthHelper.GetUserId(HttpContext.User.Claims);
             await userInviteService.Push(request.Email, userId);

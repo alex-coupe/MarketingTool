@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace DataTransfer.ViewModels
 {
-    public class PasswordResetRequest
+    public class EmailObjectRequest
     {
         [Required]
         public string Email { get; set; }
