@@ -18,47 +18,50 @@ namespace DataAccess.Repositories
         }
         public void Add(TemplateHistory item)
         {
-            throw new NotImplementedException();
+            _context.TemplateHistory.Add(item);
         }
 
         public void Edit(TemplateHistory item)
         {
-            throw new NotImplementedException();
+            _context.Entry(item).State = EntityState.Modified;
         }
 
-        public Task<IEnumerable<TemplateHistory>> GetAllAsync()
+        public async Task<IEnumerable<TemplateHistory>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.TemplateHistory.AsNoTracking()
+               .ToListAsync();
         }
 
-        public Task<TemplateHistory> GetAsync(int id)
+        public async Task<TemplateHistory> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.TemplateHistory.AsNoTracking()
+            .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            var templateHistory = _context.TemplateHistory.Find(id);
+            _context.TemplateHistory.Remove(templateHistory);
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
 
-        public Task<int> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync();
         }
 
         public List<TemplateHistory> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.TemplateHistory.ToList();
         }
 
         public IEnumerable<TemplateHistory> Where(Expression<Func<TemplateHistory, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return _context.TemplateHistory.Where(predicate);
         }
 
         private bool disposed = false;
@@ -81,9 +84,9 @@ namespace DataAccess.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public Task<TemplateHistory> GetAsync(Expression<Func<TemplateHistory, bool>> predicate, int id)
+        public async Task<TemplateHistory> GetAsync(Expression<Func<TemplateHistory, bool>> predicate, int id)
         {
-            throw new NotImplementedException();
+            return await _context.TemplateHistory.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<TemplateHistory>> GetAllAsync(Expression<Func<TemplateHistory, bool>> predicate)
