@@ -5,8 +5,10 @@ using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -75,9 +77,37 @@ namespace Api.Controllers
         [Authorize]
         [Route("ImportRecipients")]
         [HttpPost]
-        public ActionResult PostRecipients(Recipient recipient)
+        public async Task<ActionResult> PostRecipientsAsync(IFormFile file, [FromServices]IConfiguration configuration)
         {
-            return Ok();
+            var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
+            var schema = _schemaRepository.Where(x => x.ClientId == clientId).FirstOrDefault();
+            int rejectedImports = 0;
+            int acceptedImports = 0;
+            
+            var recipientsList = await UploadHelpers.ImportUpload(file, schema, configuration);
+
+            if (recipientsList == null)
+                return BadRequest();
+
+            foreach(var recipient in recipientsList)
+            {
+                RecipientValidator _validator = new RecipientValidator(schema, clientId);
+                var validationResult = await _validator.ValidateAsync(recipient);
+                if (validationResult.IsValid)
+                {
+                    _repository.Add(recipient);
+                    acceptedImports++;
+                }
+                else
+                {
+                    rejectedImports++;
+                }
+                
+            }
+
+            await _repository.SaveChangesAsync();
+
+            return Ok(new { RejectedImports = rejectedImports, AcceptedImports = acceptedImports });
         }
 
         [Authorize]
