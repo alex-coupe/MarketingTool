@@ -13,12 +13,12 @@ namespace Api.Validators
     public class RecipientValidator : AbstractValidator<Recipient>
     {
         private RecipientSchema _schema;
-        public RecipientValidator(RecipientSchema schema, int clientId)
+        public RecipientValidator(RecipientSchema schema)
         {
             _schema = schema;
             
 
-            RuleFor(x => x.ClientId).Equal(clientId).WithMessage("Can't attach recipient to client other than your own");
+            RuleFor(x => x.ClientId).Equal(schema.ClientId).WithMessage("Can't attach recipient to client other than your own");
             RuleFor(x => x.EmailAddress).EmailAddress().WithMessage("Email address is invalid");
             RuleFor(x => x.SchemaValues).Must(x => ValuesCountMatchesSchema(x.ToString())).WithMessage("Values provided does not match schema");
         }
@@ -39,30 +39,30 @@ namespace Api.Validators
             return true;
         }
 
-        private bool ValuesCountMatchesSchema(string schemaValues)
+        private bool ValuesCountMatchesSchema(string recipientSchema)
         {
             bool matches = true;
             JObject schema = (JObject)JsonConvert.DeserializeObject(_schema.Schema.ToString());
-            JObject values = (JObject)JsonConvert.DeserializeObject(schemaValues);
+            JObject values = (JObject)JsonConvert.DeserializeObject(recipientSchema);
 
-            var x = schema.Properties();
-            var y = values.Properties();
+            var schemaProperties = schema.Properties();
+            var recipientValues = values.Properties();
 
             if (schema.Count != values.Count)
                 return false;
 
-            for (int i = 0; i != x.Count(); ++i)
+            for (int i = 0; i != schemaProperties.Count(); ++i)
             {
-                var xvalue = x.ElementAt(i).Value.ToString();
-                var yvalue = y.ElementAt(i).Value.ToString();
+                var schemaValue = schemaProperties.ElementAt(i).Value.ToString();
+                var recipientValue = recipientValues.ElementAt(i).Value.ToString();
 
-                if (x.ElementAt(i).Name != y.ElementAt(i).Name)
+                if (schemaProperties.ElementAt(i).Name != recipientValues.ElementAt(i).Name)
                     matches = false;
 
-                if (xvalue == "Number" && !double.TryParse(yvalue, out _))
+                if (schemaValue == "Number" && !double.TryParse(recipientValue, out _))
                     matches = false;
 
-                if (xvalue == "Checkbox" && !bool.TryParse(yvalue, out _))
+                if (schemaValue == "Checkbox" && !bool.TryParse(recipientValue, out _))
                     matches = false;
             }
 

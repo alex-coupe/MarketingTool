@@ -61,7 +61,7 @@ namespace Api.Controllers
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var schema =  _schemaRepository.Where(x => x.ClientId == clientId).FirstOrDefault();
-            RecipientValidator _validator = new RecipientValidator(schema, clientId);
+            RecipientValidator _validator = new RecipientValidator(schema);
             var validationResult = await _validator.ValidateAsync(recipient);
             if (validationResult.IsValid)
             {
@@ -91,7 +91,7 @@ namespace Api.Controllers
 
             foreach(var recipient in recipientsList)
             {
-                RecipientValidator _validator = new RecipientValidator(schema, clientId);
+                RecipientValidator _validator = new RecipientValidator(schema);
                 var validationResult = await _validator.ValidateAsync(recipient);
                 if (validationResult.IsValid)
                 {
@@ -116,7 +116,7 @@ namespace Api.Controllers
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var schema = _schemaRepository.Where(x => x.ClientId == clientId).FirstOrDefault();
-            RecipientValidator _validator = new RecipientValidator(schema, clientId);
+            RecipientValidator _validator = new RecipientValidator(schema);
             var validationResult = await _validator.ValidateAsync(recipient);
             if (validationResult.IsValid)
             {
