@@ -100,7 +100,8 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<EmailStatus>, EmailStatusRepository>();
             services.AddTransient<IRepository<List>, ListRepository>();
             services.AddTransient<IRepository<PasswordReset>, PasswordResetRepository>();
-            //Space for Recipients
+            services.AddTransient<IRepository<Recipient>, RecipientRepository>();
+            services.AddTransient<IRepository<RecipientSchema>, RecipientSchemaRepository>();
             services.AddTransient<IRepository<SubscriptionLevel>, SubscriptionLevelRepository>();
             services.AddTransient<IRepository<Template>, TemplateRepository>();
             services.AddTransient<IRepository<TemplateHistory>, TemplateHistoryRepository>();

@@ -56,7 +56,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Template>> PostTemplate(Template template)
         {
-            NewTemplateValidator _validator = new NewTemplateValidator();
+            PostTemplateValidator _validator = new PostTemplateValidator();
             var validationResult = await _validator.ValidateAsync(template);
             if (validationResult.IsValid)
             {

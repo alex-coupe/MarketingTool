@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Api.Validators
 {
-    public class NewTemplateValidator : AbstractValidator<Template>
+    public class PostTemplateValidator : AbstractValidator<Template>
     {
-        public NewTemplateValidator()
+        public PostTemplateValidator()
             : base()
         {
 

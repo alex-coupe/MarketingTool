@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Api.Validators
 {
-    public class NewUserValidator : AbstractValidator<User>
+    public class PostUserValidator : AbstractValidator<User>
     {
         private IRepository<User> _repository;
-        public NewUserValidator(IRepository<User> repository)
+        public PostUserValidator(IRepository<User> repository)
             : base()
         {
             _repository = repository;

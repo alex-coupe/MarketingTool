@@ -68,7 +68,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Template>> PostUser(User user)
         {
-            NewUserValidator _validator = new NewUserValidator(_userRepository);
+            PostUserValidator _validator = new PostUserValidator(_userRepository);
             var validationResult = await _validator.ValidateAsync(user);
             if (validationResult.IsValid)
             {

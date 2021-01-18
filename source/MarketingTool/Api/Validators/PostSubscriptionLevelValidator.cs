@@ -7,10 +7,10 @@ using System.Linq;
 
 namespace Api.Validators
 {
-    public class NewSubscriptionLevelValidator : AbstractValidator<SubscriptionLevel>
+    public class PostSubscriptionLevelValidator : AbstractValidator<SubscriptionLevel>
     {
         private IRepository<SubscriptionLevel> _repository;
-        public NewSubscriptionLevelValidator(IRepository<SubscriptionLevel> repository)
+        public PostSubscriptionLevelValidator(IRepository<SubscriptionLevel> repository)
             : base()
         {
             _repository = repository;

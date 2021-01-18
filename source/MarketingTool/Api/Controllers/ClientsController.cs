@@ -43,7 +43,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Client>> PostClient(Client client)
         {
-            NewClientValidator _validator = new NewClientValidator();
+            PostClientValidator _validator = new PostClientValidator();
             var validationResult = await _validator.ValidateAsync(client);
             if (validationResult.IsValid)
             {
