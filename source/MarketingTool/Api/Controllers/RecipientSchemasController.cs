@@ -21,6 +21,7 @@ namespace Api.Controllers
             _repository = repository;
         }
 
+        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RecipientSchema>>> GetSchemas()
         {
@@ -28,6 +29,7 @@ namespace Api.Controllers
             return Ok(schemas);
         }
 
+        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetSchema(int id)
         {
@@ -39,6 +41,7 @@ namespace Api.Controllers
             return NotFound();
         }
 
+        [Authorize]
         [HttpPost]
         public async Task<ActionResult<RecipientSchema>> PostRecipientSchema(RecipientSchema schema)
         {
@@ -55,6 +58,7 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
+        [Authorize]
         [HttpPut]
         public async Task<ActionResult<RecipientSchema>> PutRecipientSchema(RecipientSchema schema)
         {
