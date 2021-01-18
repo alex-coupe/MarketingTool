@@ -56,7 +56,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Template>> PostTemplate(Template template)
         {
-            PostTemplateValidator _validator = new PostTemplateValidator();
+            TemplateValidator _validator = new TemplateValidator();
             var validationResult = await _validator.ValidateAsync(template);
             if (validationResult.IsValid)
             {
@@ -73,7 +73,7 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<ActionResult<Template>> PutTemplate(Template template)
         {
-            EditTemplateValidator _validator = new EditTemplateValidator();
+            TemplateValidator _validator = new TemplateValidator();
             var validationResult = await _validator.ValidateAsync(template);
             if (validationResult.IsValid)
             {

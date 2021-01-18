@@ -55,7 +55,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<RecipientSchema>> PostRecipientSchema(RecipientSchema schema)
         {
-            PostRecipientSchemaValidator _validator = new PostRecipientSchemaValidator();
+            RecipientSchemaValidator _validator = new RecipientSchemaValidator();
             var validationResult = await _validator.ValidateAsync(schema);
             if (validationResult.IsValid)
             {
@@ -72,7 +72,7 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<ActionResult<RecipientSchema>> PutRecipientSchema(RecipientSchema schema)
         {
-            EditRecipientSchemaValidator _validator = new EditRecipientSchemaValidator();
+            RecipientSchemaValidator _validator = new RecipientSchemaValidator();
             var validationResult = await _validator.ValidateAsync(schema);
             if (validationResult.IsValid)
             {

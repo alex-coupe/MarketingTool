@@ -58,7 +58,7 @@ namespace Api.Controllers
         [Route("Register")]
         public async Task<ActionResult> Register(User user)
         {
-            PostUserValidator _validator = new PostUserValidator(_userRepository);
+            UserValidator _validator = new UserValidator(_userRepository);
             var validationResult = _validator.Validate(user);
             if (validationResult.IsValid)
             {

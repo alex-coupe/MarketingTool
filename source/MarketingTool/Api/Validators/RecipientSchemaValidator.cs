@@ -7,13 +7,12 @@ using System.Threading.Tasks;
 
 namespace Api.Validators
 {
-    public class EditRecipientSchemaValidator : AbstractValidator<RecipientSchema>
+    public class RecipientSchemaValidator : AbstractValidator<RecipientSchema>
     {
-        public EditRecipientSchemaValidator()
+        public RecipientSchemaValidator()
         {
             RuleFor(schema => schema.ClientId).GreaterThan(0).WithMessage("Client id cannot be 0");
             RuleFor(schema => schema.Schema).NotEmpty().NotNull().WithMessage("Schema cannot be empty");
-            RuleFor(schema => schema.Id).GreaterThan(0).WithMessage("Schema id cannot be 0");
         }
     }
 }

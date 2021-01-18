@@ -43,7 +43,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Client>> PostClient(Client client)
         {
-            PostClientValidator _validator = new PostClientValidator();
+            ClientValidator _validator = new ClientValidator();
             var validationResult = await _validator.ValidateAsync(client);
             if (validationResult.IsValid)
             {
@@ -60,7 +60,7 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<ActionResult<Client>> PutClient(Client client)
         {
-            EditClientValidator _validator = new EditClientValidator();
+            ClientValidator _validator = new ClientValidator();
             var validationResult = await _validator.ValidateAsync(client);
             if (validationResult.IsValid)
             {

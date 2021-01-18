@@ -68,7 +68,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<Template>> PostUser(User user)
         {
-            PostUserValidator _validator = new PostUserValidator(_userRepository);
+            UserValidator _validator = new UserValidator(_userRepository);
             var validationResult = await _validator.ValidateAsync(user);
             if (validationResult.IsValid)
             {
@@ -85,7 +85,7 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<ActionResult<User>> PutUser(User user)
         {
-            EditUserValidator _validator = new EditUserValidator(_userRepository);
+            UserValidator _validator = new UserValidator(_userRepository);
             var validationResult = await _validator.ValidateAsync(user);
             if (validationResult.IsValid)
             {

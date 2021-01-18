@@ -10,10 +10,10 @@ using System.Threading.Tasks;
 
 namespace Api.Validators
 {
-    public class PostRecipientValidator : AbstractValidator<Recipient>
+    public class RecipientValidator : AbstractValidator<Recipient>
     {
         private RecipientSchema _schema;
-        public PostRecipientValidator(RecipientSchema schema, int clientId)
+        public RecipientValidator(RecipientSchema schema, int clientId)
         {
             _schema = schema;
             

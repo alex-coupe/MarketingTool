@@ -7,10 +7,10 @@ using System.Linq;
 
 namespace Api.Validators
 {
-    public class PostClientValidator : AbstractValidator<Client>
+    public class ClientValidator : AbstractValidator<Client>
     {
         
-        public PostClientValidator()
+        public ClientValidator()
             : base()
         {
             RuleFor(client => client.Name).NotNull().NotEmpty();

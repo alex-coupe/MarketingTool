@@ -44,7 +44,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            PostSubscriptionLevelValidator _validator = new PostSubscriptionLevelValidator(_repository);
+            SubscriptionLevelValidator _validator = new SubscriptionLevelValidator(_repository);
             var validationResult = _validator.Validate(subscriptionLevel);
             if (validationResult.IsValid)
             {
@@ -61,7 +61,7 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
-            EditSubscriptionLevelValidator _validator = new EditSubscriptionLevelValidator(_repository);
+            SubscriptionLevelValidator _validator = new SubscriptionLevelValidator(_repository);
             var validationResult = _validator.Validate(subscriptionLevel);
             if (validationResult.IsValid)
             {
