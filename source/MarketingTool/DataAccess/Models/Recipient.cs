@@ -12,7 +12,7 @@ namespace DataAccess.Models
 {
     public class Recipient
     {
-        private string _jsonData = string.Empty;
+        
         [Key]
         public int Id { get; init; }
 
