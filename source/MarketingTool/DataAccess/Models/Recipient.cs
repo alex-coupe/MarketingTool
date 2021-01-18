@@ -23,19 +23,9 @@ namespace DataAccess.Models
         [Required]
         public int ClientId { get; set; }
 
-        [NotMapped]
-        public JObject SchemaValues
-        {
-            get
-            {
-                return JsonConvert.DeserializeObject<JObject>(string.IsNullOrEmpty(_jsonData) ? "{}" : _jsonData);
-            }
-            set
-            {
-                _jsonData = value.ToString();
-            }
-        }
-
+       
+        public JObject SchemaValues { get; set; }
+        
         public string Notes { get; set; }
 
         public ICollection<List> Lists { get; set; }

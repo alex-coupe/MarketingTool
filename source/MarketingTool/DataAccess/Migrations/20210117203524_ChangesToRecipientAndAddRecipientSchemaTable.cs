@@ -28,12 +28,6 @@ namespace DataAccess.Migrations
                 nullable: false,
                 defaultValue: "");
 
-            migrationBuilder.AddColumn<string>(
-                name: "SchemaValues",
-                table: "Recipients",
-                type: "nvarchar(max)",
-                nullable: false);
-
             migrationBuilder.CreateTable(
                 name: "CampaignJobHistory",
                 columns: table => new
@@ -89,7 +83,7 @@ namespace DataAccess.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ClientId = table.Column<int>(type: "int", nullable: false),
-                    Schema = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    
                 },
                 constraints: table =>
                 {
