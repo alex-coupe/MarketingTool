@@ -85,17 +85,23 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<ActionResult<User>> PutUser(User user)
         {
-            UserValidator _validator = new UserValidator(_userRepository);
-            var validationResult = await _validator.ValidateAsync(user);
-            if (validationResult.IsValid)
+            var userId = AuthHelper.GetUserId(HttpContext.User.Claims);
+            var isAdmin = AuthHelper.CheckIfAdmin(HttpContext.User.Claims);
+            if (user.Id == userId || isAdmin)
             {
-                _userRepository.Edit(user);
-                await _userRepository.SaveChangesAsync();
+                UserValidator _validator = new UserValidator(_userRepository);
+                var validationResult = await _validator.ValidateAsync(user);
+                if (validationResult.IsValid)
+                {
+                    _userRepository.Edit(user);
+                    await _userRepository.SaveChangesAsync();
 
-                return Ok(user);
+                    return Ok(user);
+                }
+                return BadRequest(validationResult.Errors);
             }
 
-            return BadRequest(validationResult.Errors);
+            return Unauthorized();
         }
 
         [Authorize]
