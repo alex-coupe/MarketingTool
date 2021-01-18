@@ -1,4 +1,5 @@
-﻿using Api.Validators;
+﻿using Api.Helpers;
+using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
 using Microsoft.AspNetCore.Authorization;
@@ -25,16 +26,25 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RecipientSchema>>> GetSchemas()
         {
-            var schemas = await _repository.GetAllAsync();
+            IEnumerable<RecipientSchema> schemas;
+            if (HttpContext.User.HasClaim(claim => claim.Type == "Email" && claim.Value == "acoupe@gmail.com"))
+            {
+                schemas = await _repository.GetAllAsync();
+            }
+
+            var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
+            schemas = await _repository.GetAllAsync(x => x.ClientId == clientId);
+
             return Ok(schemas);
         }
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Client>> GetSchema(int id)
+        public async Task<ActionResult<RecipientSchema>> GetSchema(int id)
         {
-            var schema = await _repository.GetAsync(id);
-
+            var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
+            var schema = await _repository.GetAsync(x => x.ClientId == clientId, id);
+                       
             if (schema != null)
                 return Ok(schema);
 
