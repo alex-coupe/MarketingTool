@@ -27,7 +27,7 @@ namespace Api.Helpers
 
         public static async Task<IEnumerable<Recipient>> ImportUpload(IFormFile file, RecipientSchema schema, IConfiguration configuration)
         {
-            string[] permittedExtensions = { ".txt", ".csv", ".xls", ".xlsx", ".json" };
+            string[] permittedExtensions = { ".txt", ".csv", ".json" };
             var _fileSizeLimit = configuration.GetValue<long>("FileSizeLimit");
             var ext = Path.GetExtension(file.FileName).ToLowerInvariant();
 
@@ -38,14 +38,39 @@ namespace Api.Helpers
             {
                 case ".csv":
                 case ".txt":
-                  return await TxtUploadParser(file, schema);
-
+                  return await CsvUploadParser(file, schema);
+                case ".json":
+                    return await JsonUploadParser(file, schema);
                 default:
                     return null;
             }
         }
 
-        public static async Task<IEnumerable<Recipient>> TxtUploadParser(IFormFile file, RecipientSchema schema)
+        public static async Task<IEnumerable<Recipient>> JsonUploadParser(IFormFile file, RecipientSchema schema)
+        {
+            List<Recipient> recipients = new List<Recipient>();
+            var text = await ReadAsStringAsync(file);
+            JArray jsonInput = (JArray)JsonConvert.DeserializeObject(text);
+
+            foreach(var item in jsonInput)
+            {
+                var json = item.ToObject<JObject>();
+                var email = json.Properties().First().Value.ToString();
+                json.First.Remove();
+                
+                recipients.Add(new Recipient
+                {
+                    ClientId = schema.ClientId,
+                    EmailAddress = email,
+                    SchemaValues = json
+                   
+
+                });
+            }
+            return recipients;
+        }
+
+            public static async Task<IEnumerable<Recipient>> CsvUploadParser(IFormFile file, RecipientSchema schema)
         {
             /* This code takes in a csv. The schema is required to validate against the input
              * Once the text is read, it is sanitised to remove line breaks.

@@ -20,7 +20,7 @@ namespace Api.Validators
 
             RuleFor(x => x.ClientId).Equal(clientId).WithMessage("Can't attach recipient to client other than your own");
             RuleFor(x => x.EmailAddress).EmailAddress().WithMessage("Email address is invalid");
-            RuleFor(x => x.SchemaValues).Must(x => ValuesCountMatchesSchema(x.ToString())).WithMessage("Values count is not equal to schema count");
+            RuleFor(x => x.SchemaValues).Must(x => ValuesCountMatchesSchema(x.ToString())).WithMessage("Values provided does not match schema");
         }
 
         protected override bool PreValidate(ValidationContext<Recipient> context, ValidationResult result)
@@ -47,7 +47,11 @@ namespace Api.Validators
 
             var x = schema.Properties();
             var y = values.Properties();
-            for(int i = 0; i != x.Count(); ++i)
+
+            if (schema.Count != values.Count)
+                return false;
+
+            for (int i = 0; i != x.Count(); ++i)
             {
                 var xvalue = x.ElementAt(i).Value.ToString();
                 var yvalue = y.ElementAt(i).Value.ToString();
@@ -61,9 +65,6 @@ namespace Api.Validators
                 if (xvalue == "Checkbox" && !bool.TryParse(yvalue, out _))
                     matches = false;
             }
-
-            if (schema.Count != values.Count)
-                matches = false;
 
             return matches;
         }
