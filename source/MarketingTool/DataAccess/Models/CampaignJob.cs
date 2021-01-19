@@ -19,5 +19,11 @@ namespace DataAccess.Models
 
         [Required]
         public string RecipientEmail { get; set; }
+
+        [Required]
+        public string Content { get; set; }
+
+        [Required]
+        public int HourToProcess { get; set; }
     }
 }

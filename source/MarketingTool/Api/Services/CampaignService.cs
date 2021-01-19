@@ -40,39 +40,37 @@ namespace Api.Services
                 var _campaignJobsRepository = scope.ServiceProvider.GetService<IRepository<CampaignJob>>();
                 var _campaignJobHistoryRepository = scope.ServiceProvider.GetService<IRepository<CampaignJobHistory>>();
                 var _campaignsRepository = scope.ServiceProvider.GetService<IRepository<Campaign>>();
-                var _templatesRepository = scope.ServiceProvider.GetService<IRepository<Template>>();
-                var _synonymsRepository = scope.ServiceProvider.GetService<IRepository<TemplateSynonym>>();
-
+               
                 var jobs = _campaignJobsRepository.GetAll();
 
                 foreach (var job in jobs)
                 {
-                    var campaign = _campaignsRepository.Where(x => x.Id == job.CampaignId).FirstOrDefault();
-                    var template = _templatesRepository.Where(x => x.Id == campaign.Id).OrderByDescending(x => x.Version).FirstOrDefault();
-
-                    
-
-                    _emailService.Send(new MailAddress(job.RecipientEmail), new MailMessage
+                    if (DateTime.Now.Hour == job.HourToProcess)
                     {
-                        IsBodyHtml = true,
-                        Subject = campaign.Subject,
-                        Body = TemplateHelper.ConvertSynonymsToValues(template, _synonymsRepository)
-                    });
+                        var campaign = _campaignsRepository.Where(x => x.Id == job.CampaignId).FirstOrDefault();
 
-                    _campaignJobHistoryRepository.Add(new CampaignJobHistory
-                    {
-                        CampaignId = job.CampaignId,
-                        EmailStatusId = 2,
-                        RecipientEmail = job.RecipientEmail,
-                        ProcessedTimestamp = DateTime.Now
-                    });
-                    await _campaignJobHistoryRepository.SaveChangesAsync();
+                        _emailService.Send(new MailAddress(job.RecipientEmail), new MailMessage
+                        {
+                            IsBodyHtml = true,
+                            Subject = campaign.Subject,
+                            Body = job.Content
+                        });
 
-                    campaign.LastSent = DateTime.Now;
-                    await _campaignsRepository.SaveChangesAsync();
+                        _campaignJobHistoryRepository.Add(new CampaignJobHistory
+                        {
+                            CampaignId = job.CampaignId,
+                            EmailStatusId = 2,
+                            RecipientEmail = job.RecipientEmail,
+                            ProcessedTimestamp = DateTime.Now
+                        });
+                        await _campaignJobHistoryRepository.SaveChangesAsync();
 
-                    _campaignJobsRepository.Remove(job.Id);
-                    await _campaignJobsRepository.SaveChangesAsync();
+                        campaign.LastSent = DateTime.Now;
+                        await _campaignsRepository.SaveChangesAsync();
+
+                        _campaignJobsRepository.Remove(job.Id);
+                        await _campaignJobsRepository.SaveChangesAsync();
+                    }
                 }
             }
         }
