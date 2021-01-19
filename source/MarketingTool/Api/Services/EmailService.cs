@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,11 +13,11 @@ namespace Api.Services
     {
         private SmtpClient _client;
         private MailAddress from;
-        public EmailService()
+        public EmailService(IConfiguration configuration)
         {
-            _client = new SmtpClient("smtp.mailtrap.io", 2525)
+            _client = new SmtpClient(configuration["SmtpCredentials:Host"], configuration.GetValue<int>("SmtpCredentials:Port"))
             {
-                Credentials = new NetworkCredential("3737419d462efd", "d5a393aa4e4237"),
+                Credentials = new NetworkCredential(configuration["SmtpCredentials:Username"], configuration["SmtpCredentials:Password"]),
                 EnableSsl = true
             };
 
