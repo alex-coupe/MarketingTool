@@ -44,7 +44,7 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Recipient>> GetSchema(int id)
+        public async Task<ActionResult<Recipient>> GetRecipient(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var schema = await _repository.GetAsync(x => x.ClientId == clientId, id);
