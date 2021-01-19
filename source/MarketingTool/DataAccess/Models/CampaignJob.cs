@@ -21,6 +21,12 @@ namespace DataAccess.Models
         public string RecipientEmail { get; set; }
 
         [Required]
+        public string Subject { get; set; }
+
+        [Required]
+        public string SenderEmail { get; set; }
+
+        [Required]
         public string Content { get; set; }
 
         [Required]

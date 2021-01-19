@@ -27,6 +27,9 @@ namespace DataAccess.Models
         public string Description { get; set; }
 
         [Required]
+        public string SenderEmail { get; set; }
+
+        [Required]
         public int TemplateId { get; set; }
 
         [Required]
@@ -54,8 +57,17 @@ namespace DataAccess.Models
         [JsonIgnore]
         public virtual Template Template { get; set; }
 
+        [JsonIgnore]
+        public virtual List List { get; set; }
+
         public bool IsActive { get; set; } = true;
 
+        public DateTime StartDate { get; set; }
+
+        public DateTime EndDate { get; set; }
+
         public DateTime? LastSent { get; set; }
+
+        public int ListId { get; set; }
     }
 }
