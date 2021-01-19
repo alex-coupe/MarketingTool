@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -20,6 +21,7 @@ namespace DataAccess.Models
         [Required]
         public int ClientId { get; set; }
 
+        [JsonIgnore]
         public virtual Client Client { get; set; }
 
         [Required]
@@ -36,8 +38,10 @@ namespace DataAccess.Models
 
         public ICollection<Recipient> Recipients { get; set; }
 
+        [JsonIgnore]
         public virtual User CreatingUser { get; set; }
 
+        [JsonIgnore]
         public virtual User ModifyingUser { get; set; }
     }
 }

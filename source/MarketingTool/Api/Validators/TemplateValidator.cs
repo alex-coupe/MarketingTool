@@ -21,8 +21,13 @@ namespace Api.Validators
             RuleFor(template => template.CreatorId).NotEmpty().GreaterThan(0).WithMessage("Creator Id must be more than 0");
             RuleFor(template => template.Protected).NotNull().WithMessage("Protected can't be null");
             RuleFor(template => template.Version).NotEmpty().GreaterThan(0).WithMessage("Version must be more than 0");
-            RuleFor(template => template.ModifiedDate).NotNull().When(x => x.Id > 0).WithMessage("Modified date is required");
+            RuleFor(template => template.ModifiedDate.Value).NotNull().Must(BeAValidDate).When(x => x.Id > 0).WithMessage("Modified date is required");
             RuleFor(template => template.ModifierId).NotEmpty().GreaterThan(0).When(x => x.Id > 0).WithMessage("Modifier Id must be more than 0");
+        }
+
+        private bool BeAValidDate(DateTime date)
+        {
+            return !date.Equals(default(DateTime));
         }
     }
 }

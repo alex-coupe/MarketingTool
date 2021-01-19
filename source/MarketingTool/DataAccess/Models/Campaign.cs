@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -42,15 +43,15 @@ namespace DataAccess.Models
 
         [Required]
         public int TimestepId { get; set; }
-
+        [JsonIgnore]
         public virtual Timestep Timestep { get; set; }
-
+        [JsonIgnore]
         public virtual User CreatingUser { get; set; }
-
+        [JsonIgnore]
         public virtual User ModifyingUser { get; set; }
-
+        [JsonIgnore]
         public virtual Client Client { get; set; }
-
+        [JsonIgnore]
         public virtual Template Template { get; set; }
 
         public bool IsActive { get; set; } = true;
