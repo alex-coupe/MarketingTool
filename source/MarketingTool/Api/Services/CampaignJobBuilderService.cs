@@ -41,10 +41,12 @@ namespace Api.Services
                 var _templateRepository = scope.ServiceProvider.GetService<IRepository<Template>>();
                 var _campaignsRepository = scope.ServiceProvider.GetService<IRepository<Campaign>>();
                 var _timestepRepository = scope.ServiceProvider.GetService<IRepository<Timestep>>();
+                var _recipientRepository = scope.ServiceProvider.GetService<IRepository<Recipient>>();
                 var _listRepository = scope.ServiceProvider.GetService<IRepository<List>>();
                 var _synonymRepository = scope.ServiceProvider.GetService<IRepository<TemplateSynonym>>();
+                var _listRecipientRepository = scope.ServiceProvider.GetService<IRepository<ListRecipient>>();
 
-                var campaigns = _campaignsRepository.Where(x => x.StartDate <= DateTime.Now && x.EndDate >= DateTime.Now).ToList();
+                var campaigns = _campaignsRepository.Where(x => x.SendDate.Date == DateTime.Now.Date).ToList();
 
                 foreach (var campaign in campaigns)
                 {
@@ -52,28 +54,18 @@ namespace Api.Services
 
                     var list = await _listRepository.GetAsync(campaign.ListId);
 
-                    int hourToSend = 0;
+                    var template = _templateRepository.Where(x => x.Id == campaign.TemplateId).FirstOrDefault();
 
-                    if (!campaign.LastSent.HasValue)
+                    var listRecipients = _listRecipientRepository.Where(x => x.ListId == list.Id).ToList();
+
+                    foreach (var listRecipient in listRecipients)
                     {
-                        hourToSend += timestep.Hours;
-                    }
-                    else
-                    {
-                        hourToSend = timestep.Hours + campaign.LastSent.Value.Hour;
-                    }
-
-                    var template = await _templateRepository.GetAsync(campaign.TemplateId);
-
-                   
-
-                    foreach (var recipient in list.Recipients)
-                    {
+                        var recipient = _recipientRepository.Where(x => x.Id == listRecipient.RecipientId).FirstOrDefault();
                         var content = TemplateHelper.ConvertSynonymsToValues(template, _synonymRepository, recipient);
                         _campaignJobsRepository.Add(new CampaignJob
                         {
                             CampaignId = campaign.Id,
-                            HourToProcess = hourToSend,
+                            ProcessingDateTime = campaign.SendDate,
                             RecipientEmail = recipient.EmailAddress,
                             Content = content,
                             Subject = campaign.Subject,

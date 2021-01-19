@@ -7,18 +7,15 @@ using System.Threading.Tasks;
 
 namespace DataAccess.Models
 {
-    public class TemplateSynonym
+    public class ListRecipient
     {
-        [Required]
+        [Key]
         public int Id { get; set; }
 
         [Required]
-        public string Key { get; set; }
+        public int ListId { get; set; }
 
         [Required]
-        public string Value { get; set; }
-
-        [Required]
-        public int ClientId { get; set; }
+        public int RecipientId { get; set; }
     }
 }

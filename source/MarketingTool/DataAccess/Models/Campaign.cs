@@ -33,10 +33,10 @@ namespace DataAccess.Models
         public int TemplateId { get; set; }
 
         [Required]
-        [ForeignKey("CreatingUser")]
+        
         public int CreatorId { get; set; }
 
-        [ForeignKey("ModifyingUser")]
+       
         public int? ModifierId { get; set; }
 
         [Required]
@@ -46,27 +46,10 @@ namespace DataAccess.Models
 
         [Required]
         public int TimestepId { get; set; }
-        [JsonIgnore]
-        public virtual Timestep Timestep { get; set; }
-        [JsonIgnore]
-        public virtual User CreatingUser { get; set; }
-        [JsonIgnore]
-        public virtual User ModifyingUser { get; set; }
-        [JsonIgnore]
-        public virtual Client Client { get; set; }
-        [JsonIgnore]
-        public virtual Template Template { get; set; }
-
-        [JsonIgnore]
-        public virtual List List { get; set; }
-
+      
         public bool IsActive { get; set; } = true;
 
-        public DateTime StartDate { get; set; }
-
-        public DateTime EndDate { get; set; }
-
-        public DateTime? LastSent { get; set; }
+        public DateTime SendDate { get; set; }
 
         public int ListId { get; set; }
     }

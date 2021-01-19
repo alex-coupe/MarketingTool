@@ -4,14 +4,16 @@ using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210119140712_AddDescriptionToListsTable")]
+    partial class AddDescriptionToListsTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -39,8 +41,14 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
+
+                    b.Property<DateTime?>("LastSent")
+                        .HasColumnType("datetime2");
 
                     b.Property<int>("ListId")
                         .HasColumnType("int");
@@ -55,12 +63,12 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("SendDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<string>("SenderEmail")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Subject")
                         .IsRequired()
@@ -73,6 +81,18 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("ListId");
+
+                    b.HasIndex("ModifierId");
+
+                    b.HasIndex("TemplateId");
+
+                    b.HasIndex("TimestepId");
 
                     b.ToTable("Campaigns");
                 });
@@ -91,8 +111,8 @@ namespace DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("ProcessingDateTime")
-                        .HasColumnType("datetime2");
+                    b.Property<int>("HourToProcess")
+                        .HasColumnType("int");
 
                     b.Property<string>("RecipientEmail")
                         .IsRequired()
@@ -135,6 +155,10 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CampaignId");
+
+                    b.HasIndex("EmailStatusId");
+
                     b.ToTable("CampaignJobHistory");
                 });
 
@@ -154,6 +178,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("SubscriptionLevelId");
 
                     b.ToTable("Clients");
                 });
@@ -224,25 +250,13 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("ModifierId");
+
                     b.ToTable("Lists");
-                });
-
-            modelBuilder.Entity("DataAccess.Models.ListRecipient", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("ListId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("RecipientId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("ListRecipients");
                 });
 
             modelBuilder.Entity("DataAccess.Models.PasswordReset", b =>
@@ -298,6 +312,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.ToTable("Recipients");
                 });
@@ -381,6 +397,12 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("ModifierId");
+
                     b.ToTable("Templates");
                 });
 
@@ -409,6 +431,10 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("TemplateId");
+
                     b.ToTable("TemplateHistory");
                 });
 
@@ -431,6 +457,8 @@ namespace DataAccess.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.ToTable("TemplateSynonyms");
                 });
@@ -532,6 +560,8 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("ClientId");
+
                     b.ToTable("Users");
                 });
 
@@ -558,7 +588,73 @@ namespace DataAccess.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("InvitingUserId");
+
                     b.ToTable("UserInvites");
+                });
+
+            modelBuilder.Entity("ListRecipient", b =>
+                {
+                    b.Property<int>("ListsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RecipientsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ListsId", "RecipientsId");
+
+                    b.HasIndex("RecipientsId");
+
+                    b.ToTable("ListRecipient");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.Campaign", b =>
+                {
+                    b.HasOne("DataAccess.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.User", "CreatingUser")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.List", "List")
+                        .WithMany()
+                        .HasForeignKey("ListId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.User", "ModifyingUser")
+                        .WithMany()
+                        .HasForeignKey("ModifierId");
+
+                    b.HasOne("DataAccess.Models.Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.Timestep", "Timestep")
+                        .WithMany()
+                        .HasForeignKey("TimestepId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+
+                    b.Navigation("CreatingUser");
+
+                    b.Navigation("List");
+
+                    b.Navigation("ModifyingUser");
+
+                    b.Navigation("Template");
+
+                    b.Navigation("Timestep");
                 });
 
             modelBuilder.Entity("DataAccess.Models.CampaignJob", b =>
@@ -572,6 +668,61 @@ namespace DataAccess.Migrations
                     b.Navigation("Campaign");
                 });
 
+            modelBuilder.Entity("DataAccess.Models.CampaignJobHistory", b =>
+                {
+                    b.HasOne("DataAccess.Models.Campaign", "Campaign")
+                        .WithMany()
+                        .HasForeignKey("CampaignId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.EmailStatus", "EmailStatus")
+                        .WithMany()
+                        .HasForeignKey("EmailStatusId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Campaign");
+
+                    b.Navigation("EmailStatus");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.Client", b =>
+                {
+                    b.HasOne("DataAccess.Models.SubscriptionLevel", "SubscriptionLevel")
+                        .WithMany()
+                        .HasForeignKey("SubscriptionLevelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("SubscriptionLevel");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.List", b =>
+                {
+                    b.HasOne("DataAccess.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.User", "CreatingUser")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.User", "ModifyingUser")
+                        .WithMany()
+                        .HasForeignKey("ModifierId");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("CreatingUser");
+
+                    b.Navigation("ModifyingUser");
+                });
+
             modelBuilder.Entity("DataAccess.Models.PasswordReset", b =>
                 {
                     b.HasOne("DataAccess.Models.User", "User")
@@ -581,6 +732,109 @@ namespace DataAccess.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.Recipient", b =>
+                {
+                    b.HasOne("DataAccess.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.Template", b =>
+                {
+                    b.HasOne("DataAccess.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.User", "CreatingUser")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.User", "ModifyingUser")
+                        .WithMany()
+                        .HasForeignKey("ModifierId");
+
+                    b.Navigation("Client");
+
+                    b.Navigation("CreatingUser");
+
+                    b.Navigation("ModifyingUser");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.TemplateHistory", b =>
+                {
+                    b.HasOne("DataAccess.Models.User", "CreatingUser")
+                        .WithMany()
+                        .HasForeignKey("CreatorId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.Template", "Template")
+                        .WithMany()
+                        .HasForeignKey("TemplateId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatingUser");
+
+                    b.Navigation("Template");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.TemplateSynonym", b =>
+                {
+                    b.HasOne("DataAccess.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.User", b =>
+                {
+                    b.HasOne("DataAccess.Models.Client", "Client")
+                        .WithMany()
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Client");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.UserInvite", b =>
+                {
+                    b.HasOne("DataAccess.Models.User", "InvitingUser")
+                        .WithMany()
+                        .HasForeignKey("InvitingUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("InvitingUser");
+                });
+
+            modelBuilder.Entity("ListRecipient", b =>
+                {
+                    b.HasOne("DataAccess.Models.List", null)
+                        .WithMany()
+                        .HasForeignKey("ListsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DataAccess.Models.Recipient", null)
+                        .WithMany()
+                        .HasForeignKey("RecipientsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

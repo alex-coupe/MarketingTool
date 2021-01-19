@@ -13,10 +13,17 @@ namespace Api.Helpers
         {
             var finalTemplate = string.Empty;
             var synonyms = _synonymsRepository.Where(x => x.ClientId == template.ClientId).ToList();
-
+          
             foreach(var synonym in synonyms)
             {
-                finalTemplate = template.Content.Replace(synonym.Key, recipient.SchemaValues.Value<string>(synonym.Value));
+                if (string.IsNullOrEmpty(finalTemplate))
+                {
+                    finalTemplate = template.Content.Replace(synonym.Key, recipient.SchemaValues.Value<string>(synonym.Value));
+                }
+                else
+                {
+                    finalTemplate = finalTemplate.Replace(synonym.Key, recipient.SchemaValues.Value<string>(synonym.Value));
+                }
             }
            
 

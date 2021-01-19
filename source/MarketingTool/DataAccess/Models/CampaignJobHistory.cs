@@ -14,9 +14,7 @@ namespace DataAccess.Models
 
         [Required]
         public int CampaignId { get; set; }
-
-        public virtual Campaign Campaign { get; set; }
-
+           
         [Required]
         public string RecipientEmail { get; set; }
 
@@ -26,6 +24,6 @@ namespace DataAccess.Models
         [Required]
         public int EmailStatusId { get; set; }
 
-        public virtual EmailStatus EmailStatus { get; set; }
+      
     }
 }

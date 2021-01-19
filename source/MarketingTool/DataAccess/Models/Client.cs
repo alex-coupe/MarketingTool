@@ -13,7 +13,5 @@ namespace DataAccess.Models
 
         public int SubscriptionLevelId { get; set; }
 
-        public virtual SubscriptionLevel SubscriptionLevel { get; set; }
-
     }
 }

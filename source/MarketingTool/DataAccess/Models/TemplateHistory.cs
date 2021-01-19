@@ -20,7 +20,6 @@ namespace DataAccess.Models
         public string Content { get; set; }
 
         [Required]
-        [ForeignKey("CreatingUser")]
         public int CreatorId { get; set; }
 
         [Required]
@@ -29,8 +28,5 @@ namespace DataAccess.Models
         [Required]
         public int Version { get; set; }
 
-        public virtual User CreatingUser { get; set; }
-
-        public virtual Template Template { get; set; }
     }
 }

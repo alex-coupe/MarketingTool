@@ -16,9 +16,6 @@ namespace DataAccess.Models
         [Required]
         public int ClientId { get; set; }
 
-
-        public virtual Client Client { get; set; }
-
         [Required]
         public string Name { get; set; }
 
@@ -26,10 +23,8 @@ namespace DataAccess.Models
         public string Content { get; set; }
 
         [Required]
-        [ForeignKey("CreatingUser")]
         public int CreatorId { get; set; }
 
-        [ForeignKey("ModifyingUser")]
         public int? ModifierId { get; set; }
 
         [Required]
@@ -42,8 +37,5 @@ namespace DataAccess.Models
 
         public bool Protected { get; set; } = false;
 
-        public virtual User CreatingUser { get; set; }
-
-        public virtual User ModifyingUser { get; set; }
     }
 }

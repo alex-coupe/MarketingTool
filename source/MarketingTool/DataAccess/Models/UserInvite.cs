@@ -20,10 +20,8 @@ namespace DataAccess.Models
         public string EmailAddress { get; set; }
 
         [Required]
-        [ForeignKey("InvitingUser")]
+      
         public int InvitingUserId { get; set; }
-
-        public virtual User InvitingUser { get; set; }
 
         [Required]
         public bool InviteSent { get; set; }

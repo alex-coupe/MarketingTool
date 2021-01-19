@@ -13,7 +13,7 @@ namespace Api.Validators
             : base()
         {
 
-            RuleFor(template => template.Id).NotEmpty().GreaterThan(0).WithMessage("Id must be more than 0");
+            
             RuleFor(template => template.ClientId).NotEmpty().GreaterThan(0).WithMessage("Client Id must be more than 0");
             RuleFor(template => template.CreatedDate).NotNull().WithMessage("Created date is required");
             RuleFor(template => template.Name).NotNull().NotEmpty().WithMessage("Name is required");

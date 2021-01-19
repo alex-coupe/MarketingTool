@@ -45,10 +45,11 @@ namespace Api.Services
 
                 foreach (var job in jobs)
                 {
-                    if (DateTime.Now.Hour == job.HourToProcess)
+                    if (DateTime.Now.Hour == job.ProcessingDateTime.Hour)
                     {
                         var campaign = _campaignsRepository.Where(x => x.Id == job.CampaignId).FirstOrDefault();
 
+                        
                         _emailService.Send(new MailAddress(job.RecipientEmail), new MailMessage
                         {
                             IsBodyHtml = true,
@@ -65,11 +66,11 @@ namespace Api.Services
                         });
                         await _campaignJobHistoryRepository.SaveChangesAsync();
 
-                        campaign.LastSent = DateTime.Now;
-                        await _campaignsRepository.SaveChangesAsync();
-
+                       
                         _campaignJobsRepository.Remove(job.Id);
                         await _campaignJobsRepository.SaveChangesAsync();
+
+                        Thread.Sleep(10000);
                     }
                 }
             }

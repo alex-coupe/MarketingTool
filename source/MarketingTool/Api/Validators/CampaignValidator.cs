@@ -20,7 +20,7 @@ namespace Api.Validators
             RuleFor(x => x.CreatorId).GreaterThan(0).WithMessage("Creator Id is required");
             RuleFor(x => x.TemplateId).GreaterThan(0).WithMessage("Template Id is required");
             RuleFor(x => x.CreatedDate).Must(BeAValidDate).WithMessage("Created date must be valid");
-            RuleFor(x => x.ModifiedDate.Value).NotNull().When(x => x.Id > 0).Must(BeAValidDate).WithMessage("Modified date is required");
+            RuleFor(x => x.ModifiedDate.HasValue).Equal(true).When(x => x.Id > 0).WithMessage("Modified date is required");
             RuleFor(x => x.ModifierId).NotEmpty().GreaterThan(0).When(x => x.Id > 0).WithMessage("Modifier Id must be more than 0");
         }
 

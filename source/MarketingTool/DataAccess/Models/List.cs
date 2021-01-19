@@ -19,16 +19,14 @@ namespace DataAccess.Models
         public string Name { get; set; }
 
         [Required]
-        public int ClientId { get; set; }
-
-        [JsonIgnore]
-        public virtual Client Client { get; set; }
+        public string Description { get; set; }
 
         [Required]
-        [ForeignKey("CreatingUser")]
+        public int ClientId { get; set; }
+
+        [Required]
         public int CreatorId { get; set; }
 
-        [ForeignKey("ModifyingUser")]
         public int? ModifierId { get; set; }
 
         [Required]
@@ -36,12 +34,6 @@ namespace DataAccess.Models
 
         public DateTime? ModifiedDate { get; set; }
 
-        public ICollection<Recipient> Recipients { get; set; }
-
-        [JsonIgnore]
-        public virtual User CreatingUser { get; set; }
-
-        [JsonIgnore]
-        public virtual User ModifyingUser { get; set; }
+    
     }
 }

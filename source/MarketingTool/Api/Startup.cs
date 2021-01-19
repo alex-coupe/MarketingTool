@@ -109,6 +109,7 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<Timestep>, TimestepRepository>();
             services.AddTransient<IRepository<User>, UserRepository>();
             services.AddTransient<IRepository<UserInvite>, UserInviteRepository>();
+            services.AddTransient<IRepository<ListRecipient>, ListRecipientRepository>();
             services.AddSingleton<EmailService>();
             services.AddSingleton<PasswordResetService>();
             services.AddHostedService(provider => provider.GetService<PasswordResetService>());
@@ -116,6 +117,8 @@ namespace ApplicationLayer
             services.AddHostedService(provider => provider.GetService<UserInviteService>());
             services.AddSingleton<CampaignService>();
             services.AddHostedService(provider => provider.GetService<CampaignService>());
+            services.AddSingleton<CampaignJobBuilderService>();
+            services.AddHostedService(provider => provider.GetService<CampaignJobBuilderService>());
 
 
         }

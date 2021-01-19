@@ -30,6 +30,6 @@ namespace DataAccess.Models
         public string Content { get; set; }
 
         [Required]
-        public int HourToProcess { get; set; }
+        public DateTime ProcessingDateTime { get; set; }
     }
 }
