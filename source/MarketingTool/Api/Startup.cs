@@ -94,7 +94,7 @@ namespace ApplicationLayer
             });
 
             services.AddTransient<IRepository<CampaignJobHistory>, CampaignJobHistoryRepository>();
-            services.AddTransient<IRepository<CampaignJob>, CampaignJobRepository>();
+            
             services.AddTransient<IRepository<Campaign>, CampaignRepository>();
             services.AddTransient<IRepository<Client>, ClientRepository>();
             services.AddTransient<IRepository<EmailStatus>, EmailStatusRepository>();
@@ -117,8 +117,7 @@ namespace ApplicationLayer
             services.AddHostedService(provider => provider.GetService<UserInviteService>());
             services.AddSingleton<CampaignService>();
             services.AddHostedService(provider => provider.GetService<CampaignService>());
-            services.AddSingleton<CampaignJobBuilderService>();
-            services.AddHostedService(provider => provider.GetService<CampaignJobBuilderService>());
+         
 
 
         }

@@ -22,7 +22,7 @@ namespace DataAccess.Models
         public DateTime ProcessedTimestamp { get; set; }
 
         [Required]
-        public int EmailStatusId { get; set; }
+        public int EmailStatusCode { get; set; }
 
       
     }

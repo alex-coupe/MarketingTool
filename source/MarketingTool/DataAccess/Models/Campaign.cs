@@ -51,6 +51,8 @@ namespace DataAccess.Models
 
         public DateTime SendDate { get; set; }
 
+        public DateTime? ProcessedTimestamp { get; set; }
+
         public int ListId { get; set; }
     }
 }
