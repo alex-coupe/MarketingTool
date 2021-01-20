@@ -17,11 +17,7 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Change Dir
-      run: cd ./source/MarketingTool  
-    - name: Build
-      run: dotnet build --configuration Release
     - name: dotnet publish
-      run: dotnet publish -c Release -o MarketingTool
+      run: dotnet publish ./source/MarketingTool -c Release -o MarketingTool
     - name: Test
       run: dotnet test  --no-build --verbosity normal
