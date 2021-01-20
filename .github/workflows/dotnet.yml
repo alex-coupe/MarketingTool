@@ -21,6 +21,6 @@ jobs:
       run: dotnet build --configuration Release
     - name: dotnet publish
       run: |
-        dotnet publish -c Release -o dotnetcorewebapp 
+        dotnet publish -c Release -o ./source/MarketingTool 
     - name: Test
-      run: dotnet test ./MarketingTool/ --no-build --verbosity normal
+      run: dotnet test ./source/MarketingTool  --no-build --verbosity normal
