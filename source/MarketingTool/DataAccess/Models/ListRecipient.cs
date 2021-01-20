@@ -17,5 +17,9 @@ namespace DataAccess.Models
 
         [Required]
         public int RecipientId { get; set; }
+
+        public virtual List List { get; set; }
+
+        public virtual Recipient Recipient { get; set; }
     }
 }

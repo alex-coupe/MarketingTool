@@ -1,4 +1,5 @@
 ﻿using DataAccess.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +18,7 @@ namespace DataAccess.Repositories
         }
         public void Add(ListRecipient item)
         {
-            throw new NotImplementedException();
+            _context.ListRecipients.Add(item);
         }
         private bool disposed = false;
 
@@ -41,47 +42,50 @@ namespace DataAccess.Repositories
 
         public void Edit(ListRecipient item)
         {
-            throw new NotImplementedException();
+            _context.Entry(item).State = EntityState.Modified;
         }
 
         public List<ListRecipient> GetAll()
         {
-            throw new NotImplementedException();
+            return _context.ListRecipients.ToList();
         }
 
-        public Task<IEnumerable<ListRecipient>> GetAllAsync()
+        public async Task<IEnumerable<ListRecipient>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            return await _context.ListRecipients.AsNoTracking()
+              .ToListAsync();
         }
 
-        public Task<IEnumerable<ListRecipient>> GetAllAsync(Expression<Func<ListRecipient, bool>> predicate)
+        public async Task<IEnumerable<ListRecipient>> GetAllAsync(Expression<Func<ListRecipient, bool>> predicate)
         {
-            throw new NotImplementedException();
+            return await _context.ListRecipients.Where(predicate).ToListAsync();
         }
 
-        public Task<ListRecipient> GetAsync(int id)
+        public async Task<ListRecipient> GetAsync(int id)
         {
-            throw new NotImplementedException();
+            return await _context.ListRecipients.AsNoTracking()
+             .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public Task<ListRecipient> GetAsync(Expression<Func<ListRecipient, bool>> predicate, int id)
+        public async Task<ListRecipient> GetAsync(Expression<Func<ListRecipient, bool>> predicate, int id)
         {
-            throw new NotImplementedException();
+            return await _context.ListRecipients.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
         {
-            throw new NotImplementedException();
+            var listRecipient = _context.Lists.Find(id);
+            _context.Lists.Remove(listRecipient);
         }
 
         public void SaveChanges()
         {
-            throw new NotImplementedException();
+            _context.SaveChanges();
         }
 
-        public Task<int> SaveChangesAsync()
+        public async Task<int> SaveChangesAsync()
         {
-            throw new NotImplementedException();
+            return await _context.SaveChangesAsync();
         }
 
         public IEnumerable<ListRecipient> Where(Expression<Func<ListRecipient, bool>> predicate)

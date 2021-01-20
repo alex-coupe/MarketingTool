@@ -32,6 +32,7 @@ namespace Api.Controllers
             if (HttpContext.User.HasClaim(claim => claim.Type == "Email" && claim.Value == "acoupe@gmail.com"))
             {
                 synonyms = await _repository.GetAllAsync();
+                return Ok(synonyms);
             }
 
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);

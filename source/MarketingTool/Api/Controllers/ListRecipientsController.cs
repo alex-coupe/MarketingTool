@@ -30,10 +30,11 @@ namespace Api.Controllers
             if (HttpContext.User.HasClaim(claim => claim.Type == "Email" && claim.Value == "acoupe@gmail.com"))
             {
                 listRecipients = await _repository.GetAllAsync();
+                return Ok(listRecipients);
             }
 
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            listRecipients = await _repository.GetAllAsync(x => x.ClientId == clientId);
+            listRecipients = await _repository.GetAllAsync(x => x.List.ClientId == clientId);
 
             return Ok(listRecipients);
         }
@@ -43,7 +44,7 @@ namespace Api.Controllers
         public async Task<ActionResult<ListRecipient>> GetListRecipient(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var listRecipient = await _repository.GetAsync(x => x.ClientId == clientId, id);
+            var listRecipient = await _repository.GetAsync(x => x.List.ClientId == clientId, id);
 
             if (listRecipient != null)
                 return Ok(listRecipient);
