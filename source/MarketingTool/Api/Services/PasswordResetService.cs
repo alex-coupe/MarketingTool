@@ -17,6 +17,7 @@ namespace Api.Services
     {
         IServiceScopeFactory _serviceScopeFactory;
         EmailService _emailService;
+        private bool mutex = false;
         public PasswordResetService(IServiceScopeFactory serviceScopeFactory, EmailService emailService)
         {
             _serviceScopeFactory = serviceScopeFactory;
@@ -25,8 +26,9 @@ namespace Api.Services
 
         public async void ProcessQueue()
         {
+            mutex = true;
             using (var scope = _serviceScopeFactory.CreateScope())
-            {
+            {                
                 var _repository = scope.ServiceProvider.GetService<IRepository<PasswordReset>>();
 
                 var resets = _repository.Where(x => x.EmailSent == false).ToList();
@@ -44,7 +46,9 @@ namespace Api.Services
                     reset.EmailSent = true;
                     await _repository.SaveChangesAsync();
                 }
+               
             }
+            mutex = false;
         }
 
         protected override Task ExecuteAsync(CancellationToken token)
@@ -53,8 +57,11 @@ namespace Api.Services
             {
                 while (!token.IsCancellationRequested)
                 {
-                    ProcessQueue();
-                    await Task.Delay(TimeSpan.FromSeconds(150), token);
+                    if (!mutex)
+                    {
+                        ProcessQueue();
+                        await Task.Delay(TimeSpan.FromSeconds(150), token);
+                    }
                 }
             }, token);
 

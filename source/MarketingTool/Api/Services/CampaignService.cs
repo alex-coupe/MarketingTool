@@ -16,6 +16,7 @@ namespace Api.Services
     {
         IServiceScopeFactory _serviceScopeFactory;
         EmailService _emailService;
+        bool mutex = false;
         public CampaignService(IServiceScopeFactory serviceScopeFactory, EmailService emailService)
         {
             _serviceScopeFactory = serviceScopeFactory;
@@ -27,14 +28,18 @@ namespace Api.Services
             {
                 while (!token.IsCancellationRequested)
                 {
-                    ProcessQueue();
-                    await Task.Delay(TimeSpan.FromSeconds(150), token);
+                    if (!mutex)
+                    {
+                        ProcessQueue();
+                        await Task.Delay(TimeSpan.FromSeconds(150), token);
+                    }
                 }
             }, token);
         }
 
         public async void ProcessQueue()
         {
+            mutex = true;
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                
@@ -92,10 +97,11 @@ namespace Api.Services
                         }
                         campaign.ProcessedTimestamp = DateTime.Now;
                         await _campaignsRepository.SaveChangesAsync();
-                       
+                        
                     }
                 }
             }
+            mutex = false;
         }
 
 

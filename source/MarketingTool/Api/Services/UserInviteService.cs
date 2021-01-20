@@ -15,7 +15,7 @@ namespace Api.Services
     {
         IServiceScopeFactory _serviceScopeFactory;
         EmailService _emailService;
-      
+        bool mutex = false;
         public UserInviteService(IServiceScopeFactory serviceScopeFactory, EmailService emailService)
         {
             _serviceScopeFactory = serviceScopeFactory;
@@ -43,17 +43,21 @@ namespace Api.Services
         {
              return Task.Run(async () =>
              {
-                while (!token.IsCancellationRequested)
-                {
-                    ProcessQueue();
-                    await Task.Delay(TimeSpan.FromSeconds(100), token);
-                }
+                 while (!token.IsCancellationRequested)
+                 {
+                     if (!mutex)
+                     {
+                         ProcessQueue();
+                         await Task.Delay(TimeSpan.FromSeconds(100), token);
+                     }
+                 }
              }, token);
 
         }
 
         public async void ProcessQueue()
         {
+            mutex = true;
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var _userInviteRepository = scope.ServiceProvider.GetService<IRepository<UserInvite>>();
@@ -76,6 +80,7 @@ namespace Api.Services
                     await _userInviteRepository.SaveChangesAsync();
                 }
             }
+            mutex = false;
         }
     }
 }
