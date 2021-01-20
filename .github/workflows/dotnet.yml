@@ -18,9 +18,9 @@ jobs:
       with:
         dotnet-version: 5.0.x
     - name: Build
-     run: dotnet build --configuration Release
+      run: dotnet build --configuration Release
     - name: dotnet publish
       run: |
-        dotnet publish -c Release -o MarketingApp 
+        dotnet publish -c Release -o dotnetcorewebapp 
     - name: Test
       run: dotnet test ./MarketingTool/ --no-build --verbosity normal
