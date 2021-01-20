@@ -17,9 +17,10 @@ jobs:
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 5.0.x
-    - name: Restore dependencies
-      run: dotnet restore ./MarketingTool/
     - name: Build
-      run: dotnet build ./MarketingTool/ --no-restore
+     run: dotnet build --configuration Release
+    - name: dotnet publish
+      run: |
+        dotnet publish -c Release -o MarketingApp 
     - name: Test
       run: dotnet test ./MarketingTool/ --no-build --verbosity normal
