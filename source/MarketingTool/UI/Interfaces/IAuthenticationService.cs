@@ -1,5 +1,4 @@
-﻿using DataTransfer.DataTransferObjects;
-using DataTransfer.ViewModels;
+﻿using DataTransfer.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,11 +8,13 @@ namespace UI.Interfaces
 {
     public interface IAuthenticationService
     {
-        UserDTO User { get; }
+        UserViewModel User { get; }
 
         Task Initialize();
 
         Task Login(LoginRequest loginRequest);
+
+        Task Register(RegistrationViewModel registrationViewModel);
 
         Task Logout();
     }

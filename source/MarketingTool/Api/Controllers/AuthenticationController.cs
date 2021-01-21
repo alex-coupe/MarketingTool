@@ -2,7 +2,6 @@
 using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
-using DataTransfer.DataTransferObjects;
 using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -23,10 +22,10 @@ namespace Api.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly IRepository<User> _userRepository;
+        private readonly IRepository<DataAccess.Models.User> _userRepository;
         private IRepository<PasswordReset> _passwordResetRepository;
 
-        public AuthenticationController(IConfiguration config, IRepository<User> userRepository, IRepository<PasswordReset> passwordRepository )
+        public AuthenticationController(IConfiguration config, IRepository<DataAccess.Models.User> userRepository, IRepository<PasswordReset> passwordRepository )
         {
             _config = config;
             _userRepository = userRepository;
@@ -43,7 +42,7 @@ namespace Api.Controllers
             if (user != null)
             {
                 var token = GenerateJSONWebToken(user);
-                var userResponse = new UserDTO { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), 
+                var userResponse = new UserViewModel { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), 
                     Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, IsAdmin = user.Admin, IsArchived = user.Archived, Name = user.FirstName };
                 return Ok(JsonSerializer.Serialize(userResponse));
             }
@@ -54,20 +53,35 @@ namespace Api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult> Register(User user)
+        public async Task<ActionResult> Register(RegistrationViewModel newRegistration, [FromServices] IRepository<Client> clientRepository)
         {
-            UserValidator _validator = new UserValidator(_userRepository);
-            var validationResult = _validator.Validate(user);
-            if (validationResult.IsValid)
+            ClientsController _clientsController = new ClientsController(clientRepository);
+
+            var client = await _clientsController.PostClient(new Client
             {
-                user.Password = CryptoHelper.Crypto.HashPassword(user.Password);
+                Name = newRegistration.ClientName,
+                SubscriptionLevelId = newRegistration.SubscriptionLevel
+            });
+           
+            UsersController _usersController = new UsersController(_userRepository);
 
-                _userRepository.Add(user);
-                await _userRepository.SaveChangesAsync();
+            var user = _usersController.PostUser(new User
+            {
+                FirstName = newRegistration.FirstName,
+                Admin = true,
+                Archived = false,
+                EmailAddress = newRegistration.EmailAddress,
+                Password = CryptoHelper.Crypto.HashPassword(newRegistration.Password),
+                ClientId = client.Value.Id
+            });
 
-                return CreatedAtAction("Register", new { id = user.Id }, user);
+            if (user != null && client != null)
+            {
+
+                return CreatedAtAction("Register", user);
             }
-            return BadRequest(validationResult.Errors);
+            
+            return BadRequest();
         }
 
     
@@ -151,7 +165,7 @@ namespace Api.Controllers
             return NoContent();
         }
 
-        private JwtSecurityToken GenerateJSONWebToken(User user)
+        private JwtSecurityToken GenerateJSONWebToken(DataAccess.Models.User user)
         {
             var secruityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var signingCredentials = new SigningCredentials(secruityKey, SecurityAlgorithms.HmacSha256);
@@ -173,7 +187,7 @@ namespace Api.Controllers
             return token;
         }
 
-        private User AuthenticateUser(string email, string password)
+        private DataAccess.Models.User AuthenticateUser(string email, string password)
         {
             var user = _userRepository.Where(x => x.EmailAddress == email).FirstOrDefault();
 

@@ -23,14 +23,34 @@ namespace MarketingToolTests.BackendTests
     public class AuthenticationControllerTests
     {
         Mock<IRepository<User>> _userRepositoryMock;
+        Mock<IRepository<Client>> _clientRepositoryMock;
         Mock<IRepository<PasswordReset>> _passwordResetMock;
         Mock<IConfiguration> _configurationMock;
-    
+        List<Client> clientList;
+
         public AuthenticationControllerTests()
         {
             _userRepositoryMock = new Mock<IRepository<User>>();
             _passwordResetMock = new Mock<IRepository<PasswordReset>>();
             _configurationMock = new Mock<IConfiguration>();
+
+            _clientRepositoryMock = new Mock<IRepository<Client>>();
+            clientList = new List<Client> {
+            new Client
+            {
+                Id = 1,
+                Name = "Creative Inc",
+
+                SubscriptionLevelId = 1
+            },
+             new Client
+            {
+                Id = 2,
+                Name = "Big Bad Barry Inc",
+
+                SubscriptionLevelId = 1
+
+            }};
 
             var userList = new List<User> {
             new User
@@ -58,7 +78,7 @@ namespace MarketingToolTests.BackendTests
             }};
             _userRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(userList);
             _userRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
-
+            _clientRepositoryMock.Setup(x => x.Add(It.IsAny<Client>()));
             _userRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<User, bool>>>()))
                 .Returns(userList);
             _userRepositoryMock.Setup(x => x.GetAll()).Returns(userList);
@@ -95,71 +115,5 @@ namespace MarketingToolTests.BackendTests
             Assert.Equal("{ ErrorMessage = Email Address or Password Incorrect }", errorString.ToString());
         }
 
-        [Fact]
-        public async Task well_formed_user_is_registered()
-        {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
-                 , _passwordResetMock.Object);
-            var user = new User
-            {
-
-                EmailAddress = "barry@test.com",
-                FirstName = "Barry",
-                LastName = "Beaverton",
-                Admin = true,
-                Archived = false,
-                ClientId = 1,
-                Password = "Testing123"
-            };
-
-            var result = await _controller.Register(user);
-            var actionResult = Assert.IsType<CreatedAtActionResult>(result);
-            var response = Assert.IsType<User>(actionResult.Value);
-            Assert.NotNull(response);
-            Assert.Equal("barry@test.com", response.EmailAddress);
-            _userRepositoryMock.Verify(r => r.Add(user));
-            _userRepositoryMock.Verify(r => r.SaveChangesAsync());
-        }
-
-        [Fact]
-        public async Task using_existing_email_does_not_register()
-        {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
-                 , _passwordResetMock.Object);
-            var user = new User
-            {
-
-                EmailAddress = "garry@test.com",
-                FirstName = "Garry",
-                LastName = "Beaverton",
-                Admin = true,
-                Archived = false,
-                ClientId = 1,
-                Password = "Testing123"
-            };
-
-            var result = await _controller.Register(user);
-            var actionResult = Assert.IsType<BadRequestObjectResult>(result);
-            var errorString = Assert.IsType<List<ValidationFailure>>(actionResult.Value);
-            var json = errorString.FirstOrDefault().ErrorMessage;
-
-            Assert.Equal("An account with that email address already exists", json);
-        }
-
-        [Fact]
-        public async Task malformed_user_is_not_registered()
-        {
-            AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
-                 , _passwordResetMock.Object);
-            var user = new User
-            {
-                Admin = true,
-                Archived = false,
-                ClientId = 1,
-            };
-
-            var result = await _controller.Register(user);
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
     }
 }

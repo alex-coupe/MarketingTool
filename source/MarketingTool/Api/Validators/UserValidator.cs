@@ -1,6 +1,5 @@
 ﻿using DataAccess.Models;
 using DataAccess.Repositories;
-using DataTransfer.ViewModels;
 using FluentValidation;
 using System;
 using System.Collections.Generic;

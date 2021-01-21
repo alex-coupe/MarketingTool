@@ -1,10 +1,8 @@
 ﻿@page "/register"
 
-@using DataTransfer.DataTransferObjects
-@using DataTransfer.ViewModels
-
-@inject HttpClient http
-@inject NavigationManager nav
+@inject IAuthenticationService _authenticationService
+@inject IDataService<SubscriptionLevelViewModel> _subscriptionLevelsService
+@inject NavigationManager _navigationManager
 
 <h3>Register</h3>
 
@@ -35,36 +33,34 @@
 </div>
 @code {
 
-    RegisterRequest registerRequest = new RegisterRequest();
+    RegistrationViewModel registerRequest = new RegistrationViewModel();
 
-    List<SubscriptionLevelDTO> subscriptionLevels = new List<SubscriptionLevelDTO>();
+    private string Error { get; set; }
+
+    private IEnumerable<SubscriptionLevelViewModel> subscriptionLevels;
 
     private async Task HandleRegistration()
     {
-        var clientId = await PostClient();
-
-       
-      
-    }
-
-    private async Task<int> PostClient()
-    {
-        var client = new ClientDTO()
+        try
         {
-            Name = registerRequest.ClientName,
-            SubscriptionLevelId = registerRequest.SubscriptionLevel
-        };
-        var response = await http.PostAsJsonAsync("api/clients/", client);
-        var responseClient = await response.Content.ReadFromJsonAsync<ClientDTO>();
+            await _authenticationService.Register(registerRequest);
+            _navigationManager.NavigateTo("/dashboard");
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+            StateHasChanged();
+        }
 
-        return responseClient.Id;
+
+
     }
 
-   
+
 
     protected override async Task OnInitializedAsync()
     {
-        subscriptionLevels = await http.GetFromJsonAsync<List<SubscriptionLevelDTO>>("api/subscriptionlevels/");
+        subscriptionLevels = await _subscriptionLevelsService.GetAll();
 
     }
 }

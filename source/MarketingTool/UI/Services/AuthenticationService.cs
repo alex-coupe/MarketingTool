@@ -1,5 +1,4 @@
-﻿using DataTransfer.DataTransferObjects;
-using DataTransfer.ViewModels;
+﻿using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
 using UI.Interfaces;
@@ -19,16 +18,16 @@ namespace UI.Services
             _localStorageService = localStorageService;
         }
 
-        public UserDTO User { get; private set; }
+        public UserViewModel User { get; private set; }
 
          public async Task Initialize()
         {
-            User = await _localStorageService.GetItem<UserDTO>("user");
+            User = await _localStorageService.GetItem<UserViewModel>("user");
         }
 
         public async Task Login(LoginRequest loginRequest)
         {
-            User = await _httpService.Post<UserDTO>("api/authentication/login", loginRequest);
+            User = await _httpService.Post<UserViewModel>("api/authentication/login", loginRequest);
             await _localStorageService.SetItem("user", User);
         }
 
@@ -37,6 +36,13 @@ namespace UI.Services
             User = null;
             await _localStorageService.RemoveItem("user");
             _navigationManager.NavigateTo("/");
+        }
+
+        public async Task Register(RegistrationViewModel registrationViewModel)
+        {
+           User = await _httpService.Post<UserViewModel>("api/authentication/register", registrationViewModel);
+          
+            await _localStorageService.SetItem("user", User);
         }
     }
 }

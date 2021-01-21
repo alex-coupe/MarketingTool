@@ -1,4 +1,4 @@
-﻿using DataTransfer.DataTransferObjects;
+﻿using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -30,6 +30,12 @@ namespace UI.Services
             _configuration = configuration;
         }
 
+        public async Task<T> Delete<T>(string uri)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Delete, uri);
+            return await sendRequest<T>(request);
+        }
+
         public async Task<T> Get<T>(string uri)
         {
             var request = new HttpRequestMessage(HttpMethod.Get, uri);
@@ -43,10 +49,17 @@ namespace UI.Services
             return await sendRequest<T>(request);
         }
 
+        public async Task<T> Put<T>(string uri, object value)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Put, uri);
+            request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
+            return await sendRequest<T>(request);
+        }
+
         private async Task<T> sendRequest<T>(HttpRequestMessage request)
         {
             // add jwt auth header if user is logged in and request is to the api url
-            var user = await _localStorageService.GetItem<UserDTO>("user");
+            var user = await _localStorageService.GetItem<UserViewModel>("user");
             var isApiUrl = !request.RequestUri.IsAbsoluteUri;
             if (user != null && isApiUrl)
                 request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);

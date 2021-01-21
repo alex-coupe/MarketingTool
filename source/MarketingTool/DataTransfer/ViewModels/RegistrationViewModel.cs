@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace DataTransfer.ViewModels
 {
-    /// <summary>
-    /// Represents a registration request from a user
-    /// </summary>
-    public class RegisterRequest
+    public class RegistrationViewModel
     {
+
         [Required]
         public string ClientName { get; set; }
 
@@ -30,5 +30,7 @@ namespace DataTransfer.ViewModels
 
         [Required]
         public string ConfirmPassword { get; set; }
+
+
     }
 }

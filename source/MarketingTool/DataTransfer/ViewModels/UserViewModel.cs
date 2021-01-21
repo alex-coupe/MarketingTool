@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataTransfer.DataTransferObjects
+namespace DataTransfer.ViewModels
 {
-    public class UserDTO
+    public class UserViewModel
     {
         public string TokenType { get; set; }
 
