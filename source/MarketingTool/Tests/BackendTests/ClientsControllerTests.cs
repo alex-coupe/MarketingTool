@@ -98,42 +98,7 @@ namespace MarketingToolTests.BackendTests
             _clientRepositoryMock.Verify(r => r.GetAsync(4));
         }
 
-        [Fact]
-        public async Task post_adds_new_client()
-        {
-            ClientsController _controller = new ClientsController(_clientRepositoryMock.Object);
-            var client = new Client
-            {
-                Name = "Not Very Creative Inc",
-
-                SubscriptionLevelId = 1
-            };
-
-            var result = await _controller.PostClient(client);
-
-            var actionResult = Assert.IsType<CreatedAtActionResult>(result.Result);
-            var response = Assert.IsType<Client>(actionResult.Value);
-            Assert.NotNull(response);
-            Assert.Equal("Not Very Creative Inc", response.Name);
-            _clientRepositoryMock.Verify(r => r.Add(client));
-            _clientRepositoryMock.Verify(r => r.SaveChangesAsync());
-        }
-
-        [Fact]
-        public async Task post_invalid_model_returns_bad_request()
-        {
-            ClientsController _controller = new ClientsController(_clientRepositoryMock.Object);
-            var client = new Client
-            {
-                SubscriptionLevelId = 1
-            };
-
-            var result = await _controller.PostClient(client);
-
-            Assert.IsType<BadRequestObjectResult>(result.Result);
-
-        }
-
+     
         [Fact]
         public async Task edit_alters_client()
         {
@@ -169,15 +134,8 @@ namespace MarketingToolTests.BackendTests
         public async Task delete_removes_client()
         {
             ClientsController _controller = new ClientsController(_clientRepositoryMock.Object);
-            var client = new Client
-            {
-                Id = 1, 
-                Name = "Creative Inc",
-                SubscriptionLevelId = 1
-            };
-
-            await _controller.PostClient(client);
-
+            var client = clientList.First();
+           
             var result = await _controller.DeleteClient(client.Id);
 
             Assert.IsType<NoContentResult>(result);

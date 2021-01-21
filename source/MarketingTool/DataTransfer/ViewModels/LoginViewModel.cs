@@ -11,9 +11,11 @@ namespace DataTransfer.ViewModels
     public class LoginViewModel
     {
         [Required]
-        public string Email { get; set; }
+        [EmailAddress]
+        public string EmailAddress { get; set; }
 
         [Required]
+        [DataType(DataType.Password)]
         public string Password { get; set; }
     }
 }

@@ -7,9 +7,10 @@ using System.Threading.Tasks;
 
 namespace DataTransfer.ViewModels
 {
-    public class EmailObjectRequest
+    public class EmailAddressViewModel
     {
         [Required]
-        public string Email { get; set; }
+        [EmailAddress]
+        public string EmailAddress { get; set; }
     }
 }

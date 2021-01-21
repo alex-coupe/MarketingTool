@@ -7,6 +7,7 @@
 <h3>Register</h3>
 
 <div class="container text-center">
+    
     <EditForm Model="registerRequest" OnValidSubmit="HandleRegistration">
         <label>Enter Your Organisation's Name</label>
         <InputText type="text" @bind-Value="registerRequest.ClientName" />
@@ -26,6 +27,8 @@
         <InputText type="email" @bind-Value="registerRequest.EmailAddress" />
         <label For="PasswordField">Password</label>
         <InputText type="password" @bind-Value="registerRequest.Password" />
+        <label For="PasswordField">Confirm Password</label>
+        <InputText type="password" @bind-Value="registerRequest.ConfirmPassword" />
         <button type="submit" class="btn btn-primary">Register</button>
         <DataAnnotationsValidator />
         <ValidationSummary />
@@ -37,7 +40,7 @@
 
     private string Error { get; set; }
 
-    private IEnumerable<SubscriptionLevelViewModel> subscriptionLevels;
+    private IEnumerable<SubscriptionLevelViewModel> subscriptionLevels = new List<SubscriptionLevelViewModel>();
 
     private async Task HandleRegistration()
     {

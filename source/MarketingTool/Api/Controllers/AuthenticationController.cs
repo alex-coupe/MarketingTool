@@ -37,7 +37,7 @@ namespace Api.Controllers
         [Route("Login")]
         public ActionResult Login([FromBody] LoginViewModel credentials)
         {
-            var user = AuthenticateUser(credentials.Email, credentials.Password);
+            var user = AuthenticateUser(credentials.EmailAddress, credentials.Password);
 
             if (user != null)
             {
@@ -53,76 +53,51 @@ namespace Api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Register")]
-        public async Task<ActionResult> Register(RegistrationViewModel newRegistration, [FromServices] IRepository<Client> clientRepository)
+        public async Task<ActionResult> Register(RegistrationViewModel newRegistration, [FromServices] IRepository<Client> _clientRepository)
         {
-            ClientsController _clientsController = new ClientsController(clientRepository);
-
-            var client = await _clientsController.PostClient(new Client
+            
+            var client = new Client
             {
                 Name = newRegistration.ClientName,
                 SubscriptionLevelId = newRegistration.SubscriptionLevel
-            });
-           
-            UsersController _usersController = new UsersController(_userRepository);
+            };
 
-            var user = _usersController.PostUser(new User
-            {
-                FirstName = newRegistration.FirstName,
-                Admin = true,
-                Archived = false,
-                EmailAddress = newRegistration.EmailAddress,
-                Password = CryptoHelper.Crypto.HashPassword(newRegistration.Password),
-                ClientId = client.Value.Id
-            });
+            _clientRepository.Add(client);
+            await _clientRepository.SaveChangesAsync();         
 
-            if (user != null && client != null)
+            if (client.Id > 0)
             {
 
-                return CreatedAtAction("Register", user);
+                var user = new User
+                {
+                    FirstName = newRegistration.FirstName,
+                    LastName = newRegistration.LastName,
+                    Admin = true,
+                    Archived = false,
+                    EmailAddress = newRegistration.EmailAddress,
+                    Password = CryptoHelper.Crypto.HashPassword(newRegistration.Password),
+                    ClientId = client.Id
+                };
+
+                 _userRepository.Add(user);
+                await _userRepository.SaveChangesAsync();
+               
+               return Login(new LoginViewModel { EmailAddress = user.EmailAddress, Password = newRegistration.Password });     
             }
             
             return BadRequest();
         }
 
-    
-
         [AllowAnonymous]
-        [Route("ResetPassword/{Token}")]
-        [HttpGet]
-        public ActionResult<PasswordResetData> GetResetRequest([FromRoute] string Token)
-        {
-            var request = _passwordResetRepository.GetAll().Where(x => x.Token == Token).FirstOrDefault();
-
-            var resetData = new PasswordResetData
-            {
-                EmailAddress = request.EmailAddress,
-                IsTokenValid = request.DateCreated.AddMinutes(30) > DateTime.Now ? true : false,
-                UserId = request.UserId
-            };
-
-            return Ok(resetData);
-        }
-
-        [Authorize]
-        [Route("OpenResetRequests")]
-        [HttpGet]
-        public async Task<ActionResult<PasswordResetData>> GetResetRequests()
-        {
-            var requests = await _passwordResetRepository.GetAllAsync();
-
-            return Ok(requests);
-        }
-
-        [AllowAnonymous]
-        [Route("ResetPassword")]
+        [Route("ForgottenPassword")]
         [HttpPost]
-        public async Task<ActionResult> IssueReset([FromBody] EmailObjectRequest request, [FromServices]PasswordResetService resetService)
+        public async Task<ActionResult> IssueReset([FromBody] EmailAddressViewModel request, [FromServices]PasswordResetService resetService)
         {
-            var user = _userRepository.Where(x => x.EmailAddress == request.Email).FirstOrDefault();
+            var user = _userRepository.Where(x => x.EmailAddress == request.EmailAddress).FirstOrDefault();
 
             if (user != null)
             {
-                await resetService.Push(request.Email, user.Id);
+                await resetService.Push(request.EmailAddress, user.Id);
                
                 return Ok();
             }
@@ -132,9 +107,9 @@ namespace Api.Controllers
         [AllowAnonymous]
         [Route("UpdatePassword")]
         [HttpPost]
-        public async Task<ActionResult> UpdatePassword([FromBody] UpdatePasswordRequest request)
+        public async Task<ActionResult> UpdatePassword([FromBody] UpdatePasswordViewModel request)
         {
-            var resetEntry = _passwordResetRepository.Where(x => x.EmailAddress == request.EmailAddress)
+            var resetEntry = _passwordResetRepository.Where(x => x.Token == request.Token)
                 .OrderByDescending(x => x.DateCreated)
                 .FirstOrDefault();
 

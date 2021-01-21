@@ -1,14 +1,22 @@
 ﻿@inherits LayoutComponentBase
+@inject IAuthenticationService AuthenticationService
 
 <div class="page">
   
     <div class="main">
-        <div class="top-row px-4">
-            <button>Placeholder</button>
-        </div>
 
+        @if (AuthenticationService.User != null)
+        {
+        <nav class="navbar navbar-expand navbar-dark bg-dark">
+            <div class="navbar-nav">
+                <button class="btn btn-danger" @onclick="AuthenticationService.Logout">Logout</button>
+            </div>
+        </nav>
+        }
         <div class="content px-4">
             @Body
         </div>
     </div>
 </div>
+
+

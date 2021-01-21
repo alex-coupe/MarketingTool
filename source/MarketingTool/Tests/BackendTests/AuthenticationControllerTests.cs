@@ -2,20 +2,12 @@
 using DataAccess.Models;
 using DataAccess.Repositories;
 using DataTransfer.ViewModels;
-using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Moq;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
 using Xunit;
 
 namespace MarketingToolTests.BackendTests
@@ -27,7 +19,6 @@ namespace MarketingToolTests.BackendTests
         Mock<IRepository<PasswordReset>> _passwordResetMock;
         Mock<IConfiguration> _configurationMock;
         List<Client> clientList;
-
         public AuthenticationControllerTests()
         {
             _userRepositoryMock = new Mock<IRepository<User>>();
@@ -91,7 +82,7 @@ namespace MarketingToolTests.BackendTests
             AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
                 ,_passwordResetMock.Object);
             LoginViewModel request = new LoginViewModel();
-            request.Email = "test@test.com";
+            request.EmailAddress = "test@test.com";
             request.Password = "Password123";
             var result =  _controller.Login(request);
 
@@ -105,7 +96,7 @@ namespace MarketingToolTests.BackendTests
             AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
                  , _passwordResetMock.Object);
             LoginViewModel request = new LoginViewModel();
-            request.Email = "test@test.com";
+            request.EmailAddress = "test@test.com";
             request.Password = "Password12";
             var result = _controller.Login(request);
 

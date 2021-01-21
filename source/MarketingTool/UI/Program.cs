@@ -1,3 +1,4 @@
+using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -22,6 +23,7 @@ namespace UI
             builder.Services
                 .AddScoped<IHttpService, HttpService>()
                 .AddScoped<IAuthenticationService, AuthenticationService>()
+                .AddScoped<IDataService<SubscriptionLevelViewModel>, SubscriptionLevelService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>();
 
             builder.Services.AddScoped(x => {

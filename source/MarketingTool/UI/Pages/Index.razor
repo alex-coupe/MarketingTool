@@ -6,7 +6,7 @@
 <div class="container text-center">
     <EditForm Model="loginRequest" OnValidSubmit="HandleLogin">
         <label For="EmailField">Email Address</label>
-        <InputText id="EmailField" type="email" @bind-Value="loginRequest.Email" />
+        <InputText id="EmailField" type="email" @bind-Value="loginRequest.EmailAddress" />
         <label For="PasswordField">Password</label>
         <InputText id="PasswordField" type="password" @bind-Value="loginRequest.Password" />
         <button type="submit" class="btn btn-primary">Login</button>

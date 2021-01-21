@@ -40,22 +40,6 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Client>> PostClient(Client client)
-        {
-            ClientValidator _validator = new ClientValidator();
-            var validationResult = await _validator.ValidateAsync(client);
-            if (validationResult.IsValid)
-            {
-                _repository.Add(client);
-
-                await _repository.SaveChangesAsync();
-                return CreatedAtAction("PostClient", new { id = client.Id }, client);
-            }
-
-            return BadRequest(validationResult.Errors);
-        }
-
         [Authorize]
         [HttpPut]
         public async Task<ActionResult<Client>> PutClient(Client client)
