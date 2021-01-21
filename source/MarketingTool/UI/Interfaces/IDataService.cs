@@ -8,7 +8,7 @@ namespace UI.Interfaces
     public interface IDataService<T>
     {
         Task<IEnumerable<T>> GetAll();
-        Task<T> GetOne(int id);
+        Task<T> Get(int id);
 
         Task<T> Post(T entity);
 
