@@ -7,6 +7,8 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using UI.Interfaces;
+using UI.Services;
 
 namespace UI
 {
@@ -16,10 +18,24 @@ namespace UI
         {
             var builder = WebAssemblyHostBuilder.CreateDefault(args);
             builder.RootComponents.Add<App>("#app");
-            var baseAddress = builder.Configuration.GetValue<string>("BaseUrl");
-            builder.Services.AddScoped(sp => new HttpClient { BaseAddress = new Uri(baseAddress) });
 
-            await builder.Build().RunAsync();
+            builder.Services
+                .AddScoped<IHttpService, HttpService>()
+                .AddScoped<IAuthenticationService, AuthenticationService>()
+                .AddScoped<ILocalStorageService, LocalStorageService>();
+
+            builder.Services.AddScoped(x => {
+                var apiUrl = new Uri(builder.Configuration["ApiUrl"]);
+                return new HttpClient() { BaseAddress = apiUrl };
+            });
+
+            var host = builder.Build();
+
+            var authenticationService = host.Services.GetRequiredService<IAuthenticationService>();
+            await authenticationService.Initialize();
+
+            await host.RunAsync();
         }
     }
+
 }

@@ -1,6 +1,10 @@
 ﻿@page "/dashboard"
+@attribute [Authorize]
+@inject IAuthenticationService AuthenticationService
 
 <h3>Dashboard</h3>
+
+<h3>Hi @AuthenticationService.User.Name</h3>
 
 <p>
     <button class="btn btn-primary">Recipients</button>

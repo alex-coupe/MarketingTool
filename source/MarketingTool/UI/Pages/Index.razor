@@ -1,10 +1,7 @@
 ﻿@page "/"
 
-@using System.Text.Json
-@using DataTransfer.ViewModels
-
-@inject HttpClient http
-@inject NavigationManager nav
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
 
 <div class="container text-center">
     <EditForm Model="loginRequest" OnValidSubmit="HandleLogin">
@@ -29,26 +26,30 @@
 
     LoginRequest loginRequest = new LoginRequest();
 
-    private string Error { get; set; }
+    private string Error;
 
-    private async Task HandleLogin()
+    protected override void OnInitialized()
     {
-
-        var response = await http.PostAsJsonAsync("api/authentication/login", loginRequest);
-
-        if (response.IsSuccessStatusCode)
+        if (AuthenticationService.User != null)
         {
-            var json = await response.Content.ReadFromJsonAsync<AuthenticationResponse>();
-
-            if (!string.IsNullOrEmpty(json.Token) && !(json.Expires < DateTime.Now))
-                nav.NavigateTo("/dashboard");
+            _navigationManager.NavigateTo("Dashboard");
         }
-        else
-        {
-            var error = await response.Content.ReadFromJsonAsync<string>();
-            Error = error;
-        }
-
-
     }
+
+    private async void HandleLogin()
+    {
+        try
+        {
+            await AuthenticationService.Login(loginRequest);
+            var returnUrl = _navigationManager.QueryString("returnUrl") ?? "/dashboard";
+            _navigationManager.NavigateTo(returnUrl);
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+            StateHasChanged();
+        }
+    }
+
+
 } 

@@ -1,16 +1,14 @@
-﻿using Api.Helpers;
-using Api.Services;
+﻿using Api.Services;
 using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.DataTransferObjects;
 using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -45,9 +43,9 @@ namespace Api.Controllers
             if (user != null)
             {
                 var token = GenerateJSONWebToken(user);
-                var authResponse = new AuthenticationResponse { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), 
-                    Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, isAdmin = user.Admin, isArchived = user.Archived, Name = user.FirstName };
-                return Ok(JsonSerializer.Serialize(authResponse));
+                var userResponse = new UserDTO { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), 
+                    Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, IsAdmin = user.Admin, IsArchived = user.Archived, Name = user.FirstName };
+                return Ok(JsonSerializer.Serialize(userResponse));
             }
 
             return Unauthorized(new {ErrorMessage = "Email Address or Password Incorrect" });

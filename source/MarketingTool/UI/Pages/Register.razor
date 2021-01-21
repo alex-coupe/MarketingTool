@@ -43,12 +43,8 @@
     {
         var clientId = await PostClient();
 
-        var userResponse = await PostUser(clientId);
-
-        if (userResponse.IsSuccessStatusCode)
-        {
-            nav.NavigateTo("/");
-        }
+       
+      
     }
 
     private async Task<int> PostClient()
@@ -64,23 +60,7 @@
         return responseClient.Id;
     }
 
-    private async Task<HttpResponseMessage> PostUser(int clientId)
-    {
-        var user = new UserDTO()
-        {
-            Admin = true,
-            FirstName = registerRequest.FirstName,
-            LastName = registerRequest.LastName,
-            EmailAddress = registerRequest.EmailAddress,
-            Password = registerRequest.Password,
-            Archived = false,
-            ClientId = clientId
-        };
-        var userResponse = await http.PostAsJsonAsync("api/authentication/register", user);
-
-        return userResponse;
-    }
-
+   
 
     protected override async Task OnInitializedAsync()
     {
