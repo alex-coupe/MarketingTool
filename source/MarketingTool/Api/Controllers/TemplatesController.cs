@@ -27,15 +27,8 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Template>>> GetTemplates()
         {
-            IEnumerable<Template> templates;
-            if (HttpContext.User.HasClaim(claim => claim.Type == "Email" && claim.Value == "acoupe@gmail.com"))
-            {
-                templates = await _templateRepository.GetAllAsync();
-                return Ok(templates);
-            }
-
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            templates = await _templateRepository.GetAllAsync(x => x.ClientId == clientId);
+            var templates = await _templateRepository.GetAllAsync(x => x.ClientId == clientId);
 
             return Ok(templates);
         }

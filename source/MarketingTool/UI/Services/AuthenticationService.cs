@@ -25,7 +25,7 @@ namespace UI.Services
             User = await _localStorageService.GetItem<UserViewModel>("user");
         }
 
-        public async Task Login(LoginRequest loginRequest)
+        public async Task Login(LoginViewModel loginRequest)
         {
             User = await _httpService.Post<UserViewModel>("api/authentication/login", loginRequest);
             await _localStorageService.SetItem("user", User);

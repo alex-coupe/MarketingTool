@@ -12,7 +12,7 @@ namespace UI.Interfaces
 
         Task Initialize();
 
-        Task Login(LoginRequest loginRequest);
+        Task Login(LoginViewModel loginRequest);
 
         Task Register(RegistrationViewModel registrationViewModel);
 

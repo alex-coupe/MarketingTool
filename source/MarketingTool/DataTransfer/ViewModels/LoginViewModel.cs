@@ -8,7 +8,7 @@ namespace DataTransfer.ViewModels
     /// <summary>
     /// Represents a login request from the user
     /// </summary>
-    public class LoginRequest
+    public class LoginViewModel
     {
         [Required]
         public string Email { get; set; }

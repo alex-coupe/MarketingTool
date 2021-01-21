@@ -28,15 +28,8 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
-            IEnumerable<User> users;
-            if (HttpContext.User.HasClaim(claim => claim.Type == "Email" && claim.Value == "acoupe@gmail.com"))
-            {
-                users = await _userRepository.GetAllAsync();
-                return Ok(users);
-            }
-
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            users = await _userRepository.GetAllAsync(x => x.ClientId == clientId);
+            var users = await _userRepository.GetAllAsync(x => x.ClientId == clientId);
 
             return Ok(users);
         }

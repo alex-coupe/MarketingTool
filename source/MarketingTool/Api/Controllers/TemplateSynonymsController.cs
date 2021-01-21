@@ -28,15 +28,9 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<TemplateSynonym>>> GetTemplateSynonyms()
         {
-            IEnumerable<TemplateSynonym> synonyms;
-            if (HttpContext.User.HasClaim(claim => claim.Type == "Email" && claim.Value == "acoupe@gmail.com"))
-            {
-                synonyms = await _repository.GetAllAsync();
-                return Ok(synonyms);
-            }
-
+            
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            synonyms = await _repository.GetAllAsync(x => x.ClientId == clientId);
+            var synonyms = await _repository.GetAllAsync(x => x.ClientId == clientId);
 
             return Ok(synonyms);
         }

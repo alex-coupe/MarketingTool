@@ -90,7 +90,7 @@ namespace MarketingToolTests.BackendTests
         {
             AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
                 ,_passwordResetMock.Object);
-            LoginRequest request = new LoginRequest();
+            LoginViewModel request = new LoginViewModel();
             request.Email = "test@test.com";
             request.Password = "Password123";
             var result =  _controller.Login(request);
@@ -104,7 +104,7 @@ namespace MarketingToolTests.BackendTests
         {
             AuthenticationController _controller = new AuthenticationController(_configurationMock.Object, _userRepositoryMock.Object
                  , _passwordResetMock.Object);
-            LoginRequest request = new LoginRequest();
+            LoginViewModel request = new LoginViewModel();
             request.Email = "test@test.com";
             request.Password = "Password12";
             var result = _controller.Login(request);

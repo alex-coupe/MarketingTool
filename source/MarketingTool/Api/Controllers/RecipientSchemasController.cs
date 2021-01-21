@@ -26,15 +26,9 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RecipientSchema>>> GetSchemas()
         {
-            IEnumerable<RecipientSchema> schemas;
-            if (HttpContext.User.HasClaim(claim => claim.Type == "Email" && claim.Value == "acoupe@gmail.com"))
-            {
-                schemas = await _repository.GetAllAsync();
-                return Ok(schemas);
-            }
-
+           
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            schemas = await _repository.GetAllAsync(x => x.ClientId == clientId);
+            var schemas = await _repository.GetAllAsync(x => x.ClientId == clientId);
 
             return Ok(schemas);
         }

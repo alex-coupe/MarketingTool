@@ -35,7 +35,7 @@ namespace Api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Login")]
-        public ActionResult Login([FromBody] LoginRequest credentials)
+        public ActionResult Login([FromBody] LoginViewModel credentials)
         {
             var user = AuthenticateUser(credentials.Email, credentials.Password);
 

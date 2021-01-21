@@ -26,15 +26,9 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<List>>> GetLists()
         {
-            IEnumerable<List> lists;
-            if (HttpContext.User.HasClaim(claim => claim.Type == "Email" && claim.Value == "acoupe@gmail.com"))
-            {
-                lists = await _listRepository.GetAllAsync();
-                return Ok(lists);
-            }
-
+          
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            lists = await _listRepository.GetAllAsync(x => x.ClientId == clientId);
+            var lists = await _listRepository.GetAllAsync(x => x.ClientId == clientId);
 
             return Ok(lists);
         }
