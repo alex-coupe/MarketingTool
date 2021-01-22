@@ -166,7 +166,7 @@ namespace Api.Controllers
             return token;
         }
 
-        private DataAccess.Models.User AuthenticateUser(string email, string password)
+        private User AuthenticateUser(string email, string password)
         {
             var user = _userRepository.Where(x => x.EmailAddress == email).FirstOrDefault();
 

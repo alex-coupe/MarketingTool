@@ -2,9 +2,11 @@
 using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,23 +24,15 @@ namespace Api.Controllers
             _repository = repository;
         }
 
+    
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<RecipientSchema>>> GetSchemas()
-        {
-           
-            var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var schemas = await _repository.GetAllAsync(x => x.ClientId == clientId);
-
-            return Ok(schemas);
-        }
-
-        [Authorize]
-        [HttpGet("{id}")]
-        public async Task<ActionResult<RecipientSchema>> GetSchema(int id)
+        public async Task<ActionResult<RecipientSchema>> GetSchema()
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var schema = await _repository.GetAsync(x => x.ClientId == clientId, id);
+            var schemas =  await _repository.GetAllAsync(x => x.ClientId == clientId);
+
+            var schema = schemas.FirstOrDefault();
                        
             if (schema != null)
                 return Ok(schema);
@@ -50,6 +44,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<RecipientSchema>> PostRecipientSchema(RecipientSchema schema)
         {
+            schema.ClientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             RecipientSchemaValidator _validator = new RecipientSchemaValidator();
             var validationResult = await _validator.ValidateAsync(schema);
             if (validationResult.IsValid)
@@ -65,8 +60,15 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpPut]
-        public async Task<ActionResult<RecipientSchema>> PutRecipientSchema(RecipientSchema schema)
+        public async Task<ActionResult<RecipientSchema>> PutRecipientSchema(RecipientSchemaViewModel model)
         {
+            var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
+            var schema = _repository.Where(x => x.ClientId == clientId).FirstOrDefault();
+
+            if (schema == null)
+                return NotFound(new ErrorMessageViewModel { ErrorMessage = "Schema Not Found" });
+
+            schema.Schema = JObject.FromObject(model.Schema);
             RecipientSchemaValidator _validator = new RecipientSchemaValidator();
             var validationResult = await _validator.ValidateAsync(schema);
             if (validationResult.IsValid)

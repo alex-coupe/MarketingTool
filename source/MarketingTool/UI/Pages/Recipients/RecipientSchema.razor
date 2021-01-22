@@ -1,0 +1,100 @@
+﻿@page "/recipients/schema"
+
+@attribute [Authorize]
+
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<RecipientSchemaViewModel> _recipientSchemaService
+
+<h3>Recipient Schema</h3>
+
+<ul>
+    @foreach (var item in viewModel.Schema)
+    {
+        <li>@item.Key - @item.Value <button class="btn btn-danger" @onclick="() => viewModel.RemoveFromSchema(item.Key)">Delete</button></li>
+
+    }
+</ul>
+
+<button class="btn btn-primary" @onclick="HandleSaveSchema">Save Schema</button>
+
+@if (Saved)
+{
+    <p class="text-center text-success">Schema Saved Successfully!</p>
+}
+
+<EditForm Model="itemViewModel" OnValidSubmit="HandleAddToSchema">
+    <label>Enter Your Schema Item's Name</label>
+    <InputText type="text" @bind-Value="itemViewModel.Key" />
+    <label>Choose Your Schema Item's Type</label>
+    <InputSelect @bind-Value="itemViewModel.Value">
+        <option value="">Select Type ...</option>
+        <option value="Text">Text</option>
+        <option value="Number">Number</option>
+        <option value="Checkbox">Checkbox</option>
+    </InputSelect>
+    <button type="submit" class="btn btn-primary">Add To Schema</button>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+</EditForm>
+@if (!string.IsNullOrEmpty(Error))
+{
+    <p>@Error</p>
+}
+
+
+@code {
+
+    RecipientSchemaViewModel viewModel = new RecipientSchemaViewModel();
+    RecipientSchemaItemViewModel itemViewModel = new RecipientSchemaItemViewModel();
+
+    private string Error { get; set; }
+
+    private bool SchemaExists { get; set; }
+
+    private bool Saved { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        viewModel.Schema = new Dictionary<string, string>();
+        if (AuthenticationService.User != null)
+        {
+            viewModel = await _recipientSchemaService.Get(0);
+
+            SchemaExists = viewModel.Schema.Count() > 0;
+        }
+        else
+        {
+            _navigationManager.NavigateTo("/");
+        }
+    }
+
+    private void HandleAddToSchema()
+    {
+        viewModel.AddToSchema(itemViewModel);
+        itemViewModel = new RecipientSchemaItemViewModel();
+    }
+
+
+    private async Task HandleSaveSchema()
+    {
+        try
+        {
+            if (SchemaExists)
+            {
+                await _recipientSchemaService.Put(viewModel);
+            }
+            else
+            {
+                await _recipientSchemaService.Post(viewModel);
+            }
+            Saved = true;
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+            StateHasChanged();
+        }
+    }
+
+}

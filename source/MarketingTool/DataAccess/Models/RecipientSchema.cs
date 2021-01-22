@@ -12,8 +12,7 @@ namespace DataAccess.Models
 {
     public class RecipientSchema
     {
-        private string _schemaData = string.Empty;
-
+        
         [Key]
         public int Id { get; set; }
 
