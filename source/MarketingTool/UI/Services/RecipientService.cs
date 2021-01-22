@@ -16,9 +16,9 @@ namespace UI.Services
             _httpService = httpService;
         }
 
-        public Task<RecipientViewModel> Get(int id)
+        public async Task<RecipientViewModel> Get(int id)
         {
-            throw new NotImplementedException();
+            return await _httpService.Get<RecipientViewModel>($"api/recipient/{id}");
         }
 
         public async Task<IEnumerable<RecipientViewModel>> GetAll()
@@ -26,9 +26,9 @@ namespace UI.Services
             return await _httpService.Get<IEnumerable<RecipientViewModel>>($"api/recipients");
         }
 
-        public Task<RecipientViewModel> Post(RecipientViewModel entity)
+        public async Task<RecipientViewModel> Post(RecipientViewModel entity)
         {
-            throw new NotImplementedException();
+            return await _httpService.Post<RecipientViewModel>($"api/recipient", entity);
         }
 
         public Task PostNoReturnContent(RecipientViewModel entity)
@@ -36,14 +36,14 @@ namespace UI.Services
             throw new NotImplementedException();
         }
 
-        public Task<RecipientViewModel> Put(RecipientViewModel entity)
+        public async Task<RecipientViewModel> Put(RecipientViewModel entity)
         {
-            throw new NotImplementedException();
+            return await _httpService.Put<RecipientViewModel>($"api/recipient", entity);
         }
 
-        public Task Remove(int id)
+        public async Task Remove(int id)
         {
-            throw new NotImplementedException();
+            await _httpService.Delete<RecipientViewModel>($"api/recipient/{id}");
         }
     }
 }
