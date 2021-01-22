@@ -1,0 +1,12 @@
+﻿@page "/recipients/{Id}"
+
+@attribute [Authorize]
+
+<h3>Recipient</h3>
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+}

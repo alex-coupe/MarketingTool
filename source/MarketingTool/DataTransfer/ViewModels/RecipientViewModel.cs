@@ -10,6 +10,9 @@ namespace DataTransfer.ViewModels
     public class RecipientViewModel
     {
         [Required]
+        public int Id { get; set; }
+
+        [Required]
         [EmailAddress]
         public string EmailAddress { get; set; }
 
