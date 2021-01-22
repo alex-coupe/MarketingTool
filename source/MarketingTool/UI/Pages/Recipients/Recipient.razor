@@ -1,4 +1,4 @@
-﻿@page "/recipients/{Id}"
+﻿@page "/recipients/recipient/{Id}"
 
 @attribute [Authorize]
 
@@ -7,6 +7,6 @@
 @code {
 
     [Parameter]
-    public int Id { get; set; }
+    public string Id { get; set; }
 
 }

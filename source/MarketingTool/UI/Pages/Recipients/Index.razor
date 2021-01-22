@@ -30,8 +30,9 @@
                 <td>@recipient.EmailAddress</td>
                 @foreach (var item in recipient.SchemaValues)
                 {
-                    <td><input type="@schemaViewModel.Schema.First(x => x.Key == item.Key).Value" value="@item.Value" /> <NavLink href="@($"/recipients/{recipient.Id}")" >See More</NavLink></td>
+                    <td><input type="@schemaViewModel.Schema.First(x => x.Key == item.Key).Value" value="@item.Value" /> </td>
                 }
+                <td><NavLink href="@($"/recipients/recipient/{recipient.Id}")">See More</NavLink></td>
             </tr>
         }
             
