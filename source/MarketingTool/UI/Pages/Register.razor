@@ -1,6 +1,6 @@
 ﻿@page "/register"
 
-@inject IAuthenticationService _authenticationService
+@inject IAuthenticationService AuthenticationService
 @inject IDataService<SubscriptionLevelViewModel> _subscriptionLevelsService
 @inject NavigationManager _navigationManager
 
@@ -50,7 +50,7 @@
     {
         try
         {
-            await _authenticationService.Register(registerRequest);
+            await AuthenticationService.Register(registerRequest);
             _navigationManager.NavigateTo("/dashboard");
         }
         catch (Exception ex)
@@ -62,6 +62,11 @@
 
     protected override async Task OnInitializedAsync()
     {
+        if (AuthenticationService.User != null)
+        {
+            _navigationManager.NavigateTo("Dashboard");
+        }
+
         subscriptionLevels = await _subscriptionLevelsService.GetAll();
 
     }

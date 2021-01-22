@@ -1,11 +1,67 @@
 ﻿@page "/recipients/home"
 
+@attribute [Authorize]
+
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<RecipientSchemaViewModel> _recipientSchemaService
+@inject IDataService<RecipientViewModel> _recipientService
+
 <h3>Recipients</h3>
 
 <NavLink href="/recipients/schema">Schema</NavLink>
 
+<table>
+    <thead>
+        <tr>
+            <th>Email Address</th>
+            @foreach (var item in schemaViewModel.Schema)
+            {
+                <th>@item.Key</th>
+            }
+        </tr>
+    </thead>
+    <tbody>
 
+
+        @foreach (var recipient in recipientViewModel)
+        {
+            <tr>
+                <td>@recipient.EmailAddress</td>
+                @foreach (var item in recipient.SchemaValues)
+                {
+                    <td><input type="@schemaViewModel.Schema.First(x => x.Key == item.Key).Value" value="@item.Value" /></td>
+                }
+            </tr>
+        }
+            
+        </tbody>
+</table> 
 
 @code {
 
+    private string Error { get; set; }
+
+    private bool SchemaExists { get; set; }
+
+    RecipientSchemaViewModel schemaViewModel = new RecipientSchemaViewModel();
+    IEnumerable<RecipientViewModel> recipientViewModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        schemaViewModel.Schema = new Dictionary<string, string>();
+        recipientViewModel  = new List<RecipientViewModel>();
+        try
+        {
+            schemaViewModel = await _recipientSchemaService.Get(0);
+
+            recipientViewModel = await _recipientService.GetAll();
+        }
+        catch(Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+        SchemaExists = schemaViewModel.Schema.Count() > 0;
+    }
 }

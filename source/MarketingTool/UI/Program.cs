@@ -26,6 +26,7 @@ namespace UI
                 .AddScoped<IDataService<SubscriptionLevelViewModel>, SubscriptionLevelService>()
                 .AddScoped<IDataService<EmailAddressViewModel>, ForgottenPasswordService>()
                 .AddScoped<IDataService<ResetPasswordViewModel>, ResetPasswordService>()
+                .AddScoped<IDataService<RecipientViewModel>, RecipientService>()
                 .AddScoped<IDataService<RecipientSchemaViewModel>, RecipientSchemaService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>();
 
