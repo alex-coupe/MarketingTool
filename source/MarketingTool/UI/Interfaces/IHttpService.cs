@@ -11,6 +11,8 @@ namespace UI.Interfaces
 
         Task<T> Post<T>(string uri, object value);
 
+        Task PostNoContentResponse(string uri, object value);
+
         Task<T> Put<T>(string uri, object value);
 
         Task<T> Delete<T>(string uri);

@@ -12,6 +12,8 @@ namespace UI.Interfaces
 
         Task<T> Post(T entity);
 
+        Task PostNoReturnContent(T entity);
+
         Task<T> Put(T entity);
 
         Task Remove(int id);

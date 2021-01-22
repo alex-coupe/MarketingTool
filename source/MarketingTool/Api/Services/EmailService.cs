@@ -26,7 +26,16 @@ namespace Api.Services
 
         public void Send(MailAddress to, MailMessage message)
         {
-            _client.Send(from.Address, to.Address, message.Subject, message.Body);
+            //TODO add better error handling and logging to DB
+            try
+            {
+                _client.Send(from.Address, to.Address, message.Subject, message.Body);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            
+            }
         }
     }
 }

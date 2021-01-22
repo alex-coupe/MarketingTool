@@ -49,6 +49,13 @@ namespace UI.Services
             return await sendRequest<T>(request);
         }
 
+        public async Task PostNoContentResponse(string uri, object value)
+        {
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            request.Content = new StringContent(JsonSerializer.Serialize(value), Encoding.UTF8, "application/json");
+            await sendRequest(request);
+        }
+
         public async Task<T> Put<T>(string uri, object value)
         {
             var request = new HttpRequestMessage(HttpMethod.Put, uri);
@@ -69,17 +76,41 @@ namespace UI.Services
             if (response.StatusCode == HttpStatusCode.Unauthorized)
             {
                 _navigationManager.NavigateTo("/");
-                return default;
+                var error = await response.Content.ReadFromJsonAsync<ErrorMessageViewModel>();
+                throw new Exception(error.ErrorMessage);
             }
 
             // throw exception on error response
             if (!response.IsSuccessStatusCode)
             {
-                var error = await response.Content.ReadFromJsonAsync<Dictionary<string, string>>();
-                throw new Exception(error["message"]);
+                var error = await response.Content.ReadFromJsonAsync<ErrorMessageViewModel>();
+                throw new Exception(error.ErrorMessage);
             }
 
             return await response.Content.ReadFromJsonAsync<T>();
+        }
+
+        private async Task sendRequest(HttpRequestMessage request)
+        {
+            // add jwt auth header if user is logged in and request is to the api url
+            var user = await _localStorageService.GetItem<UserViewModel>("user");
+            var isApiUrl = !request.RequestUri.IsAbsoluteUri;
+            if (user != null && isApiUrl)
+                request.Headers.Authorization = new AuthenticationHeaderValue("Bearer", user.Token);
+
+            using var response = await _httpClient.SendAsync(request);
+
+            if (response.StatusCode == HttpStatusCode.Unauthorized)
+            {
+                _navigationManager.NavigateTo("/");
+            }
+
+            // throw exception on error response
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadFromJsonAsync<ErrorMessageViewModel>();
+                throw new Exception(error.ErrorMessage);
+            }
         }
     }
 }

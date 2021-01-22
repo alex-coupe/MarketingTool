@@ -24,6 +24,8 @@ namespace UI
                 .AddScoped<IHttpService, HttpService>()
                 .AddScoped<IAuthenticationService, AuthenticationService>()
                 .AddScoped<IDataService<SubscriptionLevelViewModel>, SubscriptionLevelService>()
+                .AddScoped<IDataService<EmailAddressViewModel>, ForgottenPasswordService>()
+                .AddScoped<IDataService<ResetPasswordViewModel>, ResetPasswordService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>();
 
             builder.Services.AddScoped(x => {

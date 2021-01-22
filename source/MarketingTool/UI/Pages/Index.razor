@@ -15,7 +15,7 @@
     </EditForm>
     @if (!string.IsNullOrEmpty(Error))
     {
-        <p>@Error</p>
+        <p class="text-center text-danger">@Error</p>
     }
 
     <p>Forgotten your password? Click <NavLink href="/forgottenpassword">Here</NavLink></p>
@@ -24,9 +24,9 @@
 
 @code {
 
-    LoginViewModel loginRequest = new LoginViewModel();
+        LoginViewModel loginRequest = new LoginViewModel();
 
-    private string Error;
+    private string Error { get; set; }
 
     protected override void OnInitialized()
     {

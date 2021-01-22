@@ -10,7 +10,7 @@ namespace DataTransfer.ViewModels
     /// <summary>
     /// A data type to represent the changing of a password following a password reset request
     /// </summary>
-    public class UpdatePasswordViewModel
+    public class ResetPasswordViewModel
     {
         
         [Required]
@@ -22,7 +22,6 @@ namespace DataTransfer.ViewModels
         [DataType(DataType.Password)]
         public string ConfirmPassword { get; set; }
 
-        [Required]
         public string Token { get; set; }
     }
 }

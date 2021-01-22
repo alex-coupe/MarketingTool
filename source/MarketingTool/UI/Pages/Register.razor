@@ -7,7 +7,7 @@
 <h3>Register</h3>
 
 <div class="container text-center">
-    
+
     <EditForm Model="registerRequest" OnValidSubmit="HandleRegistration">
         <label>Enter Your Organisation's Name</label>
         <InputText type="text" @bind-Value="registerRequest.ClientName" />
@@ -33,6 +33,10 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
     </EditForm>
+    @if (!string.IsNullOrEmpty(Error))
+    {
+        <p>@Error</p>
+    }
 </div>
 @code {
 

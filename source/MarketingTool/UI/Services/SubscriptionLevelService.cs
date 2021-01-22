@@ -39,5 +39,10 @@ namespace UI.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task PostNoReturnContent(SubscriptionLevelViewModel entity)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

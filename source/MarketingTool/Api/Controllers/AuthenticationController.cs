@@ -47,7 +47,7 @@ namespace Api.Controllers
                 return Ok(JsonSerializer.Serialize(userResponse));
             }
 
-            return Unauthorized(new {ErrorMessage = "Email Address or Password Incorrect" });
+            return Unauthorized(new ErrorMessageViewModel { ErrorMessage = "Email Address or Password Incorrect" });
         }
 
         [AllowAnonymous]
@@ -85,7 +85,7 @@ namespace Api.Controllers
                return Login(new LoginViewModel { EmailAddress = user.EmailAddress, Password = newRegistration.Password });     
             }
             
-            return BadRequest();
+            return BadRequest(new ErrorMessageViewModel { ErrorMessage = "Error Creating Client" });
         }
 
         [AllowAnonymous]
@@ -101,23 +101,26 @@ namespace Api.Controllers
                
                 return Ok();
             }
-            return NotFound();
+            return NotFound(new ErrorMessageViewModel { ErrorMessage = "User Not Found" });
         }
 
         [AllowAnonymous]
         [Route("UpdatePassword")]
         [HttpPost]
-        public async Task<ActionResult> UpdatePassword([FromBody] UpdatePasswordViewModel request)
+        public async Task<ActionResult> UpdatePassword([FromBody] ResetPasswordViewModel request)
         {
+            if (request.Password != request.ConfirmPassword)
+                return BadRequest(new ErrorMessageViewModel { ErrorMessage = "Password and Password Confirmation Do Not Match" });
+
             var resetEntry = _passwordResetRepository.Where(x => x.Token == request.Token)
                 .OrderByDescending(x => x.DateCreated)
                 .FirstOrDefault();
 
             if (resetEntry == null || resetEntry.DateCreated.AddMinutes(30) < DateTime.Now)
             {
-                return BadRequest();
+                return BadRequest(new ErrorMessageViewModel { ErrorMessage = "Invalid Token" });
             }
-            var user = resetEntry.User;
+            var user = await _userRepository.GetAsync(resetEntry.UserId);
 
             if (user != null)
             {
@@ -125,9 +128,10 @@ namespace Api.Controllers
                 _passwordResetRepository.Remove(resetEntry.Id);
                 await _userRepository.SaveChangesAsync();
                 await _passwordResetRepository.SaveChangesAsync();
+                //TODO send email confirming password change
                 return Ok();
             }
-            return BadRequest(new { ErrorMessage = "A user could not be found" });
+            return BadRequest(new ErrorMessageViewModel  { ErrorMessage = "User Not Found From This Token" });
         }
 
         [Authorize]
