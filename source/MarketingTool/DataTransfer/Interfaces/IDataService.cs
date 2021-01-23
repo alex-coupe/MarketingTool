@@ -10,6 +10,8 @@ namespace DataTransfer.Interfaces
         Task<IEnumerable<T>> GetAll();
         Task<T> Get(int id);
 
+        Task<T> Get();
+
         Task<T> Post(T entity);
 
         Task PostNoReturnContent(T entity);

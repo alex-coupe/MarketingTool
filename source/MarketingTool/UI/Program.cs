@@ -29,6 +29,7 @@ namespace UI
                 .AddScoped<IDataService<ResetPasswordViewModel>, ResetPasswordService>()
                 .AddScoped<IDataService<RecipientViewModel>, RecipientService>()
                 .AddScoped<IDataService<RecipientSchemaViewModel>, RecipientSchemaService>()
+                .AddScoped<IDataService<DashboardViewModel>, DashboardService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>();
 
             builder.Services.AddScoped(x => {

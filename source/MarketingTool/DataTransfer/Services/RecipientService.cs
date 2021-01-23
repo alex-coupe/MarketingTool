@@ -21,6 +21,11 @@ namespace DataTransfer.Services
             return await _httpService.Get<RecipientViewModel>($"api/recipient/{id}");
         }
 
+        public Task<RecipientViewModel> Get()
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<IEnumerable<RecipientViewModel>> GetAll()
         {
             return await _httpService.Get<IEnumerable<RecipientViewModel>>($"api/recipients");

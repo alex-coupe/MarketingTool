@@ -1,20 +1,36 @@
 ﻿@page "/dashboard"
 @attribute [Authorize]
 @inject IAuthenticationService AuthenticationService
-
+@inject IDataService<DashboardViewModel> _dashboardService
 <h3>Dashboard</h3>
 
 <h3>Hi @AuthenticationService.User.Name</h3>
 
 <p>
-    <NavLink class="btn btn-primary" href="/recipients/index">Recipients</NavLink>
-    <button class="btn btn-primary">Lists</button>
-    <button class="btn btn-primary">Campaigns</button>
-    <button class="btn btn-primary">Templates</button>
+    <NavLink class="btn btn-primary" href="/recipients/index">Recipients Total Recipients: @viewModel.RecipientCount</NavLink>
+    <button class="btn btn-primary">Lists Total Lists: @viewModel.ListCount</button>
+    <button class="btn btn-primary">Campaigns Total Campaigns: @viewModel.TotalCampaigns Active Campaigns: @viewModel.ActiveCampaigns</button>
+    <button class="btn btn-primary">Templates Total Templates: @viewModel.TotalTemplates</button>
     <button class="btn btn-primary">Analytics</button>
     <button class="btn btn-primary">Administration </button>
 </p>
 
 @code {
 
+    private string Error { get; set; }
+
+    DashboardViewModel viewModel = new DashboardViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            viewModel = await _dashboardService.Get();
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+    }
 }

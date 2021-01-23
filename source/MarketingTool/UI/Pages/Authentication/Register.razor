@@ -66,8 +66,15 @@
         {
             _navigationManager.NavigateTo("Dashboard");
         }
-
-        subscriptionLevels = await _subscriptionLevelsService.GetAll();
+       
+        try
+        {
+            subscriptionLevels = await _subscriptionLevelsService.GetAll();
+        }
+        catch(Exception ex)
+        {
+            Error = ex.Message;
+        }
 
     }
 }

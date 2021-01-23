@@ -17,5 +17,11 @@ namespace DataTransfer.ViewModels
 
         [Required]
         public int TotalCampaigns { get; set; }
+
+        [Required]
+        public int ActiveCampaigns { get; set; }
+
+        [Required]
+        public int TotalTemplates { get; set; }
     }
 }

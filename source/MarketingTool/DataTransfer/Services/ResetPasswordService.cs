@@ -19,6 +19,11 @@ namespace DataTransfer.Services
             throw new NotImplementedException();
         }
 
+        public Task<ResetPasswordViewModel> Get()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<ResetPasswordViewModel>> GetAll()
         {
             throw new NotImplementedException();

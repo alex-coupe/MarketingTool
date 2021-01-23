@@ -20,6 +20,11 @@ namespace DataTransfer.Services
             throw new NotImplementedException();
         }
 
+        public Task<EmailAddressViewModel> Get()
+        {
+            throw new NotImplementedException();
+        }
+
         public Task<IEnumerable<EmailAddressViewModel>> GetAll()
         {
             throw new NotImplementedException();

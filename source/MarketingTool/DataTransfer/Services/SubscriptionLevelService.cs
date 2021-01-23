@@ -44,5 +44,10 @@ namespace DataTransfer.Services
         {
             throw new NotImplementedException();
         }
+
+        public Task<SubscriptionLevelViewModel> Get()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

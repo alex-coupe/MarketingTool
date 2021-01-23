@@ -96,6 +96,7 @@ namespace Api.Services
                             Thread.Sleep(10000);
                         }
                         campaign.ProcessedTimestamp = DateTime.Now;
+                        campaign.IsActive = false;
                         await _campaignsRepository.SaveChangesAsync();
                         
                     }

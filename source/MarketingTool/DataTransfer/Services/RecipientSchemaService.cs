@@ -15,7 +15,12 @@ namespace DataTransfer.Services
         {
             _httpService = httpService;
         }
-        public async Task<RecipientSchemaViewModel> Get(int id)
+        public Task<RecipientSchemaViewModel> Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public async Task<RecipientSchemaViewModel> Get()
         {
             return await _httpService.Get<RecipientSchemaViewModel>($"api/recipientschemas");
         }
