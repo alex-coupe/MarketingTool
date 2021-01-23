@@ -1,4 +1,5 @@
-﻿using DataTransfer.ViewModels;
+﻿using DataTransfer.Interfaces;
+using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Configuration;
 using System;
@@ -11,9 +12,8 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
-using UI.Interfaces;
 
-namespace UI.Services
+namespace DataTransfer.Services
 {
     public class HttpService : IHttpService
     {

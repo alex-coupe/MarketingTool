@@ -1,3 +1,5 @@
+using DataTransfer.Interfaces;
+using DataTransfer.Services;
 using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -8,8 +10,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using UI.Interfaces;
-using UI.Services;
+
 
 namespace UI
 {

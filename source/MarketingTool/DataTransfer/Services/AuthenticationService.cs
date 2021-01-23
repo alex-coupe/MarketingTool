@@ -1,9 +1,9 @@
 ﻿using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Components;
 using System.Threading.Tasks;
-using UI.Interfaces;
+using DataTransfer.Interfaces;
 
-namespace UI.Services
+namespace DataTransfer.Services
 {
     public class AuthenticationService : IAuthenticationService
     {
