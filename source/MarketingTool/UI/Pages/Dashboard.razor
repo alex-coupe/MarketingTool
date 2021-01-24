@@ -8,11 +8,11 @@
 
 <p>
     <NavLink class="btn btn-primary" href="/recipients/index">Recipients Total Recipients: @viewModel.RecipientCount</NavLink>
-    <button class="btn btn-primary">Lists Total Lists: @viewModel.ListCount</button>
-    <button class="btn btn-primary">Campaigns Total Campaigns: @viewModel.TotalCampaigns Active Campaigns: @viewModel.ActiveCampaigns</button>
-    <button class="btn btn-primary">Templates Total Templates: @viewModel.TotalTemplates</button>
-    <button class="btn btn-primary">Analytics</button>
-    <button class="btn btn-primary">Administration </button>
+    <NavLink class="btn btn-primary"  href="/lists/index">Lists Total Lists: @viewModel.ListCount</NavLink>
+    <NavLink class="btn btn-primary"  href="/campaigns/index">Campaigns Total Campaigns: @viewModel.TotalCampaigns Active Campaigns: @viewModel.ActiveCampaigns</NavLink>
+    <NavLink class="btn btn-primary"  href="/templates/index">Templates Total Templates: @viewModel.TotalTemplates</NavLink>
+    <NavLink class="btn btn-primary">Analytics</NavLink>
+    <NavLink class="btn btn-primary">Administration </NavLink>
 </p>
 
 @code {

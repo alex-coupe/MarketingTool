@@ -1,6 +1,40 @@
 ﻿@page "/templates/index"
+
+@attribute [Authorize]
+
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<TemplateViewModel> _templateService
+
 <h3>Templates</h3>
 
-@code {
-
+@foreach(var template in templateViewModels)
+{
+    <p>@template.Name</p>
 }
+
+<p>@Error</p>
+
+@code {
+    private string Error { get; set; }
+
+    IEnumerable<TemplateViewModel> templateViewModels;
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        templateViewModels = new List<TemplateViewModel>();
+        try
+        {
+            templateViewModels = await _templateService.GetAll();
+
+          
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+    }
+}
+
