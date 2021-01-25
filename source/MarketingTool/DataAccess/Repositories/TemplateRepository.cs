@@ -35,8 +35,10 @@ namespace DataAccess.Repositories
 
         public async Task<Template> GetAsync(int id)
         {
-            return await _context.Templates.Where(x => x.Id == id).Include(template => template.CreatingUser)
-                .Include(template => template.ModifyingUser).FirstOrDefaultAsync();
+            return await _context.Templates.Where(x => x.Id == id)
+                .Include(template => template.CreatingUser)
+                .Include(template => template.ModifyingUser)
+                .FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -58,12 +60,14 @@ namespace DataAccess.Repositories
         public List<Template> GetAll()
         {
             return _context.Templates.Include(template => template.CreatingUser)
-                .Include(template => template.ModifyingUser).ToList();
+                .Include(template => template.ModifyingUser)
+                .ToList();
         }
 
         public IEnumerable<Template> Where(Expression<Func<Template, bool>> predicate)
         {
-            return _context.Templates.Where(predicate).Include(template => template.CreatingUser)
+            return _context.Templates.Where(predicate)
+                .Include(template => template.CreatingUser)
                 .Include(template => template.ModifyingUser);
         }
 
@@ -90,13 +94,16 @@ namespace DataAccess.Repositories
         public async Task<IEnumerable<Template>> GetAllAsync(Expression<Func<Template, bool>> predicate)
         {
             return await _context.Templates.Where(predicate).Include(template => template.CreatingUser)
-                .Include(template => template.ModifyingUser).ToListAsync();
+                .Include(template => template.ModifyingUser)
+                .ToListAsync();
         }
 
         public async Task<Template> GetAsync(Expression<Func<Template, bool>> predicate, int id)
         {
-            return await _context.Templates.Where(predicate).Where(x => x.Id == id).Include(template => template.CreatingUser)
-                .Include(template => template.ModifyingUser).FirstOrDefaultAsync();
+            return await _context.Templates.Where(predicate).Where(x => x.Id == id)
+                .Include(template => template.CreatingUser)
+                .Include(template => template.ModifyingUser)
+                .FirstOrDefaultAsync();
         }
     }
 }

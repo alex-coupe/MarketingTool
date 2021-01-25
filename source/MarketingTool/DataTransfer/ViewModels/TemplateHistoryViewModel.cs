@@ -6,16 +6,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Models
+namespace DataTransfer.ViewModels
 {
-    public class TemplateHistory
+    public class TemplateHistoryViewModel
     {
-        [Key]
-        public int Id { get; init; }
-
-        [Required]
-        public int TemplateId { get; set; }
-
         [Required]
         public string Content { get; set; }
 
@@ -27,7 +21,6 @@ namespace DataAccess.Models
         [ForeignKey("ModifyingUser")]
         public int? ModifierId { get; set; }
 
-        public string ModifyingUser { get; set; }
-
+        public virtual UserViewModel ModifyingUser { get; set; }
     }
 }

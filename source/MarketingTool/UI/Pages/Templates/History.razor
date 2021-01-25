@@ -1,0 +1,10 @@
+﻿@page "/templates/history/{Id}"
+
+@attribute [Authorize]
+
+<h3>History</h3>
+
+@code {
+    [Parameter]
+    public string Id { get; set; }
+}

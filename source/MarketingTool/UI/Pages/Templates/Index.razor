@@ -8,10 +8,36 @@
 
 <h3>Templates</h3>
 
-@foreach(var template in templateViewModels)
-{
-    <p>@template.Name</p>
-}
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Version</th>
+            <th>Creator</th>
+            <th>Created Date</th>
+            <th>Protected</th>
+            <th>Last Modified By</th>
+            <th>Modified Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach(var template in templateViewModels)
+        {
+            <tr>
+                <td>@template.Name</td>
+                <td>@template.Version</td>
+                <td>@template.CreatingUser</td>
+                <td>@template.CreatedDate.ToShortDateString()</td>
+                <td>@template.Protected</td>
+                <td>@template.ModifyingUser</td>
+                <td>@template.ModifiedDate?.ToShortDateString()</td>
+                <NavLink class="btn btn-primary" href="@($"/templates/history/{template.Id}")">View History</NavLink>
+                <NavLink class="@((template.Protected ? "btn btn-success disabled" : "btn btn-success"))" href="@($"/templates/template/{template.Id}")">Edit Template</NavLink>
+            </tr>
+        }
+    </tbody>
+</table>
+
 
 <p>@Error</p>
 

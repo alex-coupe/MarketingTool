@@ -2,6 +2,7 @@
 using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -25,23 +26,49 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Template>>> GetTemplates()
+        public async Task<ActionResult<IEnumerable<TemplateViewModel>>> GetTemplates()
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var templates = await _templateRepository.GetAllAsync(x => x.ClientId == clientId);
 
-            return Ok(templates);
+            var templatesCollection = templates.Select(x => new TemplateViewModel
+            {
+                Name = x.Name,
+                Content = x.Content,
+                Version = x.Version,
+                CreatedDate = x.CreatedDate,
+                Id = x.Id,
+                Protected = x.Protected,
+                ModifiedDate = x.ModifiedDate,
+                ModifyingUser = $"{x.ModifyingUser?.FirstName} {x.ModifyingUser?.LastName}",
+                CreatingUser = $"{x.CreatingUser.FirstName} {x.CreatingUser.LastName}",
+            }).ToList();
+
+            return Ok(templatesCollection);
         }
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Template>> GetTemplate(int id)
+        public async Task<ActionResult<TemplateViewModel>> GetTemplate(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var template = await _templateRepository.GetAsync(x => x.ClientId == clientId,id);
-            
+
+            var templateViewModel = new TemplateViewModel
+            {
+                Name = template.Name,
+                Content = template.Content,
+                Version = template.Version,
+                CreatedDate = template.CreatedDate,
+                Id = template.Id,
+                Protected = template.Protected,
+                ModifiedDate = template.ModifiedDate,
+                ModifyingUser = $"{template.ModifyingUser?.FirstName} {template.ModifyingUser?.LastName}",
+                CreatingUser = $"{template.CreatingUser.FirstName} {template.CreatingUser.LastName}",
+            };
+                                 
             if (template != null)
-                return Ok(template);
+                return Ok(templateViewModel);
            
             return NotFound();
         }

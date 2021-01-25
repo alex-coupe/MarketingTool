@@ -10,6 +10,9 @@ namespace DataTransfer.ViewModels
     public class TemplateViewModel
     {
         [Required]
+        public int Id { get; set; }
+
+        [Required]
         public string Name { get; set; }
 
         [Required]
@@ -21,6 +24,13 @@ namespace DataTransfer.ViewModels
         [Required]
         public bool Protected { get; set; }
 
+        [Required]
+        public DateTime CreatedDate { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
+
+        public string CreatingUser { get; set; }
+        public string ModifyingUser { get; set; }
 
     }
 }
