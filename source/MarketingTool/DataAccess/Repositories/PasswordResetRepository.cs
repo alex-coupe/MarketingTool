@@ -80,7 +80,7 @@ namespace DataAccess.Repositories
 
         public IEnumerable<PasswordReset> Where(Expression<Func<PasswordReset, bool>> predicate)
         {
-            return _context.PasswordResets.Where(predicate);
+            return _context.PasswordResets.Where(predicate).Include(x => x.User);
         }
 
         public async Task<IEnumerable<PasswordReset>> GetAllAsync(Expression<Func<PasswordReset, bool>> predicate)

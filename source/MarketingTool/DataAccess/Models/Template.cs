@@ -23,19 +23,23 @@ namespace DataAccess.Models
         public string Content { get; set; }
 
         [Required]
+        [ForeignKey("CreatingUser")]
         public int CreatorId { get; set; }
-
+        [ForeignKey("ModifyingUser")]
         public int? ModifierId { get; set; }
 
         [Required]
         public DateTime CreatedDate { get; set; }
-
+             
         public DateTime? ModifiedDate { get; set; }
 
         [Required]
         public int Version { get; set; }
 
         public bool Protected { get; set; } = false;
+
+        public virtual User CreatingUser { get; set; }
+        public virtual User ModifyingUser { get; set; }
 
     }
 }

@@ -35,8 +35,10 @@ namespace ApplicationLayer
         {
             services.AddControllers().AddNewtonsoftJson();
             services.AddDbContext<DatabaseContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
-                x => x.MigrationsAssembly("DataAccess")));
+            options.UseLazyLoadingProxies()
+            .UseSqlServer(Configuration.GetConnectionString("DefaultConnection"),
+            x => x.MigrationsAssembly("DataAccess")));
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MarketingAppAPI", Version = "v1" });

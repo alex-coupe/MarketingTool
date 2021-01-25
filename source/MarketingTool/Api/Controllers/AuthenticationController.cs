@@ -120,11 +120,11 @@ namespace Api.Controllers
             {
                 return BadRequest(new ErrorMessageViewModel { ErrorMessage = "Invalid Token" });
             }
-            var user = await _userRepository.GetAsync(resetEntry.UserId);
-
-            if (user != null)
+            
+            if (resetEntry.User != null)
             {
-                user.Password = CryptoHelper.Crypto.HashPassword(request.Password);
+             
+                resetEntry.User.Password = CryptoHelper.Crypto.HashPassword(request.Password);
                 _passwordResetRepository.Remove(resetEntry.Id);
                 await _userRepository.SaveChangesAsync();
                 await _passwordResetRepository.SaveChangesAsync();
