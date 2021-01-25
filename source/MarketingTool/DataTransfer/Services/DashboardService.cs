@@ -17,12 +17,12 @@ namespace DataTransfer.Services
             _httpService = httpService;
         }
 
-        public Task<DashboardViewModel> Get(int id)
+        public Task<DashboardViewModel> Get(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<DashboardViewModel> Get()
+        public async Task<DashboardViewModel> GetSingle()
         {
             return await _httpService.Get<DashboardViewModel>($"api/dashboard");
         }
@@ -51,5 +51,6 @@ namespace DataTransfer.Services
         {
             throw new NotImplementedException();
         }
+
     }
 }

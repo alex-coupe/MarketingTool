@@ -10,17 +10,9 @@ namespace DataTransfer.ViewModels
 {
     public class TemplateHistoryViewModel
     {
-        [Required]
-        public string Content { get; set; }
+        public string TemplateName { get; set; }
 
-        [Required]
-        public int Version { get; set; }
-
-        public DateTime? EditedDate { get; set; }
-
-        [ForeignKey("ModifyingUser")]
-        public int? ModifierId { get; set; }
-
-        public virtual UserViewModel ModifyingUser { get; set; }
+        public ICollection<TemplateHistoryItemViewModel> TemplateHistory { get; set; }
+      
     }
 }

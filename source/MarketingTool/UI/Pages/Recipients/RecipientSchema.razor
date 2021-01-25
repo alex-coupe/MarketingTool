@@ -59,7 +59,7 @@
         viewModel.Schema = new Dictionary<string, string>();
         if (AuthenticationService.User != null)
         {
-            viewModel = await _recipientSchemaService.Get();
+            viewModel = await _recipientSchemaService.GetSingle();
 
             SchemaExists = viewModel.Schema.Count() > 0;
         }

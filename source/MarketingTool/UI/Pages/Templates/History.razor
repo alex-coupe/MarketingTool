@@ -2,9 +2,60 @@
 
 @attribute [Authorize]
 
-<h3>History</h3>
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<TemplateHistoryViewModel> _templateHistoryService
+
+<h3>Template History for @templateHistoryViewModel.TemplateName</h3>
+
+<table class="table">
+    <thead>
+        <tr>         
+            <th>Version</th>
+            <th>Content</th>
+            <th>Protected</th>
+            <th>Last Modified By</th>
+            <th>Modified Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var entry in templateHistoryViewModel.TemplateHistory)
+        {
+            <tr>
+                <td>@entry.Version</td>
+                <td>Click to Preview</td>
+                <td>@entry.Protected</td>
+                <td>@entry.ModifyingUser</td>
+                <td>@entry.ModifiedDate?.ToString(new CultureInfo("en-GB"))</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+<p>@Error</p>
 
 @code {
+
     [Parameter]
     public string Id { get; set; }
+
+    private string Error { get; set; }
+
+    TemplateHistoryViewModel templateHistoryViewModel;
+
+    protected override async Task OnInitializedAsync()
+    {
+        templateHistoryViewModel = new TemplateHistoryViewModel();
+        templateHistoryViewModel.TemplateHistory = new List<TemplateHistoryItemViewModel>();
+        try
+        {
+            templateHistoryViewModel = await _templateHistoryService.Get(Id);
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+    }
 }

@@ -16,12 +16,12 @@ namespace DataTransfer.Services
             _httpService = httpService;
         }
 
-        public async Task<CampaignViewModel> Get(int id)
+        public async Task<CampaignViewModel> Get(string id)
         {
             return await _httpService.Get<CampaignViewModel>($"api/campaigns/{id}");
         }
 
-        public Task<CampaignViewModel> Get()
+        public Task<CampaignViewModel> GetSingle()
         {
             throw new NotImplementedException();
         }
@@ -50,5 +50,7 @@ namespace DataTransfer.Services
         {
             await _httpService.Delete<CampaignViewModel>($"api/campaigns/{id}");
         }
+
+       
     }
 }

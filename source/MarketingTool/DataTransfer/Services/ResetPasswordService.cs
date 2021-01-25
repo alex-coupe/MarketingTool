@@ -14,12 +14,12 @@ namespace DataTransfer.Services
         {
             _httpService = httpService;
         }
-        public Task<ResetPasswordViewModel> Get(int id)
+        public Task<ResetPasswordViewModel> Get(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ResetPasswordViewModel> Get()
+        public Task<ResetPasswordViewModel> GetSingle()
         {
             throw new NotImplementedException();
         }
@@ -48,5 +48,6 @@ namespace DataTransfer.Services
         {
             throw new NotImplementedException();
         }
+
     }
 }

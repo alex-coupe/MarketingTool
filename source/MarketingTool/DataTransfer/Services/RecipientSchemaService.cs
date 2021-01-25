@@ -15,12 +15,12 @@ namespace DataTransfer.Services
         {
             _httpService = httpService;
         }
-        public Task<RecipientSchemaViewModel> Get(int id)
+        public Task<RecipientSchemaViewModel> Get(string id)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<RecipientSchemaViewModel> Get()
+        public async Task<RecipientSchemaViewModel> GetSingle()
         {
             return await _httpService.Get<RecipientSchemaViewModel>($"api/recipientschemas");
         }
@@ -49,5 +49,6 @@ namespace DataTransfer.Services
         {
             await _httpService.Delete<RecipientSchemaViewModel>($"api/recipientschemas/{id}");
         }
+
     }
 }

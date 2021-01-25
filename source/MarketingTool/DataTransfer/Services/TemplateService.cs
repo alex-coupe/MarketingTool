@@ -16,12 +16,12 @@ namespace DataTransfer.Services
             _httpService = httpService;
         }
 
-        public async Task<TemplateViewModel> Get(int id)
+        public async Task<TemplateViewModel> Get(string id)
         {
             return await _httpService.Get<TemplateViewModel>($"api/templates/{id}");
         }
 
-        public Task<TemplateViewModel> Get()
+        public Task<TemplateViewModel> GetSingle()
         {
             throw new NotImplementedException();
         }
@@ -50,5 +50,6 @@ namespace DataTransfer.Services
         {
             await _httpService.Delete<TemplateViewModel>($"api/templates/{id}");
         }
+
     }
 }

@@ -15,12 +15,12 @@ namespace DataTransfer.Services
         {
             _httpService = httpService;
         }
-        public Task<EmailAddressViewModel> Get(int id)
+        public Task<EmailAddressViewModel> Get(string id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<EmailAddressViewModel> Get()
+        public Task<EmailAddressViewModel> GetSingle()
         {
             throw new NotImplementedException();
         }
@@ -49,5 +49,6 @@ namespace DataTransfer.Services
         {
             throw new NotImplementedException();
         }
+
     }
 }

@@ -34,7 +34,7 @@ else
     {
         try
         {
-            viewModel = await _dashboardService.Get();
+            viewModel = await _dashboardService.GetSingle();
             IsLoading = false;
         }
         catch (Exception ex)

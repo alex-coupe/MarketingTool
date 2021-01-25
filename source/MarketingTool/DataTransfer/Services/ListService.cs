@@ -17,12 +17,12 @@ namespace DataTransfer.Services
             _httpService = httpService;
         }
 
-        public async Task<ListViewModel> Get(int id)
+        public async Task<ListViewModel> Get(string id)
         {
             return await _httpService.Get<ListViewModel>($"api/lists/{id}");
         }
 
-        public Task<ListViewModel> Get()
+        public Task<ListViewModel> GetSingle()
         {
             throw new NotImplementedException();
         }
@@ -51,5 +51,7 @@ namespace DataTransfer.Services
         {
             await _httpService.Delete<ListViewModel>($"api/lists/{id}");
         }
+
+
     }
 }

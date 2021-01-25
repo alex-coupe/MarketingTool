@@ -20,7 +20,7 @@ namespace DataTransfer.Services
             return await _httpService.Get<IEnumerable<SubscriptionLevelViewModel>>("api/subscriptionlevels");
         }
 
-        public async Task<SubscriptionLevelViewModel> Get(int id)
+        public async Task<SubscriptionLevelViewModel> Get(string id)
         {
             return await _httpService.Get<SubscriptionLevelViewModel>($"api/subscriptionlevel/{id}");
         }
@@ -45,9 +45,10 @@ namespace DataTransfer.Services
             throw new NotImplementedException();
         }
 
-        public Task<SubscriptionLevelViewModel> Get()
+        public Task<SubscriptionLevelViewModel> GetSingle()
         {
             throw new NotImplementedException();
         }
+
     }
 }

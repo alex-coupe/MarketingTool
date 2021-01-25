@@ -29,12 +29,14 @@ namespace DataAccess.Repositories
         public async Task<IEnumerable<TemplateHistory>> GetAllAsync()
         {
             return await _context.TemplateHistory.AsNoTracking()
+               .Include(x => x.Template)
                .ToListAsync();
         }
 
         public async Task<TemplateHistory> GetAsync(int id)
         {
             return await _context.TemplateHistory.AsNoTracking()
+            .Include(x => x.Template)
             .SingleOrDefaultAsync(x => x.Id == id);
         }
 
@@ -86,12 +88,16 @@ namespace DataAccess.Repositories
 
         public async Task<TemplateHistory> GetAsync(Expression<Func<TemplateHistory, bool>> predicate, int id)
         {
-            return await _context.TemplateHistory.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.TemplateHistory.Where(predicate).Where(x => x.Id == id)
+                .Include(x => x.Template)
+                .FirstOrDefaultAsync();
         }
 
         public async Task<IEnumerable<TemplateHistory>> GetAllAsync(Expression<Func<TemplateHistory, bool>> predicate)
         {
-            return await _context.TemplateHistory.Where(predicate).ToListAsync();
+            return await _context.TemplateHistory.Where(predicate)
+                .Include(x => x.Template)
+                .ToListAsync();
         }
     }
 }

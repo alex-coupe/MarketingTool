@@ -54,7 +54,7 @@
         recipientViewModel  = new List<RecipientViewModel>();
         try
         {
-            schemaViewModel = await _recipientSchemaService.Get();
+            schemaViewModel = await _recipientSchemaService.GetSingle();
 
             if (schemaViewModel != null)
                 SchemaExists = true;

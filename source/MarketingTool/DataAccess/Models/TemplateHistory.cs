@@ -22,12 +22,17 @@ namespace DataAccess.Models
         [Required]
         public int Version { get; set; }
 
-        public DateTime? EditedDate { get; set; }
+        [Required]
+        public bool Protected { get; set; }
+
+        public DateTime? ModifiedDate { get; set; }
 
         [ForeignKey("ModifyingUser")]
         public int? ModifierId { get; set; }
 
-        public string ModifyingUser { get; set; }
+        public virtual User ModifyingUser { get; set; }
+
+        public virtual Template Template { get; set; }
 
     }
 }
