@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using Api.DataMappers;
 
 namespace Api.Controllers
 {
@@ -31,20 +32,9 @@ namespace Api.Controllers
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var templates = await _templateRepository.GetAllAsync(x => x.ClientId == clientId);
 
-            var templatesCollection = templates.Select(x => new TemplateViewModel
-            {
-                Name = x.Name,
-                Content = x.Content,
-                Version = x.Version,
-                CreatedDate = x.CreatedDate,
-                Id = x.Id,
-                Protected = x.Protected,
-                ModifiedDate = x.ModifiedDate,
-                ModifyingUser = $"{x.ModifyingUser?.FirstName} {x.ModifyingUser?.LastName}",
-                CreatingUser = $"{x.CreatingUser.FirstName} {x.CreatingUser.LastName}",
-            }).ToList();
+            templates.MapCollection(out List<TemplateViewModel> viewModel);
 
-            return Ok(templatesCollection);
+            return Ok(viewModel);
         }
 
         [Authorize]
@@ -54,21 +44,11 @@ namespace Api.Controllers
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var template = await _templateRepository.GetAsync(x => x.ClientId == clientId,id);
 
-            var templateViewModel = new TemplateViewModel
-            {
-                Name = template.Name,
-                Content = template.Content,
-                Version = template.Version,
-                CreatedDate = template.CreatedDate,
-                Id = template.Id,
-                Protected = template.Protected,
-                ModifiedDate = template.ModifiedDate,
-                ModifyingUser = $"{template.ModifyingUser?.FirstName} {template.ModifyingUser?.LastName}",
-                CreatingUser = $"{template.CreatingUser.FirstName} {template.CreatingUser.LastName}",
-            };
-                                 
             if (template != null)
-                return Ok(templateViewModel);
+            {
+                template.Map(out TemplateViewModel viewModel);
+                return Ok(viewModel);
+            }
            
             return NotFound();
         }
