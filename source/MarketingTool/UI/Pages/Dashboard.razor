@@ -6,6 +6,12 @@
 
 <h3>Hi @AuthenticationService.User.Name</h3>
 
+@if (IsLoading)
+{
+    <p>Loading....</p>
+}
+else
+{
 <p>
     <NavLink class="btn btn-primary" href="/recipients/index">Recipients Total Recipients: @viewModel.RecipientCount</NavLink>
     <NavLink class="btn btn-primary"  href="/lists/index">Lists Total Lists: @viewModel.ListCount</NavLink>
@@ -14,10 +20,13 @@
     <NavLink class="btn btn-primary">Analytics</NavLink>
     <NavLink class="btn btn-primary">Administration </NavLink>
 </p>
+}
 
 @code {
 
     private string Error { get; set; }
+
+    private bool IsLoading { get; set; } = true;
 
     DashboardViewModel viewModel = new DashboardViewModel();
 
@@ -26,6 +35,7 @@
         try
         {
             viewModel = await _dashboardService.Get();
+            IsLoading = false;
         }
         catch (Exception ex)
         {

@@ -26,8 +26,7 @@ namespace Api.DataMappers
 
         public static void MapCollection(this IEnumerable<Template> inVal, out List<TemplateViewModel> outVal)
         {
-            outVal = new List<TemplateViewModel>();
-            inVal.Select(x => new TemplateViewModel
+            outVal =  inVal.Select(x => new TemplateViewModel
             {
                 Name = x.Name,
                 Content = x.Content,

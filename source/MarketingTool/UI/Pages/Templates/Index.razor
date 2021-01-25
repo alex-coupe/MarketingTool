@@ -27,12 +27,12 @@
                 <td>@template.Name</td>
                 <td>@template.Version</td>
                 <td>@template.CreatingUser</td>
-                <td>@template.CreatedDate.ToShortDateString()</td>
+                <td>@template.CreatedDate.ToString(new CultureInfo("en-GB"))</td>
                 <td>@template.Protected</td>
                 <td>@template.ModifyingUser</td>
-                <td>@template.ModifiedDate?.ToShortDateString()</td>
+                <td>@template.ModifiedDate?.ToString(new CultureInfo("en-GB"))</td>
                 <NavLink class="btn btn-primary" href="@($"/templates/history/{template.Id}")">View History</NavLink>
-                <NavLink class="@((template.Protected ? "btn btn-success disabled" : "btn btn-success"))" href="@($"/templates/template/{template.Id}")">Edit Template</NavLink>
+                <NavLink class="@((template.Protected ? "btn btn-secondary disabled" : "btn btn-success"))" href="@($"/templates/template/{template.Id}")">Edit Template</NavLink>
             </tr>
         }
     </tbody>
