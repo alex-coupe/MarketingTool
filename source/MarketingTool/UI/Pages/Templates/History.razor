@@ -1,4 +1,4 @@
-﻿@page "/templates/history/{Id}"
+﻿@page "/templates/history/{Id:int}"
 
 @attribute [Authorize]
 
@@ -10,7 +10,8 @@
 
 <table class="table">
     <thead>
-        <tr>         
+        <tr>       
+            <th>Name</th>
             <th>Version</th>
             <th>Content</th>
             <th>Protected</th>
@@ -21,13 +22,14 @@
     <tbody>
         @foreach (var entry in templateHistoryViewModel.TemplateHistory)
         {
-            <tr>
-                <td>@entry.Version</td>
-                <td>Click to Preview</td>
-                <td>@entry.Protected</td>
-                <td>@entry.ModifyingUser</td>
-                <td>@entry.ModifiedDate?.ToString(new CultureInfo("en-GB"))</td>
-            </tr>
+        <tr>
+            <td>@entry.Name</td>
+            <td>@entry.Version</td>
+            <td>Click to Preview</td>
+            <td>@entry.Protected</td>
+            <td>@entry.ModifyingUser</td>
+            <td>@entry.ModifiedDate?.ToString(new CultureInfo("en-GB"))</td>
+        </tr>
         }
     </tbody>
 </table>
@@ -38,7 +40,7 @@
 @code {
 
     [Parameter]
-    public string Id { get; set; }
+    public int Id { get; set; }
 
     private string Error { get; set; }
 

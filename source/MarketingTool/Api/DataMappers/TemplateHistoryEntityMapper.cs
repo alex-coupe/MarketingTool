@@ -15,6 +15,7 @@ namespace Api.DataMappers
             outVal.TemplateName = inVal.First().Template.Name;
             outVal.TemplateHistory = inVal.Select(x => new TemplateHistoryItemViewModel
             {
+                Name = x.Name,
                Content = x.Content,
                ModifiedDate = x.ModifiedDate,
                ModifyingUser = $"{x.ModifyingUser?.FirstName} {x.ModifyingUser?.LastName}",

@@ -15,7 +15,7 @@ namespace DataTransfer.Services
         {
             _httpService = httpService;
         }
-        public Task<EmailAddressViewModel> Get(string id)
+        public Task<EmailAddressViewModel> Get(int id)
         {
             throw new NotImplementedException();
         }

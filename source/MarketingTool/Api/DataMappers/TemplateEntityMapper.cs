@@ -29,16 +29,43 @@ namespace Api.DataMappers
             outVal = new Template
             {
                 Name = inVal.Name,
+                Id = inVal.Id,
+                ModifierId = !string.IsNullOrEmpty(inVal.ModifyingUser) ? int.Parse(inVal.ModifyingUser) : null,
                 Content = inVal.Content,
                 Version = inVal.Version,
                 CreatedDate = DateTime.Now,
-                Id = inVal.Id,
                 Protected = inVal.Protected,  
-                CreatorId = int.Parse(inVal.CreatingUser)
+                CreatorId = int.Parse(inVal.CreatingUser),
+                ModifiedDate = inVal.ModifiedDate.HasValue ? inVal.ModifiedDate.Value : null
             };
         }
 
-        public static void MapCollection(this IEnumerable<Template> inVal, out List<TemplateViewModel> outVal)
+        public static void MapToHistory(this Template inVal, TemplateViewModel inValTwo, out TemplateHistory outVal)
+        {
+            outVal = new TemplateHistory
+            {
+                Name = inVal.Name,
+                Content = inVal.Content,
+                ModifiedDate = DateTime.Now,
+                ModifierId = int.Parse(inValTwo.ModifyingUser),
+                Protected = inVal.Protected,
+                TemplateId = inVal.Id,
+                Version = inVal.Version,
+            };
+        }
+
+        public static void MapEdit(this TemplateViewModel inVal, ref Template outVal)
+        {
+            {
+                outVal.Name = inVal.Name;
+                outVal.Content = inVal.Content;
+                outVal.ModifiedDate = DateTime.Now;
+                outVal.ModifierId = int.Parse(inVal.ModifyingUser);
+                outVal.Version = inVal.Version += 1;
+            };
+        }
+
+        public static void Map(this IEnumerable<Template> inVal, out List<TemplateViewModel> outVal)
         {
             outVal =  inVal.Select(x => new TemplateViewModel
             {

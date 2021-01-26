@@ -17,6 +17,9 @@ namespace DataAccess.Models
         public int TemplateId { get; set; }
 
         [Required]
+        public string Name { get; set; }
+
+        [Required]
         public string Content { get; set; }
 
         [Required]

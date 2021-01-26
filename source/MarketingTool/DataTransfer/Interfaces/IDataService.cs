@@ -8,7 +8,7 @@ namespace DataTransfer.Interfaces
     public interface IDataService<T>
     {
         Task<IEnumerable<T>> GetAll();
-        Task<T> Get(string id);
+        Task<T> Get(int id);
 
         Task<T> GetSingle();
 

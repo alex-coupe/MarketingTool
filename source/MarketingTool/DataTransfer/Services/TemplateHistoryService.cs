@@ -17,9 +17,9 @@ namespace DataTransfer.Services
             _httpService = httpService;
         }
 
-        public async Task<TemplateHistoryViewModel> Get(string id)
+        public async Task<TemplateHistoryViewModel> Get(int id)
         {
-            return await _httpService.Get<TemplateHistoryViewModel>($"api/templatehistory/?templateId={int.Parse(id)}");
+            return await _httpService.Get<TemplateHistoryViewModel>($"api/templatehistory/?templateId={id}");
         }
 
         public Task<TemplateHistoryViewModel> GetSingle()

@@ -14,7 +14,7 @@ namespace DataTransfer.Services
         {
             _httpService = httpService;
         }
-        public Task<ResetPasswordViewModel> Get(string id)
+        public Task<ResetPasswordViewModel> Get(int id)
         {
             throw new NotImplementedException();
         }

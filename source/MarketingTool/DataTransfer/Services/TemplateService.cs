@@ -16,7 +16,7 @@ namespace DataTransfer.Services
             _httpService = httpService;
         }
 
-        public async Task<TemplateViewModel> Get(string id)
+        public async Task<TemplateViewModel> Get(int id)
         {
             return await _httpService.Get<TemplateViewModel>($"api/templates/{id}");
         }

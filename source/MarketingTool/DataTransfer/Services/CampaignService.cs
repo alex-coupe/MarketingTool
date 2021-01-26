@@ -16,7 +16,7 @@ namespace DataTransfer.Services
             _httpService = httpService;
         }
 
-        public async Task<CampaignViewModel> Get(string id)
+        public async Task<CampaignViewModel> Get(int id)
         {
             return await _httpService.Get<CampaignViewModel>($"api/campaigns/{id}");
         }

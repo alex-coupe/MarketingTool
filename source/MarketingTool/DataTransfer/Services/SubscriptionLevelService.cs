@@ -20,7 +20,7 @@ namespace DataTransfer.Services
             return await _httpService.Get<IEnumerable<SubscriptionLevelViewModel>>("api/subscriptionlevels");
         }
 
-        public async Task<SubscriptionLevelViewModel> Get(string id)
+        public async Task<SubscriptionLevelViewModel> Get(int id)
         {
             return await _httpService.Get<SubscriptionLevelViewModel>($"api/subscriptionlevel/{id}");
         }

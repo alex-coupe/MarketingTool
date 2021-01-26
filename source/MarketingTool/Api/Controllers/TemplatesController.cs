@@ -32,7 +32,7 @@ namespace Api.Controllers
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var templates = await _templateRepository.GetAllAsync(x => x.ClientId == clientId);
 
-            templates.MapCollection(out List<TemplateViewModel> viewModel);
+            templates.Map(out List<TemplateViewModel> viewModel);
 
             return Ok(viewModel);
         }
@@ -75,16 +75,22 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpPut]
-        public async Task<ActionResult<Template>> PutTemplate(Template template)
+        public async Task<ActionResult<TemplateViewModel>> PutTemplate(TemplateViewModel viewModel,[FromServices]IRepository<TemplateHistory> _historyRepository)
         {
+            var template = await _templateRepository.GetAsync(viewModel.Id);
+            template.MapToHistory(viewModel, out TemplateHistory history);
+            _historyRepository.Add(history);
+
+            viewModel.MapEdit(ref template);
             TemplateValidator _validator = new TemplateValidator();
             var validationResult = await _validator.ValidateAsync(template);
             if (validationResult.IsValid)
             {
                 _templateRepository.Edit(template);
                 await _templateRepository.SaveChangesAsync();
+                await _historyRepository.SaveChangesAsync();
 
-                return Ok(template);
+                return Ok(viewModel);
             }
 
             return BadRequest(validationResult.Errors);

@@ -17,7 +17,7 @@ namespace DataTransfer.Services
             _httpService = httpService;
         }
 
-        public Task<DashboardViewModel> Get(string id)
+        public Task<DashboardViewModel> Get(int id)
         {
             throw new NotImplementedException();
         }

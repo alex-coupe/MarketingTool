@@ -16,7 +16,7 @@ namespace DataTransfer.Services
             _httpService = httpService;
         }
 
-        public async Task<RecipientViewModel> Get(string id)
+        public async Task<RecipientViewModel> Get(int id)
         {
             return await _httpService.Get<RecipientViewModel>($"api/recipient/{id}");
         }

@@ -1,10 +1,82 @@
-﻿@page "/templates/template/{Id}"
+﻿@page "/templates/template/{Id:int}"
 
 @attribute [Authorize]
 
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<TemplateViewModel> _templateService
+
 <h3>Edit</h3>
+
+<div class="container text-center">
+    @if (!Loading)
+    {
+    <EditForm Model="viewModel" OnValidSubmit="HandleTemplateSubmit">
+        <label>Template Name</label>
+        <InputText type="text" @bind-Value="viewModel.Name" />
+        <label>Content</label>
+        <InputTextArea @bind-Value="viewModel.Content" />
+        <label>Protect Template</label>
+        <InputCheckbox @bind-Value="viewModel.Protected" />
+        <button type="submit" class="btn btn-primary">Save</button>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </EditForm>
+    }
+    else
+    {
+        <p>Loading...</p>
+    }
+
+    @if (Saved)
+    {
+        <p class="text-center text-success">Saved Successfully!</p>
+    }
+
+    @if (!string.IsNullOrEmpty(Error))
+    {
+        <p>@Error</p>
+    }
+</div>
 
 @code {
     [Parameter]
-    public string Id { get; set; }
+    public int Id { get; set; }
+
+    TemplateViewModel viewModel = new TemplateViewModel();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            viewModel = await _templateService.Get(Id);
+            Loading = false;
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+    }
+
+    public async Task HandleTemplateSubmit()
+    {
+        viewModel.ModifyingUser = AuthenticationService.User.UserId.ToString();
+        viewModel.ModifiedDate = DateTime.Now;
+        try
+        {
+            await _templateService.Put(viewModel);
+            Saved = true;
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    private string Error { get; set; }
+
+    private bool Saved { get; set; } = false;
+
+    private bool Loading { get; set; } = true;
 }

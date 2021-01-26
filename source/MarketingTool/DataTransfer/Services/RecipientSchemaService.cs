@@ -15,7 +15,7 @@ namespace DataTransfer.Services
         {
             _httpService = httpService;
         }
-        public Task<RecipientSchemaViewModel> Get(string id)
+        public Task<RecipientSchemaViewModel> Get(int id)
         {
             throw new NotImplementedException();
         }
