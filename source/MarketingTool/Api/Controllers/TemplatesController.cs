@@ -55,8 +55,11 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Template>> PostTemplate(Template template)
+        public async Task<ActionResult<Template>> PostTemplate(TemplateViewModel viewModel)
         {
+            viewModel.Map(out Template template);
+            template.ClientId = AuthHelper.GetClientId(HttpContext.User.Claims);
+
             TemplateValidator _validator = new TemplateValidator();
             var validationResult = await _validator.ValidateAsync(template);
             if (validationResult.IsValid)

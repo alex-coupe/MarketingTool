@@ -24,6 +24,20 @@ namespace Api.DataMappers
                 };
         }
 
+        public static void Map(this TemplateViewModel inVal, out Template outVal)
+        {
+            outVal = new Template
+            {
+                Name = inVal.Name,
+                Content = inVal.Content,
+                Version = inVal.Version,
+                CreatedDate = DateTime.Now,
+                Id = inVal.Id,
+                Protected = inVal.Protected,  
+                CreatorId = int.Parse(inVal.CreatingUser)
+            };
+        }
+
         public static void MapCollection(this IEnumerable<Template> inVal, out List<TemplateViewModel> outVal)
         {
             outVal =  inVal.Select(x => new TemplateViewModel

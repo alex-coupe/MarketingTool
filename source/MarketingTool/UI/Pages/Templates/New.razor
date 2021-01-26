@@ -1,7 +1,60 @@
 ﻿@page "/templates/new"
 
+@attribute [Authorize]
+
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<TemplateViewModel> _templateService
+
 <h3>New Template</h3>
 
-@code {
+<div class="container text-center">
 
-}
+    <EditForm Model="viewModel" OnValidSubmit="HandleTemplateSubmit">
+        <label>Template Name</label>
+        <InputText type="text" @bind-Value="viewModel.Name" />
+        <label>Content</label>
+        <InputTextArea @bind-Value="viewModel.Content" />
+        <label>Protect Template</label>
+        <InputCheckbox @bind-Value="viewModel.Protected" />
+        <button type="submit" class="btn btn-primary">Save</button>
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+    </EditForm>
+
+    @if (Saved)
+    {
+        <p class="text-center text-success">Saved Successfully!</p>
+    }
+
+    @if (!string.IsNullOrEmpty(Error))
+    {
+        <p>@Error</p>
+    }
+</div>
+
+    @code {
+
+        TemplateViewModel viewModel = new TemplateViewModel();
+
+        public async Task HandleTemplateSubmit()
+        {
+            viewModel.Version = 1;
+            viewModel.CreatingUser = AuthenticationService.User.UserId.ToString();
+            try
+            {
+                await _templateService.Post(viewModel);
+                viewModel = new TemplateViewModel();
+                Saved = true;
+            }
+            catch(Exception ex)
+            {
+                Error = ex.Message;
+            }
+        }
+
+        private string Error { get; set; }
+
+        private bool Saved { get; set; } = false;
+
+    }
