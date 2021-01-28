@@ -50,24 +50,39 @@ namespace Api.Controllers
             var list = await _listRepository.GetAsync(x => x.ClientId == clientId, id);
 
             if (list != null)
-                return Ok(list);
+            {
+                list.Map(out ListViewModel viewModel, _campaignRepository);
+                return Ok(viewModel);
+            }
 
             return NotFound();
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<List>> PostList(List list)
+        public async Task<ActionResult<List>> PostList(ListViewModel viewModel)
         {
+            viewModel.Map(out List list);
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-           
+            list.ClientId = clientId;        
+
             ListValidator _validator = new ListValidator(clientId);
             var validationResult = await _validator.ValidateAsync(list);
             if (validationResult.IsValid)
             {
                 _listRepository.Add(list);
-
+                           
                 await _listRepository.SaveChangesAsync();
+
+                foreach (var recipient in viewModel.Recipients)
+                {
+                    _listRecipientRepository.Add(new ListRecipient
+                    {
+                        RecipientId = recipient.Id,
+                        ListId = list.Id
+                    });
+                }
+                await _listRecipientRepository.SaveChangesAsync();
                 return CreatedAtAction("PostList", new { id = list.Id }, list);
             }
 
@@ -76,10 +91,13 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpPut]
-        public async Task<ActionResult<List>> PutList(List list)
+        public async Task<ActionResult> PutList(ListViewModel viewModel)
         {
+            var list = await _listRepository.GetAsync(viewModel.Id);
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
 
+            viewModel.MapEdit(ref list);
+            
             ListValidator _validator = new ListValidator(clientId);
             var validationResult = await _validator.ValidateAsync(list);
             if (validationResult.IsValid)
@@ -87,7 +105,7 @@ namespace Api.Controllers
                 _listRepository.Edit(list);
                 await _listRepository.SaveChangesAsync();
 
-                return Ok(list);
+                return Ok();
             }
 
             return BadRequest(validationResult.Errors);

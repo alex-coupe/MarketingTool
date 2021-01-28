@@ -4,10 +4,99 @@
 @inject NavigationManager _navigationManager
 @inject IAuthenticationService AuthenticationService
 @inject IDataService<ListViewModel> _listService
+@inject IDataService<RecipientViewModel> _recipientService
 
 <h3>Edit List</h3>
+
+<div class="container text-center">
+    @if (!Loading)
+    {
+        <EditForm Model="viewModel" OnValidSubmit="HandleSubmit">
+            <label>List Name</label>
+            <InputText type="text" @bind-Value="viewModel.Name" />
+            <label>Description</label>
+            <InputText type="text" @bind-Value="viewModel.Description" />
+            <label>Edit Recipients</label>
+            @foreach (var rec in recipientViewModel)
+            {
+                <br />
+                <label>@rec.EmailAddress</label>
+                <input type="checkbox" checked="@(viewModel.Recipients.Where(x => x.Id == rec.Id).Any())" @onchange="@(e => HandleToggle(rec, e))" />
+            }
+            <button type="submit" class="btn btn-primary">Save</button>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+        </EditForm>
+    }
+    else
+    {
+        <p>Loading...</p>
+    }
+
+    @if (Saved)
+    {
+        <p class="text-center text-success">Saved Successfully!</p>
+    }
+
+    <p>@Error</p>
+
+</div>
 
 @code {
     [Parameter]
     public int Id { get; set; }
+
+    private string Error { get; set; }
+
+    private bool Loading { get; set; } = true;
+
+    private bool Saved { get; set; } = false;
+
+    ListViewModel viewModel = new ListViewModel();
+    IEnumerable<RecipientViewModel> recipientViewModel = new List<RecipientViewModel>();
+    public async Task HandleSubmit()
+    {
+        viewModel.ModifyingUser = AuthenticationService.User.UserId.ToString();
+        viewModel.ModifiedDate = DateTime.Now;
+        try
+        {
+            await _listService.Put(viewModel);
+            Saved = true;
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+   
+    public void HandleToggle(RecipientViewModel rec, ChangeEventArgs args)
+    {
+        if ((bool)args.Value)
+        {
+            viewModel.Recipients.Add(rec);
+        }
+        else
+        {
+            viewModel.Recipients.Remove(rec);
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        try
+        {
+            viewModel = await _listService.Get(Id);
+            recipientViewModel = await _recipientService.GetAll();
+            Loading = false;
+
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+            Loading = false;
+        }
+
+    }
 }

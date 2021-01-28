@@ -1,7 +1,97 @@
 ﻿@page "/lists/new"
 
+@attribute [Authorize]
+
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<ListViewModel> _listService
+@inject IDataService<RecipientViewModel> _recipientService
+
 <h3>New List</h3>
 
-@code {
+<div class="container text-center">
+    @if (!Loading)
+    {
+        <EditForm Model="listViewModel" OnValidSubmit="HandleSubmit">
+            <label>List Name</label>
+            <InputText type="text" @bind-Value="listViewModel.Name" />
+            <label>Description</label>
+            <InputText type="text" @bind-Value="listViewModel.Description" />
+            <label>Edit Recipients</label>
+            @foreach(var rec in recipientViewModel)
+            {
+                <br />
+                <label>@rec.EmailAddress</label>
+                <input type="checkbox" @onchange="@(e => HandleToggle(rec, e))" />
+            }
+            <button type="submit" class="btn btn-primary">Save</button>
+            <DataAnnotationsValidator />
+            <ValidationSummary />
+        </EditForm>
+    }
+    else
+    {
+        <p>Loading...</p>
+    }
 
+    @if (Saved)
+    {
+        <p class="text-center text-success">Saved Successfully!</p>
+    }
+
+    <p>@Error</p>
+
+</div>
+@code {
+    private string Error { get; set; }
+
+    public bool Loading { get; set; } = false;
+
+    public bool Saved { get; set; } = false;
+
+    ListViewModel listViewModel = new ListViewModel();
+    IEnumerable<RecipientViewModel> recipientViewModel = new List<RecipientViewModel>();
+
+    public void HandleToggle(RecipientViewModel rec, ChangeEventArgs args)
+    {
+        if ((bool)args.Value)
+        {
+            listViewModel.Recipients.Add(rec);
+        }
+        else
+        {
+            listViewModel.Recipients.Remove(rec);
+        }
+    }
+
+    public async Task HandleSubmit()
+    {
+
+        try
+        {
+            await _listService.Post(listViewModel);
+            Saved = true;
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        listViewModel.Recipients = new List<RecipientViewModel>();
+        listViewModel.CreatingUser = AuthenticationService.User.UserId.ToString();
+        try
+        {
+            recipientViewModel = await _recipientService.GetAll();
+            Loading = false;
+
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+    }
 }

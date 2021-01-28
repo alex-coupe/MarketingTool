@@ -11,7 +11,7 @@
 <div class="container text-center">
     @if (!Loading)
     {
-    <EditForm Model="viewModel" OnValidSubmit="HandleTemplateSubmit">
+    <EditForm Model="viewModel" OnValidSubmit="HandleSubmit">
         <label>Template Name</label>
         <InputText type="text" @bind-Value="viewModel.Name" />
         <label>Content</label>
@@ -57,7 +57,7 @@
 
     }
 
-    public async Task HandleTemplateSubmit()
+    public async Task HandleSubmit()
     {
         viewModel.ModifyingUser = AuthenticationService.User.UserId.ToString();
         viewModel.ModifiedDate = DateTime.Now;

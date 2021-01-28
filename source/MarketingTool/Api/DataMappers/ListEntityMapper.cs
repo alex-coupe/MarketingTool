@@ -25,14 +25,62 @@ namespace Api.DataMappers
                 ModifyingUser = $"{x.ModifyingUser?.FirstName} {x.ModifyingUser?.LastName}",
                 CreatingUser = $"{x.CreatingUser.FirstName} {x.CreatingUser.LastName}",
                 CampaignCount = _campaignRepository.Where(camp => camp.ListId == x.Id).Count(),
-                Recipients = x.ListRecipients.Select(bla => new RecipientViewModel
+                Recipients = x.ListRecipients.Select(lr => new RecipientViewModel
                 {
-                    EmailAddress = bla.Recipient.EmailAddress,
-                    SchemaValues = bla.Recipient.SchemaValues.ToObject<Dictionary<string,string>>(),
-                    Id = bla.Id,
-                    Notes = bla.Recipient.Notes
+                    EmailAddress = lr.Recipient.EmailAddress,
+                    SchemaValues = lr.Recipient.SchemaValues.ToObject<Dictionary<string,string>>(),
+                    Id = lr.RecipientId,
+                    Notes = lr.Recipient.Notes
                 }).ToList()
             }).ToList();
         }
+
+        public static void Map(this List inVal, out ListViewModel outVal, IRepository<Campaign> _campaignRepository)
+        {
+            outVal = new ListViewModel
+            {
+                Name = inVal.Name,
+                Description = inVal.Description,
+                CreatedDate = inVal.CreatedDate,
+                Id = inVal.Id,
+                ModifiedDate = inVal.ModifiedDate,
+                ModifyingUser = $"{inVal.ModifyingUser?.FirstName} {inVal.ModifyingUser?.LastName}",
+                CreatingUser = $"{inVal.CreatingUser.FirstName} {inVal.CreatingUser.LastName}",
+                CampaignCount = _campaignRepository.Where(camp => camp.ListId == inVal.Id).Count(),
+                Recipients = inVal.ListRecipients.Select(lr => new RecipientViewModel
+                {
+                    EmailAddress = lr.Recipient.EmailAddress,
+                    SchemaValues = lr.Recipient.SchemaValues.ToObject<Dictionary<string, string>>(),
+                    Id = lr.RecipientId,
+                    Notes = lr.Recipient.Notes
+                }).ToList()
+            };
+        }
+
+        public static void MapEdit(this ListViewModel inVal, ref List outVal)
+        {
+            {
+                outVal.Name = inVal.Name;
+                outVal.Description = inVal.Description;
+                outVal.ModifiedDate = DateTime.Now;
+                outVal.ModifierId = int.Parse(inVal.ModifyingUser);
+               
+            };
+        }
+
+        public static void Map(this ListViewModel inVal, out List outVal)
+        {
+            outVal = new List
+            {
+                Name = inVal.Name,
+                Id = inVal.Id,
+                ModifierId = !string.IsNullOrEmpty(inVal.ModifyingUser) ? int.Parse(inVal.ModifyingUser) : null,
+                Description = inVal.Description,
+                CreatedDate = DateTime.Now,
+                CreatorId = int.Parse(inVal.CreatingUser),
+                ModifiedDate = inVal.ModifiedDate.HasValue ? inVal.ModifiedDate.Value : null
+            };
+        }
+
     }
 }
