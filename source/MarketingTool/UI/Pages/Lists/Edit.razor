@@ -1,0 +1,13 @@
+﻿@page "/lists/edit/{Id:int}"
+@attribute [Authorize]
+
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<ListViewModel> _listService
+
+<h3>Edit List</h3>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+}

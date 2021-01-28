@@ -64,6 +64,7 @@ namespace DataAccess.Repositories
         public async Task<ListRecipient> GetAsync(int id)
         {
             return await _context.ListRecipients.AsNoTracking()
+                .Include(x => x.Recipient)
              .SingleOrDefaultAsync(x => x.Id == id);
         }
 

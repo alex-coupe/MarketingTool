@@ -1,4 +1,4 @@
-﻿@page "/templates/index"
+﻿@page "/templates"
 
 @attribute [Authorize]
 
@@ -32,7 +32,7 @@
                 <td>@template.ModifyingUser</td>
                 <td>@template.ModifiedDate?.ToString(new CultureInfo("en-GB"))</td>
                 <NavLink class="btn btn-primary" href="@($"/templates/history/{template.Id}")">View History</NavLink>
-                <NavLink class="@((template.Protected ? "btn btn-secondary disabled" : "btn btn-success"))" href="@($"/templates/template/{template.Id}")">Edit Template</NavLink>
+                <NavLink class="@((template.Protected ? "btn btn-secondary disabled" : "btn btn-success"))" href="@($"/templates/edit/{template.Id}")">Edit Template</NavLink>
             </tr>
         }
     </tbody>

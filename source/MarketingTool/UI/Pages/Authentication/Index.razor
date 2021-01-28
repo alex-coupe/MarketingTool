@@ -13,10 +13,9 @@
         <DataAnnotationsValidator />
         <ValidationSummary />
     </EditForm>
-    @if (!string.IsNullOrEmpty(Error))
-    {
-        <p class="text-center text-danger">@Error</p>
-    }
+  
+    <p class="text-center text-danger">@Error</p>
+    
 
     <p>Forgotten your password? Click <NavLink href="/forgottenpassword">Here</NavLink></p>
     <p>Not registered yet? Sign up <NavLink href="/register">Here</NavLink></p>

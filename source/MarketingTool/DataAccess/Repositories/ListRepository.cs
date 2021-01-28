@@ -49,29 +49,39 @@ namespace DataAccess.Repositories
 
         public List<List> GetAll()
         {
-            return _context.Lists.ToList();
+            return _context.Lists
+                .Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser)
+                .Include(list => list.ListRecipients).ThenInclude(lr => lr.Recipient)
+                .ToList();
         }
 
         public async Task<IEnumerable<List>> GetAllAsync()
         {
             return await _context.Lists.AsNoTracking()
+                 .Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser)
                .ToListAsync();
         }
 
         public async Task<IEnumerable<List>> GetAllAsync(Expression<Func<List, bool>> predicate)
         {
-            return await _context.Lists.Where(predicate).ToListAsync();
+            return await _context.Lists.Where(predicate).Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser).ToListAsync();
         }
 
         public async Task<List> GetAsync(int id)
         {
             return await _context.Lists.AsNoTracking()
-             .SingleOrDefaultAsync(x => x.Id == id);
+              .Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser)
+                .SingleOrDefaultAsync(x => x.Id == id);
         }
 
         public async Task<List> GetAsync(Expression<Func<List, bool>> predicate, int id)
         {
-            return await _context.Lists.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.Lists.Where(predicate).Where(x => x.Id == id).Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser).FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

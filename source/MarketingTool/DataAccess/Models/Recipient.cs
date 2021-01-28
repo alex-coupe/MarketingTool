@@ -12,7 +12,6 @@ namespace DataAccess.Models
 {
     public class Recipient
     {
-        
         [Key]
         public int Id { get; init; }
 

@@ -1,4 +1,4 @@
-﻿@page "/recipients/index"
+﻿@page "/recipients"
 
 @attribute [Authorize]
 
@@ -22,8 +22,6 @@
         </tr>
     </thead>
     <tbody>
-
-
         @foreach (var recipient in recipientViewModel)
         {
             <tr>
@@ -38,6 +36,8 @@
             
         </tbody>
 </table> 
+
+<p>@Error</p>
 
 @code {
 

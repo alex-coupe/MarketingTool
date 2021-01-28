@@ -1,7 +1,69 @@
-﻿@page "/lists/index"
+﻿@page "/lists"
+
+
+@attribute [Authorize]
+
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<ListViewModel> _listService
+
 
 <h3>Lists</h3>
 
-@code {
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Creator</th>
+            <th>Created Date</th>
+            <th>Last Modified By</th>
+            <th>Modified Date</th>
+            <th>Campaign Count</th>
+            <th>Recipient Count</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var list in viewModels)
+        {
+        <tr>
+            <td>@list.Name</td>
+            <td>@list.Description</td>
+            <td>@list.CreatingUser</td>
+            <td>@list.CreatedDate.ToString(new CultureInfo("en-GB"))</td>
+            <td>@list.ModifyingUser</td>
+            <td>@list.ModifiedDate?.ToString(new CultureInfo("en-GB"))</td>
+            <td>@list.CampaignCount</td>
+            <td>@list.Recipients.Count</td>
+            <NavLink class="btn btn-primary" href="@($"/lists/edit/{list.Id}")">Edit List</NavLink>
+        </tr>
+        }
+    </tbody>
+</table>
 
+<NavLink class="btn btn-primary" href="/lists/new">New List</NavLink>
+
+<p>@Error</p>
+
+
+@code {
+    private string Error { get; set; }
+
+    IEnumerable<ListViewModel> viewModels;
+
+    protected override async Task OnInitializedAsync()
+    {
+        viewModels = new List<ListViewModel>();
+        try
+        {
+            viewModels = await _listService.GetAll();
+
+
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+    }
 }

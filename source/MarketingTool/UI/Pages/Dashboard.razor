@@ -13,13 +13,15 @@
 else
 {
 <p>
-    <NavLink class="btn btn-primary" href="/recipients/index">Recipients Total Recipients: @viewModel.RecipientCount</NavLink>
-    <NavLink class="btn btn-primary"  href="/lists/index">Lists Total Lists: @viewModel.ListCount</NavLink>
-    <NavLink class="btn btn-primary"  href="/campaigns/index">Campaigns Total Campaigns: @viewModel.TotalCampaigns Active Campaigns: @viewModel.ActiveCampaigns</NavLink>
-    <NavLink class="btn btn-primary"  href="/templates/index">Templates Total Templates: @viewModel.TotalTemplates</NavLink>
-    <NavLink class="btn btn-primary">Analytics</NavLink>
-    <NavLink class="btn btn-primary">Administration </NavLink>
+    <NavLink class="btn btn-primary" href="/recipients">Recipients Total Recipients: @viewModel.RecipientCount</NavLink>
+    <NavLink class="btn btn-primary" href="/lists">Lists Total Lists: @viewModel.ListCount</NavLink>
+    <NavLink class="btn btn-primary" href="/campaigns">Campaigns Total Campaigns: @viewModel.TotalCampaigns Active Campaigns: @viewModel.ActiveCampaigns</NavLink>
+    <NavLink class="btn btn-primary" href="/templates">Templates Total Templates: @viewModel.TotalTemplates</NavLink>
+    <NavLink class="btn btn-primary" href="/analytics">Analytics</NavLink>
+    <NavLink class="btn btn-primary" href="/administration">Administration </NavLink>
 </p>
+
+<p>@Error</p>
 }
 
 @code {
@@ -40,6 +42,7 @@ else
         catch (Exception ex)
         {
             Error = ex.Message;
+            IsLoading = false;
         }
 
     }

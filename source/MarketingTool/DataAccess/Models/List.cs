@@ -11,6 +11,7 @@ namespace DataAccess.Models
 {
     public class List
     {
+      
         [Key]
         public int Id { get; init; }
 
@@ -25,8 +26,9 @@ namespace DataAccess.Models
         public int ClientId { get; set; }
 
         [Required]
+        [ForeignKey("CreatingUser")]
         public int CreatorId { get; set; }
-
+        [ForeignKey("ModifyingUser")]
         public int? ModifierId { get; set; }
 
         [Required]
@@ -34,6 +36,10 @@ namespace DataAccess.Models
 
         public DateTime? ModifiedDate { get; set; }
 
-    
+        public virtual User CreatingUser { get; set; }
+        public virtual User ModifyingUser { get; set; }
+
+        public virtual ICollection<ListRecipient> ListRecipients { get; set; }
+
     }
 }
