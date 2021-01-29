@@ -78,7 +78,8 @@
         }
         else
         {
-            viewModel.Recipients.Remove(rec);
+            var test = viewModel.Recipients.Where(x => x.Id == rec.Id).FirstOrDefault();
+            var b = viewModel.Recipients.Remove(test);
         }
     }
 

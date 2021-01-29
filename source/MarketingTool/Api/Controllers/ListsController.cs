@@ -95,7 +95,7 @@ namespace Api.Controllers
         {
             var list = await _listRepository.GetAsync(viewModel.Id);
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-
+            var listRecipients = _listRecipientRepository.Where(x => x.ListId == list.Id).ToList();
             viewModel.MapEdit(ref list);
             
             ListValidator _validator = new ListValidator(clientId);
@@ -103,9 +103,32 @@ namespace Api.Controllers
             if (validationResult.IsValid)
             {
                 _listRepository.Edit(list);
+
+                foreach(var rec in listRecipients)
+                {
+                    if (!viewModel.Recipients.Any(x => x.Id == rec.RecipientId))
+                    {
+                        _listRecipientRepository.Remove(rec.Id);
+
+                    }
+                }
+
+                foreach(var rec in viewModel.Recipients)
+                {
+                    if (!listRecipients.Any(x => x.ListId == list.Id && x.RecipientId == rec.Id))
+                    {
+                        _listRecipientRepository.Add(new ListRecipient
+                        {
+                            ListId = list.Id,
+                            RecipientId = rec.Id
+                        });
+
+                    }
+                }
+                await _listRecipientRepository.SaveChangesAsync();
                 await _listRepository.SaveChangesAsync();
 
-                return Ok();
+                return Ok(viewModel);
             }
 
             return BadRequest(validationResult.Errors);

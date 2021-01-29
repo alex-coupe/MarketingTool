@@ -75,8 +75,8 @@ namespace DataAccess.Repositories
 
         public void Remove(int id)
         {
-            var listRecipient = _context.Lists.Find(id);
-            _context.Lists.Remove(listRecipient);
+            var listRecipient = _context.ListRecipients.Find(id);
+            _context.ListRecipients.Remove(listRecipient);
         }
 
         public void SaveChanges()
