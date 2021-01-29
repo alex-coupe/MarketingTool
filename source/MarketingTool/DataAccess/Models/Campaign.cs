@@ -33,19 +33,15 @@ namespace DataAccess.Models
         public int TemplateId { get; set; }
 
         [Required]
-        
+        [ForeignKey("CreatingUser")]
         public int CreatorId { get; set; }
-
-       
+        [ForeignKey("ModifyingUser")]
         public int? ModifierId { get; set; }
 
         [Required]
         public DateTime CreatedDate { get; set; }
 
         public DateTime? ModifiedDate { get; set; }
-
-        [Required]
-        public int TimestepId { get; set; }
       
         public bool IsActive { get; set; } = true;
 
@@ -54,5 +50,8 @@ namespace DataAccess.Models
         public DateTime? ProcessedTimestamp { get; set; }
 
         public int ListId { get; set; }
+
+        public virtual User CreatingUser { get; set; }
+        public virtual User ModifyingUser { get; set; }
     }
 }

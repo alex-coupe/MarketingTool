@@ -49,13 +49,15 @@ namespace DataAccess.Repositories
 
         public async Task<IEnumerable<Campaign>> GetAllAsync()
         {
-            return await _context.Campaigns.AsNoTracking()
+            return await _context.Campaigns.AsNoTracking().Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser)
                .ToListAsync();
         }
 
         public async Task<IEnumerable<Campaign>> GetAllAsync(Expression<Func<Campaign, bool>> predicate)
         {
-            return await _context.Campaigns.Where(predicate).ToListAsync();
+            return await _context.Campaigns.Where(predicate).Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser).ToListAsync();
         }
 
         public async Task<Campaign> GetAsync(int id)
@@ -66,7 +68,8 @@ namespace DataAccess.Repositories
 
         public async Task<Campaign> GetAsync(Expression<Func<Campaign, bool>> predicate, int id)
         {
-            return await _context.Campaigns.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.Campaigns.Where(predicate).Where(x => x.Id == id).Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser).FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -87,7 +90,8 @@ namespace DataAccess.Repositories
 
         public List<Campaign> GetAll()
         {
-            return _context.Campaigns.ToList();
+            return _context.Campaigns.Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser).ToList();
         }
 
         public IEnumerable<Campaign> Where(Expression<Func<Campaign, bool>> predicate)

@@ -2,6 +2,7 @@
 using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.DataMappers;
 
 namespace Api.Controllers
 {
@@ -25,12 +27,12 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Campaign>>> GetCampaigns()
+        public async Task<ActionResult<IEnumerable<CampaignViewModel>>> GetCampaigns()
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var campaigns = await _campaignRepository.GetAllAsync(x => x.ClientId == clientId);
-
-            return Ok(campaigns);
+            campaigns.Map(out List<CampaignViewModel> viewModel);
+            return Ok(viewModel);
         }
 
         [Authorize]

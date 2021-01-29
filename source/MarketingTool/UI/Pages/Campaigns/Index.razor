@@ -1,7 +1,70 @@
 ﻿@page "/campaigns"
 
+@attribute [Authorize]
+
+@inject NavigationManager _navigationManager
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<CampaignViewModel> _campaignService
+
 <h3>Campaigns</h3>
 
-@code {
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Description</th>
+            <th>Creator</th>
+            <th>Created Date</th>
+            <th>Last Modified By</th>
+            <th>Modified Date</th>
+            <th>Email Subject</th>
+            <th>Sender Email</th>
+            <th>Processed Time</th>
+            <th>Active</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var campaign in viewModels)
+        {
+        <tr>
+            <td>@campaign.Name</td>
+            <td>@campaign.Description</td>
+            <td>@campaign.CreatingUser</td>
+            <td>@campaign.CreatedDate.ToString(new CultureInfo("en-GB"))</td>
+            <td>@campaign.ModifyingUser</td>
+            <td>@campaign.ModifiedDate?.ToString(new CultureInfo("en-GB"))</td>
+            <td>@campaign.Subject</td>
+            <td>@campaign.SenderEmail</td>
+            <td>@campaign.SendDate.ToString(new CultureInfo("en-GB"))</td>
+            <td>@campaign.IsActive</td>
+            <td>@campaign.ProcessedTimestamp?.ToString(new CultureInfo("en-GB"))</td>
+            <NavLink class="btn btn-primary" href="@($"/templates/edit/{campaign.TemplateId}")">View Template</NavLink>
+            <NavLink class="btn btn-primary" href="@($"/lists/edit/{campaign.ListId}")">View List</NavLink>
+        </tr>
+        }
+    </tbody>
+</table>
 
+<NavLink class="btn btn-primary" href="/lists/new">New List</NavLink>
+
+<p>@Error</p>
+
+@code {
+    private string Error { get; set; }
+
+    IEnumerable<CampaignViewModel> viewModels;
+
+    protected override async Task OnInitializedAsync()
+    {
+        viewModels = new List<CampaignViewModel>();
+        try
+        {
+            viewModels = await _campaignService.GetAll();
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+    }
 }
