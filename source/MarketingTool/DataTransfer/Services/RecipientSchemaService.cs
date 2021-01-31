@@ -47,7 +47,7 @@ namespace DataTransfer.Services
 
         public async Task Remove(int id)
         {
-            await _httpService.Delete<RecipientSchemaViewModel>($"api/recipientschemas/{id}");
+            await _httpService.Delete($"api/recipientschemas/{id}");
         }
 
     }

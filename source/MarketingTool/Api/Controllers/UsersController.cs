@@ -99,7 +99,7 @@ namespace Api.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(int id)
         {
             _userRepository.Remove(id);

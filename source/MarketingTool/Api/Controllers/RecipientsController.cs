@@ -127,7 +127,7 @@ namespace Api.Controllers
 
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteRecipient(int id)
         {
             _repository.Remove(id);

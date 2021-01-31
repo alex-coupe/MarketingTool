@@ -137,7 +137,7 @@ namespace Api.Controllers
 
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteList(int id)
         {
             _listRepository.Remove(id);

@@ -87,7 +87,7 @@ namespace Api.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTemplateSynonym(int id)
         {
             _repository.Remove(id);

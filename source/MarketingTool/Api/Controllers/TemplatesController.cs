@@ -97,7 +97,7 @@ namespace Api.Controllers
         }
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteTemplate(int id)
         {
             _templateRepository.Remove(id);

@@ -48,7 +48,7 @@ namespace DataTransfer.Services
 
         public async Task Remove(int id)
         {
-            await _httpService.Delete<TemplateViewModel>($"api/templates/{id}");
+            await _httpService.Delete($"api/templates/{id}");
         }
 
     }

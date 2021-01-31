@@ -49,7 +49,7 @@ namespace DataTransfer.Services
 
         public async Task Remove(int id)
         {
-            await _httpService.Delete<ListViewModel>($"api/lists/{id}");
+            await _httpService.Delete($"api/lists/{id}");
         }
 
 

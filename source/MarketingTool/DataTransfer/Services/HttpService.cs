@@ -30,10 +30,10 @@ namespace DataTransfer.Services
   
         }
 
-        public async Task<T> Delete<T>(string uri)
+        public async Task Delete(string uri)
         {
             var request = new HttpRequestMessage(HttpMethod.Delete, uri);
-            return await sendRequest<T>(request);
+            await sendRequest(request);
         }
 
         public async Task<T> Get<T>(string uri)

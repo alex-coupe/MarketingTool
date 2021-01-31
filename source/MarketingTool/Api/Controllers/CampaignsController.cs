@@ -37,23 +37,26 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpGet("{id}")]
-        public async Task<ActionResult<Campaign>> GetCampaign(int id)
+        public async Task<ActionResult<CampaignViewModel>> GetCampaign(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var campaign = await _campaignRepository.GetAsync(x => x.ClientId == clientId, id);
 
             if (campaign != null)
-                return Ok(campaign);
-
+            {
+                campaign.Map(out CampaignViewModel viewModel);
+                return Ok(viewModel);
+            }
             return NotFound();
         }
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<Campaign>> PostCampaign(Campaign campaign)
+        public async Task<ActionResult<Campaign>> PostCampaign(CampaignViewModel viewModel)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-
+            viewModel.Map(out Campaign campaign);
+            campaign.ClientId = clientId;
             CampaignValidator _validator = new CampaignValidator(clientId);
             var validationResult = await _validator.ValidateAsync(campaign);
             if (validationResult.IsValid)
@@ -69,10 +72,12 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpPut]
-        public async Task<ActionResult<Campaign>> PutCampaign(Campaign campaign)
+        public async Task<ActionResult<Campaign>> PutCampaign(CampaignViewModel viewModel)
         {
+            var campaign = await _campaignRepository.GetAsync(viewModel.Id);
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-
+            viewModel.MapEdit(ref campaign);
+            campaign.ClientId = clientId;
             CampaignValidator _validator = new CampaignValidator(clientId);
             var validationResult = await _validator.ValidateAsync(campaign);
             if (validationResult.IsValid)
@@ -80,7 +85,7 @@ namespace Api.Controllers
                 _campaignRepository.Edit(campaign);
                 await _campaignRepository.SaveChangesAsync();
 
-                return Ok(campaign);
+                return Ok(viewModel);
             }
 
             return BadRequest(validationResult.Errors);
@@ -89,7 +94,7 @@ namespace Api.Controllers
 
 
         [Authorize]
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteCampaign(int id)
         {
             _campaignRepository.Remove(id);

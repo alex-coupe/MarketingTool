@@ -15,6 +15,6 @@ namespace DataTransfer.Interfaces
 
         Task<T> Put<T>(string uri, object value);
 
-        Task<T> Delete<T>(string uri);
+        Task Delete(string uri);
     }
 }

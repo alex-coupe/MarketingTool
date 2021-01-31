@@ -40,12 +40,13 @@
             <td>@campaign.ProcessedTimestamp?.ToString(new CultureInfo("en-GB"))</td>
             <NavLink class="btn btn-primary" href="@($"/templates/edit/{campaign.TemplateId}")">View Template</NavLink>
             <NavLink class="btn btn-primary" href="@($"/lists/edit/{campaign.ListId}")">View List</NavLink>
+            <NavLink class="btn btn-primary" href="@($"/campaigns/edit/{campaign.Id}")">Edit Campaign</NavLink>
         </tr>
         }
     </tbody>
 </table>
 
-<NavLink class="btn btn-primary" href="/lists/new">New List</NavLink>
+<NavLink class="btn btn-primary" href="/campaigns/new">New Campaign</NavLink>
 
 <p>@Error</p>
 
