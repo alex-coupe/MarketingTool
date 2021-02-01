@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DataAccess.Models
+namespace DataTransfer.ViewModels
 {
-    public class TemplateSynonym
+    public class TemplateSynonymViewModel
     {
-        [Required]
         public int Id { get; set; }
 
         [Required]
@@ -17,11 +16,5 @@ namespace DataAccess.Models
 
         [Required]
         public string Value { get; set; }
-
-        [Required]
-        public string Description { get; set; }
-
-        [Required]
-        public int ClientId { get; set; }
     }
 }

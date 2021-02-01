@@ -5,6 +5,7 @@
 @inject NavigationManager _navigationManager
 @inject IAuthenticationService AuthenticationService
 @inject IDataService<TemplateViewModel> _templateService
+@inject IDataService<TemplateSynonymViewModel> _synonymService
 
 <h3>New Template</h3>
 
@@ -22,37 +23,70 @@
         <ValidationSummary />
     </EditForm>
 
+    <label>Template Synonyms</label>
+    <select @bind="Synonym">
+        <option></option>
+        @foreach (var synonym in synonymViewModels)
+        {
+            <option>@synonym.Key</option>
+        }
+    </select>
+    <button class="btn btn-primary" @onclick="InsertSynonym">Insert</button>
     @if (Saved)
     {
         <p class="text-center text-success">Saved Successfully!</p>
     }
 
-   <p>@Error</p>
-    
+    <p>@Error</p>
+
 </div>
 
-    @code {
+@code {
 
-        TemplateViewModel viewModel = new TemplateViewModel();
+    TemplateViewModel viewModel = new TemplateViewModel();
+    IEnumerable<TemplateSynonymViewModel> synonymViewModels = new List<TemplateSynonymViewModel>();
 
-        public async Task HandleTemplateSubmit()
+    private string Synonym { get; set; }
+
+    private void InsertSynonym()
+    {
+        if (!string.IsNullOrEmpty(Synonym))
         {
-            viewModel.Version = 1;
-            viewModel.CreatingUser = AuthenticationService.User.UserId.ToString();
-            try
-            {
-                await _templateService.Post(viewModel);
-                viewModel = new TemplateViewModel();
-                Saved = true;
-            }
-            catch(Exception ex)
-            {
-                Error = ex.Message;
-            }
+            viewModel.Content += Synonym;
+        }
+    }
+
+    public async Task HandleTemplateSubmit()
+    {
+        viewModel.Version = 1;
+        viewModel.CreatingUser = AuthenticationService.User.UserId.ToString();
+        try
+        {
+            await _templateService.Post(viewModel);
+            viewModel = new TemplateViewModel();
+            Saved = true;
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            synonymViewModels = await _synonymService.GetAll();
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
         }
 
-        private string Error { get; set; }
-
-        private bool Saved { get; set; } = false;
-
     }
+
+    private string Error { get; set; }
+
+    private bool Saved { get; set; } = false;
+
+}

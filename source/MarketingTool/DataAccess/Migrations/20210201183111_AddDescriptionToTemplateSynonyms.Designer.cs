@@ -4,14 +4,16 @@ using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210201183111_AddDescriptionToTemplateSynonyms")]
+    partial class AddDescriptionToTemplateSynonyms
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -428,6 +430,69 @@ namespace DataAccess.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TemplateSynonyms");
+                });
+
+            modelBuilder.Entity("DataAccess.Models.Timestep", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
+
+                    b.Property<int>("Hours")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Timesteps");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Hours = 0,
+                            Name = "ASAP"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Hours = 1,
+                            Name = "Hourly"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Hours = 24,
+                            Name = "Daily"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Hours = 168,
+                            Name = "Weekly"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Hours = 336,
+                            Name = "Bi-Weekly"
+                        },
+                        new
+                        {
+                            Id = 6,
+                            Hours = 672,
+                            Name = "4 Weekly"
+                        },
+                        new
+                        {
+                            Id = 7,
+                            Hours = 730,
+                            Name = "Monthly"
+                        });
                 });
 
             modelBuilder.Entity("DataAccess.Models.User", b =>
