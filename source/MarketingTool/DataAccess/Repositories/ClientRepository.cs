@@ -64,6 +64,11 @@ namespace DataAccess.Repositories
             _context.Clients.Remove(client);
         }
 
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
+
         public IEnumerable<Client> Where(Expression<Func<Client, bool>> predicate)
         {
             return _context.Clients.Where(predicate);
