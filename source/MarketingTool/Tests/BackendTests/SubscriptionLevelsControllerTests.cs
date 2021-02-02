@@ -37,9 +37,9 @@ namespace MarketingToolTests.BackendTests
 
             _subscriptionLevelRepositoryMock = new Mock<IRepository<SubscriptionLevel>>();
 
-            _subscriptionLevelRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(subscriptionLevels);
+            _subscriptionLevelRepositoryMock.Setup(x => x.GetAllAsync(null)).ReturnsAsync(subscriptionLevels);
 
-            _subscriptionLevelRepositoryMock.Setup(x => x.GetAsync(_getId)).Returns(Task.FromResult(new SubscriptionLevel
+            _subscriptionLevelRepositoryMock.Setup(x => x.GetAsync(x => x.Id == _getId)).Returns(Task.FromResult(new SubscriptionLevel
             {
 
                 Name = "Pro",
@@ -51,11 +51,9 @@ namespace MarketingToolTests.BackendTests
             _subscriptionLevelRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _subscriptionLevelRepositoryMock.Setup(r => r.Edit(It.IsAny<SubscriptionLevel>()));
             _subscriptionLevelRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
-            _subscriptionLevelRepositoryMock.Setup(x => x.GetAll()).Returns(subscriptionLevels);
             _subscriptionLevelRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
 
-            _subscriptionLevelRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<SubscriptionLevel, bool>>>()))
-                .Returns(subscriptionLevels);
+           
         }
 
         [Fact]
@@ -70,7 +68,7 @@ namespace MarketingToolTests.BackendTests
             var level = returnValue.FirstOrDefault();
             Assert.Equal("Free", level.Name);
             Assert.Equal(2, returnValue.Count());
-            _subscriptionLevelRepositoryMock.Verify(r => r.GetAllAsync());
+            _subscriptionLevelRepositoryMock.Verify(r => r.GetAllAsync(null));
            
         }
 
@@ -85,7 +83,7 @@ namespace MarketingToolTests.BackendTests
             var level = Assert.IsType<SubscriptionLevel>(actionResult.Value);
             Assert.NotNull(level);
             Assert.Equal("Pro", level.Name);
-            _subscriptionLevelRepositoryMock.Verify(r => r.GetAsync(level.Id));
+            _subscriptionLevelRepositoryMock.Verify(r => r.GetAsync(x => x.Id == level.Id));
         }
 
         [Fact]
@@ -95,9 +93,8 @@ namespace MarketingToolTests.BackendTests
 
             var result = await _controller.GetSubscriptionLevel(4);
 
-            var actionResult = Assert.IsType<NotFoundResult>(result.Result);
-
-            _subscriptionLevelRepositoryMock.Verify(r => r.GetAsync(4));
+          Assert.IsType<NotFoundResult>(result.Result);
+                        
         }
 
         [Fact]

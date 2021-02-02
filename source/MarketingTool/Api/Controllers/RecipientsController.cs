@@ -55,7 +55,7 @@ namespace Api.Controllers
         public async Task<ActionResult<Recipient>> PostRecipient(Recipient recipient)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var schema =  _schemaRepository.Where(x => x.ClientId == clientId).FirstOrDefault();
+            var schema = await _schemaRepository.GetAsync(x => x.ClientId == clientId);
             RecipientValidator _validator = new RecipientValidator(schema);
             var validationResult = await _validator.ValidateAsync(recipient);
             if (validationResult.IsValid)
@@ -75,7 +75,7 @@ namespace Api.Controllers
         public async Task<ActionResult> PostRecipientsAsync(IFormFile file, [FromServices]IConfiguration configuration)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var schema = _schemaRepository.Where(x => x.ClientId == clientId).FirstOrDefault();
+            var schema = await _schemaRepository.GetAsync(x => x.ClientId == clientId);
             int rejectedImports = 0;
             int acceptedImports = 0;
             
@@ -110,7 +110,7 @@ namespace Api.Controllers
         public async Task<ActionResult<Recipient>> PutRecipient(Recipient recipient)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var schema = _schemaRepository.Where(x => x.ClientId == clientId).FirstOrDefault();
+            var schema = await _schemaRepository.GetAsync(x => x.ClientId == clientId);
             RecipientValidator _validator = new RecipientValidator(schema);
             var validationResult = await _validator.ValidateAsync(recipient);
             if (validationResult.IsValid)

@@ -24,14 +24,14 @@ namespace Api.Services
             _emailService = emailService;
         }
 
-        public async void ProcessQueue()
+        public async Task ProcessQueue()
         {
             mutex = true;
             using (var scope = _serviceScopeFactory.CreateScope())
             {                
                 var _repository = scope.ServiceProvider.GetService<IRepository<PasswordReset>>();
 
-                var resets = _repository.Where(x => x.EmailSent == false).ToList();
+                var resets = await _repository.GetAllAsync(x => x.EmailSent == false);
 
                 foreach (var reset in resets)
                 {
@@ -59,7 +59,7 @@ namespace Api.Services
                 {
                     if (!mutex)
                     {
-                        ProcessQueue();
+                        await ProcessQueue();
                         await Task.Delay(TimeSpan.FromSeconds(150), token);
                     }
                 }

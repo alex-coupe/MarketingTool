@@ -47,25 +47,14 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
 
-        public async Task<IEnumerable<Campaign>> GetAllAsync()
-        {
-            return await _context.Campaigns.AsNoTracking().Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser)
-               .ToListAsync();
-        }
-
         public async Task<IEnumerable<Campaign>> GetAllAsync(Expression<Func<Campaign, bool>> predicate)
         {
-            return await _context.Campaigns.Where(predicate).Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser).ToListAsync();
+            return await _context.Campaigns.Where(predicate)
+                .Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser)
+                .ToListAsync();
         }
-
-        public async Task<Campaign> GetAsync(int id)
-        {
-            return await _context.Campaigns.AsNoTracking()
-              .SingleOrDefaultAsync(x => x.Id == id);
-        }
-
+                
         public async Task<Campaign> GetAsync(Expression<Func<Campaign, bool>> predicate)
         {
             return await _context.Campaigns.Where(predicate)
@@ -85,15 +74,5 @@ namespace DataAccess.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public List<Campaign> GetAll()
-        {
-            return _context.Campaigns.Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser).ToList();
-        }
-
-        public IEnumerable<Campaign> Where(Expression<Func<Campaign, bool>> predicate)
-        {
-            return _context.Campaigns.Where(predicate);
-        }
     }
 }

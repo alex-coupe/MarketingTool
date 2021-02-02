@@ -45,27 +45,19 @@ namespace DataAccess.Repositories
         {
             _context.Entry(item).State = EntityState.Modified;
         }
-
-        public async Task<IEnumerable<UserInvite>> GetAllAsync()
-        {
-            return await _context.UserInvites.AsNoTracking()
-                .ToListAsync();
-        }
-
+            
         public async Task<IEnumerable<UserInvite>> GetAllAsync(Expression<Func<UserInvite, bool>> predicate)
         {
-            return await _context.UserInvites.Where(predicate).ToListAsync();
-        }
-
-        public async Task<UserInvite> GetAsync(int id)
-        {
-            return await _context.UserInvites.AsNoTracking()
-             .SingleOrDefaultAsync(x => x.Id == id);
+            return await _context.UserInvites.Where(predicate)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<UserInvite> GetAsync(Expression<Func<UserInvite, bool>> predicate)
         {
-            return await _context.UserInvites.Where(predicate).FirstOrDefaultAsync();
+            return await _context.UserInvites.Where(predicate)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -79,14 +71,5 @@ namespace DataAccess.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public List<UserInvite> GetAll()
-        {
-            return _context.UserInvites.ToList();
-        }
-
-        public IEnumerable<UserInvite> Where(Expression<Func<UserInvite, bool>> predicate)
-        {
-            return _context.UserInvites.Where(predicate);
-        }
     }
 }

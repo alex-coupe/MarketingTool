@@ -45,18 +45,19 @@ namespace DataAccess.Repositories
         {
             _context.Entry(item).State = EntityState.Modified;
         }
-
-        public async Task<IEnumerable<Client>> GetAllAsync()
+        public async Task<IEnumerable<Client>> GetAllAsync(Expression<Func<Client, bool>> predicate)
         {
-            return await _context.Clients.AsNoTracking()
-               .ToListAsync();
+            return await _context.Clients.Where(predicate)
+                .AsNoTracking()
+                .ToListAsync();            
         }
 
-        public async Task<Client> GetAsync(int id)
+        public async Task<Client> GetAsync(Expression<Func<Client, bool>> predicate)
         {
-            return await _context.Clients.AsNoTracking()
-               .SingleOrDefaultAsync(x => x.Id == id);
-        }
+            return await _context.Clients.Where(predicate)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
+        }      
 
         public void Remove(int id)
         {
@@ -68,25 +69,6 @@ namespace DataAccess.Repositories
         {
             return await _context.SaveChangesAsync();
         }
-
-        public IEnumerable<Client> Where(Expression<Func<Client, bool>> predicate)
-        {
-            return _context.Clients.Where(predicate);
-        }
-
-        public List<Client> GetAll()
-        {
-            return _context.Clients.ToList();
-        }
-
-        public async Task<IEnumerable<Client>> GetAllAsync(Expression<Func<Client, bool>> predicate)
-        {
-            return await _context.Clients.Where(predicate).ToListAsync();
-        }
-
-        public async Task<Client> GetAsync(Expression<Func<Client, bool>> predicate)
-        {
-            return await _context.Clients.Where(predicate).FirstOrDefaultAsync();
-        }
+      
     }
 }

@@ -26,20 +26,6 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
 
-        public async Task<IEnumerable<TemplateHistory>> GetAllAsync()
-        {
-            return await _context.TemplateHistory.AsNoTracking()
-               .Include(x => x.Template)
-               .ToListAsync();
-        }
-
-        public async Task<TemplateHistory> GetAsync(int id)
-        {
-            return await _context.TemplateHistory.AsNoTracking()
-            .Include(x => x.Template)
-            .SingleOrDefaultAsync(x => x.Id == id);
-        }
-
         public void Remove(int id)
         {
             var templateHistory = _context.TemplateHistory.Find(id);
@@ -49,16 +35,6 @@ namespace DataAccess.Repositories
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
-        }
-
-        public List<TemplateHistory> GetAll()
-        {
-            return _context.TemplateHistory.ToList();
-        }
-
-        public IEnumerable<TemplateHistory> Where(Expression<Func<TemplateHistory, bool>> predicate)
-        {
-            return _context.TemplateHistory.Where(predicate);
         }
 
         private bool disposed = false;

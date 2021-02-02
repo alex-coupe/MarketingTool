@@ -112,9 +112,8 @@ namespace Api.Controllers
             if (request.Password != request.ConfirmPassword)
                 return BadRequest(new ErrorMessageViewModel { ErrorMessage = "Password and Password Confirmation Do Not Match" });
 
-            var resetEntry = _passwordResetRepository.Where(x => x.Token == request.Token)
-                .OrderByDescending(x => x.DateCreated)
-                .FirstOrDefault();
+            var entries = await _passwordResetRepository.GetAllAsync(x => x.Token == request.Token);
+            var resetEntry = entries.OrderByDescending(x => x.DateCreated).FirstOrDefault();
 
             if (resetEntry == null || resetEntry.DateCreated.AddMinutes(30) < DateTime.Now)
             {

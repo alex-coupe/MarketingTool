@@ -47,19 +47,7 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
 
-        public async Task<IEnumerable<SubscriptionLevel>> GetAllAsync()
-        {
-            return await _context.SubscriptionLevels.AsNoTracking()
-                .ToListAsync();
-
-        }
-
-        public async Task<SubscriptionLevel> GetAsync(int id)
-        {
-            return await _context.SubscriptionLevels.AsNoTracking()
-                .SingleOrDefaultAsync(x => x.Id == id);
-        }
-
+     
         public void Remove(int id)
         {
             var subscriptionLevel = _context.SubscriptionLevels.Find(id);
@@ -72,25 +60,19 @@ namespace DataAccess.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<SubscriptionLevel> Where(Expression<Func<SubscriptionLevel, bool>> predicate)
-        {
-            return _context.SubscriptionLevels.Where(predicate);
-        }
-
-        public List<SubscriptionLevel> GetAll()
-        {
-            return _context.SubscriptionLevels.ToList();
-        }
-
+       
         public async Task<IEnumerable<SubscriptionLevel>> GetAllAsync(Expression<Func<SubscriptionLevel, bool>> predicate)
         {
-            return await _context.SubscriptionLevels.AsNoTracking()
+            return await _context.SubscriptionLevels.Where(predicate)
+              .AsNoTracking()
               .ToListAsync();
         }
 
         public async Task<SubscriptionLevel> GetAsync(Expression<Func<SubscriptionLevel, bool>> predicate)
         {
-            return await _context.SubscriptionLevels.Where(predicate).FirstOrDefaultAsync();
+            return await _context.SubscriptionLevels.Where(predicate)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
     }
 }

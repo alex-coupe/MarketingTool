@@ -48,18 +48,6 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
 
-        public async Task<IEnumerable<User>> GetAllAsync()
-        {
-            return await _context.Users.AsNoTracking()
-                .ToListAsync();
-        }
-
-        public async Task<User> GetAsync(int id)
-        {
-            return await _context.Users.AsNoTracking()
-               .SingleOrDefaultAsync(x => x.Id == id);
-        }
-
         public void Remove(int id)
         {
             var user = _context.Users.Find(id);
@@ -70,25 +58,19 @@ namespace DataAccess.Repositories
         {
             return await _context.SaveChangesAsync();
         }
-
-        public IEnumerable<User> Where(Expression<Func<User, bool>> predicate)
-        {
-            return _context.Users.Where(predicate);
-        }
-
-        public List<User> GetAll()
-        {
-            return _context.Users.ToList();
-        }
-
+            
         public async Task<IEnumerable<User>> GetAllAsync(Expression<Func<User, bool>> predicate)
         {
-            return await _context.Users.Where(predicate).ToListAsync();
+            return await _context.Users.Where(predicate)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<User> GetAsync(Expression<Func<User, bool>> predicate)
         {
-            return await _context.Users.Where(predicate).FirstOrDefaultAsync();
+            return await _context.Users.Where(predicate)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
     }
 }

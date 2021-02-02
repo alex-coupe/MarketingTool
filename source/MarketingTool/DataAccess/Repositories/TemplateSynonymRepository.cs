@@ -47,31 +47,20 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
 
-        public List<TemplateSynonym> GetAll()
-        {
-            return _context.TemplateSynonyms.ToList();
-        }
-
-        public async Task<IEnumerable<TemplateSynonym>> GetAllAsync()
-        {
-            return await _context.TemplateSynonyms.AsNoTracking()
-               .ToListAsync();
-        }
-
+    
         public async Task<IEnumerable<TemplateSynonym>> GetAllAsync(Expression<Func<TemplateSynonym, bool>> predicate)
         {
-            return await _context.TemplateSynonyms.Where(predicate).ToListAsync();
+            return await _context.TemplateSynonyms.Where(predicate)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<TemplateSynonym> GetAsync(int id)
-        {
-            return await _context.TemplateSynonyms.AsNoTracking()
-             .SingleOrDefaultAsync(x => x.Id == id);
-        }
-
+        
         public async Task<TemplateSynonym> GetAsync(Expression<Func<TemplateSynonym, bool>> predicate)
         {
-            return await _context.TemplateSynonyms.Where(predicate).FirstOrDefaultAsync();
+            return await _context.TemplateSynonyms.Where(predicate)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -85,9 +74,5 @@ namespace DataAccess.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<TemplateSynonym> Where(Expression<Func<TemplateSynonym, bool>> predicate)
-        {
-            return _context.TemplateSynonyms.Where(predicate);
-        }
     }
 }

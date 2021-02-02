@@ -46,32 +46,20 @@ namespace DataAccess.Repositories
         {
             _context.Entry(item).State = EntityState.Modified;
         }
-
-        public List<RecipientSchema> GetAll()
-        {
-            return _context.RecipientSchemas.ToList();
-        }
-
-        public async Task<IEnumerable<RecipientSchema>> GetAllAsync()
-        {
-            return await _context.RecipientSchemas.AsNoTracking()
-               .ToListAsync();
-        }
-
+       
         public async Task<IEnumerable<RecipientSchema>> GetAllAsync(Expression<Func<RecipientSchema, bool>> predicate)
         {
-            return await _context.RecipientSchemas.Where(predicate).ToListAsync();
+            return await _context.RecipientSchemas.Where(predicate)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
-        public async Task<RecipientSchema> GetAsync(int id)
-        {
-            return await _context.RecipientSchemas.AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Id == id);
-        }
-
+     
         public async Task<RecipientSchema> GetAsync(Expression<Func<RecipientSchema, bool>> predicate)
         {
-            return await _context.RecipientSchemas.Where(predicate).FirstOrDefaultAsync();
+            return await _context.RecipientSchemas.Where(predicate)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -79,16 +67,11 @@ namespace DataAccess.Repositories
             var schema = _context.RecipientSchemas.Find(id);
             _context.RecipientSchemas.Remove(schema);
         }
-
-      
+              
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<RecipientSchema> Where(Expression<Func<RecipientSchema, bool>> predicate)
-        {
-            return _context.RecipientSchemas.Where(predicate);
-        }
     }
 }

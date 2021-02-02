@@ -45,32 +45,20 @@ namespace DataAccess.Repositories
         {
             _context.Entry(item).State = EntityState.Modified;
         }
-
-        public List<EmailStatus> GetAll()
-        {
-            return _context.EmailStatuses.ToList();
-        }
-
-        public async Task<IEnumerable<EmailStatus>> GetAllAsync()
-        {
-            return await _context.EmailStatuses.AsNoTracking()
-                .ToListAsync();
-        }
+               
 
         public async Task<IEnumerable<EmailStatus>> GetAllAsync(Expression<Func<EmailStatus, bool>> predicate)
         {
-            return await _context.EmailStatuses.Where(predicate).ToListAsync();
-        }
-
-        public async Task<EmailStatus> GetAsync(int id)
-        {
-            return await _context.EmailStatuses.AsNoTracking()
-            .SingleOrDefaultAsync(x => x.Id == id);
+            return await _context.EmailStatuses.Where(predicate)
+                .AsNoTracking()
+                .ToListAsync();
         }
 
         public async Task<EmailStatus> GetAsync(Expression<Func<EmailStatus, bool>> predicate)
         {
-            return await _context.EmailStatuses.Where(predicate).FirstOrDefaultAsync();
+            return await _context.EmailStatuses.Where(predicate)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -84,9 +72,5 @@ namespace DataAccess.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<EmailStatus> Where(Expression<Func<EmailStatus, bool>> predicate)
-        {
-            return _context.EmailStatuses.Where(predicate);
-        }
     }
 }

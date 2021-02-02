@@ -19,7 +19,6 @@
             <th>Created Date</th>
             <th>Last Modified By</th>
             <th>Modified Date</th>
-            <th>Campaign Count</th>
             <th>Recipient Count</th>
         </tr>
     </thead>
@@ -33,7 +32,6 @@
             <td>@list.CreatedDate.ToString(new CultureInfo("en-GB"))</td>
             <td>@list.ModifyingUser</td>
             <td>@list.ModifiedDate?.ToString(new CultureInfo("en-GB"))</td>
-            <td>@list.CampaignCount</td>
             <td>@list.Recipients.Count</td>
             <NavLink class="btn btn-primary" href="@($"/lists/edit/{list.Id}")">Edit List</NavLink>
         </tr>

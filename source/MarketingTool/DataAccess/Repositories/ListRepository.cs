@@ -47,41 +47,21 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
 
-        public List<List> GetAll()
-        {
-            return _context.Lists
-                .Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser)
-                .Include(list => list.ListRecipients).ThenInclude(lr => lr.Recipient)
-                .ToList();
-        }
-
-        public async Task<IEnumerable<List>> GetAllAsync()
-        {
-            return await _context.Lists.AsNoTracking()
-                 .Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser)
-               .ToListAsync();
-        }
-
+    
         public async Task<IEnumerable<List>> GetAllAsync(Expression<Func<List, bool>> predicate)
         {
-            return await _context.Lists.Where(predicate).Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser).ToListAsync();
-        }
-
-        public async Task<List> GetAsync(int id)
-        {
-            return await _context.Lists.AsNoTracking()
-              .Include(list => list.CreatingUser)
+            return await _context.Lists.Where(predicate)
+                .Include(list => list.CreatingUser)
                 .Include(list => list.ModifyingUser)
-                .SingleOrDefaultAsync(x => x.Id == id);
-        }
+                .ToListAsync();
+        }    
 
         public async Task<List> GetAsync(Expression<Func<List, bool>> predicate)
         {
-            return await _context.Lists.Where(predicate).Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser).FirstOrDefaultAsync();
+            return await _context.Lists.Where(predicate)
+                .Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser)
+                .FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -95,9 +75,5 @@ namespace DataAccess.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<List> Where(Expression<Func<List, bool>> predicate)
-        {
-            return _context.Lists.Where(predicate);
-        }
     }
 }

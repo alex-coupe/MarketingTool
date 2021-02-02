@@ -3,16 +3,17 @@ using DataAccess.Repositories;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Api.Helpers
 {
     public static class TemplateHelper
     {
         
-        public static string ConvertSynonymsToValues(Template template, IRepository<TemplateSynonym> _synonymsRepository, Recipient recipient)
+        public static async Task<string> ConvertSynonymsToValuesAsync(Template template, IRepository<TemplateSynonym> _synonymsRepository, Recipient recipient)
         {
             var finalTemplate = string.Empty;
-            var synonyms = _synonymsRepository.Where(x => x.ClientId == template.ClientId).ToList();
+            var synonyms = await _synonymsRepository.GetAllAsync(x => x.ClientId == template.ClientId);
           
             foreach(var synonym in synonyms)
             {

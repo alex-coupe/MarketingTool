@@ -32,7 +32,7 @@ namespace Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<SubscriptionLevel>> GetSubscriptionLevel(int id)
         {
-            var subLevel = await _repository.GetAsync(id);
+            var subLevel = await _repository.GetAsync(x => x.Id == id);
 
             if (subLevel != null)
                 return Ok(subLevel);
@@ -45,7 +45,7 @@ namespace Api.Controllers
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
             SubscriptionLevelValidator _validator = new SubscriptionLevelValidator(_repository);
-            var validationResult = _validator.Validate(subscriptionLevel);
+            var validationResult = await _validator.ValidateAsync(subscriptionLevel);
             if (validationResult.IsValid)
             {
                 _repository.Add(subscriptionLevel);
@@ -62,7 +62,7 @@ namespace Api.Controllers
         public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
             SubscriptionLevelValidator _validator = new SubscriptionLevelValidator(_repository);
-            var validationResult = _validator.Validate(subscriptionLevel);
+            var validationResult = await _validator.ValidateAsync(subscriptionLevel);
             if (validationResult.IsValid)
             {
                 _repository.Edit(subscriptionLevel);

@@ -63,12 +63,12 @@ namespace Api.Services
                 var _userInviteRepository = scope.ServiceProvider.GetService<IRepository<UserInvite>>();
                 var _userRepository = scope.ServiceProvider.GetService<IRepository<User>>();
                 var _clientRepository = scope.ServiceProvider.GetService<IRepository<Client>>();
-                var invites = _userInviteRepository.Where(x => x.InviteSent == false).ToList();
+                var invites = await _userInviteRepository.GetAllAsync(x => x.InviteSent == false);
               
                 foreach (var invite in invites)
                 {
-                    var invitingUser = _userRepository.Where(x => x.Id == invite.InvitingUserId).FirstOrDefault();
-                    var invitingClient = _clientRepository.Where(x => x.Id == invitingUser.ClientId).FirstOrDefault();
+                    var invitingUser = await _userRepository.GetAsync(x => x.Id == invite.InvitingUserId);
+                    var invitingClient = await _clientRepository.GetAsync(x => x.Id == invitingUser.ClientId);
                     _emailService.Send(new System.Net.Mail.MailAddress(invite.EmailAddress), new System.Net.Mail.MailMessage
                     {
                         Subject = "You've been invited",

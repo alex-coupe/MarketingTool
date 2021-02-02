@@ -12,7 +12,7 @@ namespace Api.DataMappers
 {
     public static class ListEntityMapper
     {
-        public static void Map(this IEnumerable<List> inVal, out List<ListViewModel> outVal, IRepository<Campaign> _campaignRepository)
+        public static void Map(this IEnumerable<List> inVal, out List<ListViewModel> outVal)
         {
 
             outVal = inVal.Select(x => new ListViewModel
@@ -24,7 +24,6 @@ namespace Api.DataMappers
                 ModifiedDate = x.ModifiedDate,
                 ModifyingUser = $"{x.ModifyingUser?.FirstName} {x.ModifyingUser?.LastName}",
                 CreatingUser = $"{x.CreatingUser.FirstName} {x.CreatingUser.LastName}",
-                CampaignCount = _campaignRepository.Where(camp => camp.ListId == x.Id).Count(),
                 Recipients = x.ListRecipients.Select(lr => new RecipientViewModel
                 {
                     EmailAddress = lr.Recipient.EmailAddress,
@@ -35,7 +34,7 @@ namespace Api.DataMappers
             }).ToList();
         }
 
-        public static void Map(this List inVal, out ListViewModel outVal, IRepository<Campaign> _campaignRepository)
+        public static void Map(this List inVal, out ListViewModel outVal)
         {
             outVal = new ListViewModel
             {
@@ -46,7 +45,6 @@ namespace Api.DataMappers
                 ModifiedDate = inVal.ModifiedDate,
                 ModifyingUser = $"{inVal.ModifyingUser?.FirstName} {inVal.ModifyingUser?.LastName}",
                 CreatingUser = $"{inVal.CreatingUser.FirstName} {inVal.CreatingUser.LastName}",
-                CampaignCount = _campaignRepository.Where(camp => camp.ListId == inVal.Id).Count(),
                 Recipients = inVal.ListRecipients.Select(lr => new RecipientViewModel
                 {
                     EmailAddress = lr.Recipient.EmailAddress,

@@ -52,24 +52,26 @@ namespace Api.Services
                 var _synonymRepository = scope.ServiceProvider.GetService<IRepository<TemplateSynonym>>();
                 var _listRecipientRepository = scope.ServiceProvider.GetService<IRepository<ListRecipient>>();
 
-                var campaigns = _campaignsRepository.Where(x => !x.ProcessedTimestamp.HasValue && x.SendDate.Date == DateTime.Now.Date && x.SendDate.Hour == DateTime.Now.Hour)
-                    .ToList();
+                var campaigns = await _campaignsRepository.GetAllAsync(x => !x.ProcessedTimestamp.HasValue 
+                && x.SendDate.Date == DateTime.Now.Date
+                && x.SendDate.Hour == DateTime.Now.Hour);
+                    
 
                 foreach (var campaign in campaigns)
                 {
                     if (DateTime.Now.Hour == campaign.SendDate.Hour)
                     {
-                        var list = await _listRepository.GetAsync(campaign.ListId);
+                        var list = await _listRepository.GetAsync(x => x.Id == campaign.ListId);
 
-                        var template = _templateRepository.Where(x => x.Id == campaign.TemplateId).FirstOrDefault();
+                        var template = await _templateRepository.GetAsync(x => x.Id == campaign.TemplateId);
 
-                        var listRecipients = _listRecipientRepository.Where(x => x.ListId == list.Id).ToList();
+                        var listRecipients = await _listRecipientRepository.GetAllAsync(x => x.ListId == list.Id);
                         SmtpStatusCode code = new SmtpStatusCode();
                         code = SmtpStatusCode.Ok;
                         foreach (var listRecipient in listRecipients)
                         {
-                            var recipient = _recipientRepository.Where(x => x.Id == listRecipient.RecipientId).FirstOrDefault();
-                            var content = TemplateHelper.ConvertSynonymsToValues(template, _synonymRepository, recipient);
+                            var recipient = await _recipientRepository.GetAsync(x => x.Id == listRecipient.RecipientId);
+                            var content = await TemplateHelper.ConvertSynonymsToValuesAsync(template, _synonymRepository, recipient);
                             try
                             {
                                 _emailService.Send(new MailAddress(recipient.EmailAddress), new MailMessage

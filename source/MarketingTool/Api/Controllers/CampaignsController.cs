@@ -74,7 +74,7 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<ActionResult<Campaign>> PutCampaign(CampaignViewModel viewModel)
         {
-            var campaign = await _campaignRepository.GetAsync(viewModel.Id);
+            var campaign = await _campaignRepository.GetAsync(x => x.Id == viewModel.Id);
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             viewModel.MapEdit(ref campaign);
             campaign.ClientId = clientId;

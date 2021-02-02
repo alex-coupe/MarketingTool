@@ -46,33 +46,20 @@ namespace DataAccess.Repositories
         public void Edit(CampaignJobHistory item)
         {
             _context.Entry(item).State = EntityState.Modified;
-        }
-
-        public List<CampaignJobHistory> GetAll()
-        {
-            return _context.CampaignJobHistory.ToList();
-        }
-
-        public async Task<IEnumerable<CampaignJobHistory>> GetAllAsync()
-        {
-            return await _context.CampaignJobHistory.AsNoTracking()
-                .ToListAsync();
-        }
+        }     
 
         public async Task<IEnumerable<CampaignJobHistory>> GetAllAsync(Expression<Func<CampaignJobHistory, bool>> predicate)
         {
-            return await _context.CampaignJobHistory.Where(predicate).ToListAsync();
+            return await _context.CampaignJobHistory.Where(predicate)
+                .AsNoTracking()
+                .ToListAsync();
         }
-
-        public async Task<CampaignJobHistory> GetAsync(int id)
-        {
-            return await _context.CampaignJobHistory.AsNoTracking()
-             .SingleOrDefaultAsync(x => x.Id == id);
-        }
-
+              
         public async Task<CampaignJobHistory> GetAsync(Expression<Func<CampaignJobHistory, bool>> predicate)
         {
-            return await _context.CampaignJobHistory.Where(predicate).FirstOrDefaultAsync();
+            return await _context.CampaignJobHistory.Where(predicate)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -84,11 +71,6 @@ namespace DataAccess.Repositories
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
-        }
-
-        public IEnumerable<CampaignJobHistory> Where(Expression<Func<CampaignJobHistory, bool>> predicate)
-        {
-            return _context.CampaignJobHistory.Where(predicate);
         }
 
     }

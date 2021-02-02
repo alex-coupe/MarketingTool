@@ -37,7 +37,7 @@ namespace Api.Controllers
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var lists = await _listRepository.GetAllAsync(x => x.ClientId == clientId);
             
-            lists.Map(out List<ListViewModel> viewModel, _campaignRepository);
+            lists.Map(out List<ListViewModel> viewModel);
 
             return Ok(viewModel);
         }
@@ -51,7 +51,7 @@ namespace Api.Controllers
 
             if (list != null)
             {
-                list.Map(out ListViewModel viewModel, _campaignRepository);
+                list.Map(out ListViewModel viewModel);
                 return Ok(viewModel);
             }
 
@@ -93,9 +93,9 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<ActionResult> PutList(ListViewModel viewModel)
         {
-            var list = await _listRepository.GetAsync(viewModel.Id);
+            var list = await _listRepository.GetAsync(x => x.Id == viewModel.Id);
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var listRecipients = _listRecipientRepository.Where(x => x.ListId == list.Id).ToList();
+            var listRecipients = await _listRecipientRepository.GetAllAsync(x => x.ListId == list.Id);
             viewModel.MapEdit(ref list);
             
             ListValidator _validator = new ListValidator(clientId);

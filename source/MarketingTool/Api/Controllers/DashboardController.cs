@@ -34,14 +34,17 @@ namespace Api.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult<DashboardViewModel> GetDashboardInfo()
+        public async Task<ActionResult<DashboardViewModel>> GetDashboardInfo()
         {
             var viewModel = new DashboardViewModel();
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var campaigns = _campaignsRepository.Where(x => x.ClientId == clientId).ToList();
-            viewModel.ListCount = _listRepository.Where(x => x.ClientId == clientId).Count();
-            viewModel.RecipientCount = _recipientsRepository.Where(x => x.ClientId == clientId).Count();
-            viewModel.TotalTemplates = _templatesRepository.Where(x => x.ClientId == clientId).Count();
+            var campaigns = await _campaignsRepository.GetAllAsync(x => x.ClientId == clientId);
+            var recipients = await _recipientsRepository.GetAllAsync(x => x.ClientId == clientId);
+            var templates = await _templatesRepository.GetAllAsync(x => x.ClientId == clientId);
+            var lists = await _listRepository.GetAllAsync(x => x.ClientId == clientId);
+            viewModel.ListCount = lists.Count();
+            viewModel.RecipientCount = recipients.Count();
+            viewModel.TotalTemplates = templates.Count();
 
             viewModel.TotalCampaigns = campaigns.Count();
             viewModel.ActiveCampaigns = campaigns.Where(x => x.IsActive).Count();

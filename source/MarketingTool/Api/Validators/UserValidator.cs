@@ -21,12 +21,17 @@ namespace Api.Validators
             RuleFor(user => user.FirstName).NotNull().NotEmpty().WithMessage("First name is required");
             RuleFor(user => user.LastName).NotNull().NotEmpty().WithMessage("Last name is required");
             RuleFor(user => user.Password).NotNull().NotEmpty().WithMessage("Password is required");
-            RuleFor(user => user).Must(user => !IsDuplicate(user.EmailAddress)).WithMessage("An account with that email address already exists");
+            RuleFor(x => x.EmailAddress).MustAsync(async (email, cancellation) => {
+                bool exists = await IsDuplicate(email);
+                return !exists;
+            }).WithMessage("An account with that email address already exists");
+            
         }
 
-        private bool IsDuplicate(string email)
+        private async Task<bool> IsDuplicate(string email)
         {
-            return _repository.GetAll().Any(x => x.EmailAddress.ToLower() == email?.ToLower());
+            var users = await _repository.GetAllAsync();
+            return users.Any(x => x.EmailAddress.ToLower() == email?.ToLower());
         }
     }
 }

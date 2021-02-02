@@ -45,32 +45,20 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
 
-        public List<ListRecipient> GetAll()
-        {
-            return _context.ListRecipients.ToList();
-        }
-
-        public async Task<IEnumerable<ListRecipient>> GetAllAsync()
-        {
-            return await _context.ListRecipients.AsNoTracking()
-              .ToListAsync();
-        }
-
+      
         public async Task<IEnumerable<ListRecipient>> GetAllAsync(Expression<Func<ListRecipient, bool>> predicate)
         {
-            return await _context.ListRecipients.Where(predicate).ToListAsync();
+            return await _context.ListRecipients.Where(predicate)
+                .AsNoTracking()
+                .ToListAsync();
         }
-
-        public async Task<ListRecipient> GetAsync(int id)
-        {
-            return await _context.ListRecipients.AsNoTracking()
-                .Include(x => x.Recipient)
-             .SingleOrDefaultAsync(x => x.Id == id);
-        }
+               
 
         public async Task<ListRecipient> GetAsync(Expression<Func<ListRecipient, bool>> predicate)
         {
-            return await _context.ListRecipients.Where(predicate).FirstOrDefaultAsync();
+            return await _context.ListRecipients.Where(predicate)
+                .AsNoTracking()
+                .FirstOrDefaultAsync();
         }
 
         public void Remove(int id)
@@ -84,9 +72,5 @@ namespace DataAccess.Repositories
             return await _context.SaveChangesAsync();
         }
 
-        public IEnumerable<ListRecipient> Where(Expression<Func<ListRecipient, bool>> predicate)
-        {
-            return _context.ListRecipients.Where(predicate);
-        }
     }
 }

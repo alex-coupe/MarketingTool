@@ -63,7 +63,7 @@ namespace Api.Controllers
         public async Task<ActionResult<RecipientSchema>> PutRecipientSchema(RecipientSchemaViewModel model)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var schema = _repository.Where(x => x.ClientId == clientId).FirstOrDefault();
+            var schema = await _repository.GetAsync(x => x.ClientId == clientId);
 
             if (schema == null)
                 return NotFound(new ErrorMessageViewModel { ErrorMessage = "Schema Not Found" });

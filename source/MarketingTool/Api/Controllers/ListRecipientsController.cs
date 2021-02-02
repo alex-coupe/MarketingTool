@@ -37,7 +37,7 @@ namespace Api.Controllers
         public async Task<ActionResult<ListRecipient>> GetListRecipient(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var listRecipient = await _repository.GetAsync(id);
+            var listRecipient = await _repository.GetAsync(x => x.Id == id);
 
             if (listRecipient != null)
                 return Ok(listRecipient);

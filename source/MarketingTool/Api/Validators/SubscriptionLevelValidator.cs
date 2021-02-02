@@ -4,6 +4,7 @@ using DataTransfer.ViewModels;
 using FluentValidation;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Api.Validators
 {
@@ -17,12 +18,16 @@ namespace Api.Validators
 
             RuleFor(sl => sl.MaxUsers).GreaterThan(0).WithMessage("Max users must be more than 0");
             RuleFor(sl => sl.Name).NotNull().NotEmpty().WithMessage("Name must be filled out");
-            RuleFor(sl => sl).Must(sl => !IsDuplicate(sl.Name)).WithMessage("A subscription level with that name already exists");
+            RuleFor(x => x.Name).MustAsync(async (name, cancellation) => {
+                bool exists = await IsDuplicate(name);
+                return !exists;
+            }).WithMessage("A subscription level with that name already exists");
         }
 
-        private bool IsDuplicate(string name)
+        private async Task<bool> IsDuplicate(string name)
         {
-            return _repository.GetAll().Any(x => x.Name.ToLower() == name?.ToLower());
+            var subLevels = await _repository.GetAllAsync();
+            return subLevels.Any(x => x.Name.ToLower() == name?.ToLower());
         }
 
 

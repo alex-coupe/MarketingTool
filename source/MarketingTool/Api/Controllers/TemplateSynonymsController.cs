@@ -53,7 +53,7 @@ namespace Api.Controllers
         public async Task<ActionResult<TemplateSynonym>> PostTemplateSynonym(TemplateSynonym synonym)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var schema = _schemaRepository.Where(x => x.ClientId == clientId).FirstOrDefault();
+            var schema = await _schemaRepository.GetAsync(x => x.ClientId == clientId);
             TemplateSynonymValidator _validator = new TemplateSynonymValidator(schema);
             var validationResult = await _validator.ValidateAsync(synonym);
             if (validationResult.IsValid)
@@ -72,7 +72,7 @@ namespace Api.Controllers
         public async Task<ActionResult<TemplateSynonym>> PutTemplateSynonym(TemplateSynonym synonym)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var schema = _schemaRepository.Where(x => x.ClientId == clientId).FirstOrDefault();
+            var schema = await _schemaRepository.GetAsync(x => x.ClientId == clientId);
             TemplateSynonymValidator _validator = new TemplateSynonymValidator(schema);
             var validationResult = await _validator.ValidateAsync(synonym);
             if (validationResult.IsValid)

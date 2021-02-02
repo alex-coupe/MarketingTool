@@ -77,7 +77,7 @@ namespace Api.Controllers
         [HttpPut]
         public async Task<ActionResult<TemplateViewModel>> PutTemplate(TemplateViewModel viewModel,[FromServices]IRepository<TemplateHistory> _historyRepository)
         {
-            var template = await _templateRepository.GetAsync(viewModel.Id);
+            var template = await _templateRepository.GetAsync(x => x.Id == viewModel.Id);
             template.MapToHistory(viewModel, out TemplateHistory history);
             _historyRepository.Add(history);
 

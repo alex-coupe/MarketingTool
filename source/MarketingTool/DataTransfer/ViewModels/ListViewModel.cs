@@ -27,8 +27,6 @@ namespace DataTransfer.ViewModels
 
         public DateTime? ModifiedDate { get; set; }
 
-        public int CampaignCount { get; set; }
-
         public ICollection<RecipientViewModel> Recipients { get; set; }
     }
 }

@@ -32,7 +32,7 @@ namespace Api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetClient(int id)
         {
-            var client = await _repository.GetAsync(id);
+            var client = await _repository.GetAsync(x => x.Id == id);
 
             if (client != null)
                 return Ok(client);

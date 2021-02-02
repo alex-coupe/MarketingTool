@@ -39,7 +39,7 @@ namespace MarketingToolTests.BackendTests
 
             }};
 
-            _clientRepositoryMock.Setup(x => x.GetAsync(_getId)).Returns(Task.FromResult(new Client
+            _clientRepositoryMock.Setup(x => x.GetAsync(x => x.Id == _getId)).Returns(Task.FromResult(new Client
             {
                 Id = 1,
                 Name = "Creative Inc",
@@ -47,14 +47,12 @@ namespace MarketingToolTests.BackendTests
 
                 SubscriptionLevelId = 1
             }));
-            _clientRepositoryMock.Setup(x => x.GetAllAsync()).ReturnsAsync(clientList);
+            _clientRepositoryMock.Setup(x => x.GetAllAsync(null)).ReturnsAsync(clientList);
 
             _clientRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _clientRepositoryMock.Setup(r => r.Edit(It.IsAny<Client>()));
             _clientRepositoryMock.Setup(r => r.Remove(It.IsAny<int>()));
-            _clientRepositoryMock.Setup(x => x.Where(It.IsAny<Expression<Func<Client, bool>>>()))
-              .Returns(clientList);
-            _clientRepositoryMock.Setup(x => x.GetAll()).Returns(clientList);
+           
         }
 
         [Fact]
@@ -69,7 +67,7 @@ namespace MarketingToolTests.BackendTests
             var client = returnValue.FirstOrDefault();
             Assert.Equal("Creative Inc", client.Name);
             Assert.Equal(2, returnValue.Count());
-            _clientRepositoryMock.Verify(r => r.GetAllAsync());
+            _clientRepositoryMock.Verify(r => r.GetAllAsync(null));
         }
 
         [Fact]
@@ -83,7 +81,7 @@ namespace MarketingToolTests.BackendTests
             var client = Assert.IsType<Client>(actionResult.Value);
             Assert.NotNull(client);
             Assert.Equal("Creative Inc", client.Name);
-            _clientRepositoryMock.Verify(r => r.GetAsync(client.Id));
+            _clientRepositoryMock.Verify(r => r.GetAsync(x => x.Id == client.Id));
         }
 
         [Fact]
@@ -93,9 +91,8 @@ namespace MarketingToolTests.BackendTests
 
             var result = await _controller.GetClient(4);
 
-            var actionResult = Assert.IsType<NotFoundResult>(result.Result);
+            Assert.IsType<NotFoundResult>(result.Result);
 
-            _clientRepositoryMock.Verify(r => r.GetAsync(4));
         }
 
      
