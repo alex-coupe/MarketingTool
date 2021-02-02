@@ -6,7 +6,7 @@
 @inject IAuthenticationService AuthenticationService
 @inject IDataService<TemplateViewModel> _templateService
 @inject IDataService<TemplateSynonymViewModel> _synonymService
-
+@inject IJSRuntime _js
 <h3>Edit Template</h3>
 
 <div class="container text-center">
@@ -16,7 +16,7 @@
             <label>Template Name</label>
             <InputText type="text" @bind-Value="viewModel.Name" />
             <label>Content</label>
-            <InputTextArea @bind-Value="viewModel.Content" />
+            <InputTextArea id="template-content" @bind-Value="viewModel.Content" />
             <label>Protect Template</label>
             <InputCheckbox @bind-Value="viewModel.Protected" />
             <button type="submit" class="btn btn-primary">Save</button>
@@ -56,11 +56,13 @@
 
     private string Synonym { get; set; }
 
-    private void InsertSynonym()
+    private async Task InsertSynonym()
     {
         if (!string.IsNullOrEmpty(Synonym))
         {
-            viewModel.Content += Synonym;
+            var cursorPos = await _js.InvokeAsync<int>("getCursorPosition");
+
+            viewModel.Content = viewModel.Content.Insert(cursorPos, Synonym);
         }
     }
 
@@ -102,3 +104,4 @@
 
     private bool Loading { get; set; } = true;
 }
+
