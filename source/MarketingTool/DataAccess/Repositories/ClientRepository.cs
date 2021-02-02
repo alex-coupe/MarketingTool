@@ -64,11 +64,6 @@ namespace DataAccess.Repositories
             _context.Clients.Remove(client);
         }
 
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
         public IEnumerable<Client> Where(Expression<Func<Client, bool>> predicate)
         {
             return _context.Clients.Where(predicate);
