@@ -80,11 +80,6 @@ namespace DataAccess.Repositories
             _context.TemplateSynonyms.Remove(synonym);
         }
 
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

@@ -21,8 +21,6 @@ namespace DataAccess.Repositories
 
         Task<int> SaveChangesAsync();
 
-        void SaveChanges();
-
         IEnumerable<T> Where(Expression<Func<T, bool>> predicate);
 
         List<T> GetAll();

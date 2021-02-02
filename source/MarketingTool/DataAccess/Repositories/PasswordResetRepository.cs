@@ -63,11 +63,6 @@ namespace DataAccess.Repositories
             _context.PasswordResets.Remove(passwordReset);
         }
 
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
         public Task<int> SaveChangesAsync()
         {
             return _context.SaveChangesAsync();

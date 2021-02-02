@@ -74,11 +74,6 @@ namespace DataAccess.Repositories
             _context.UserInvites.Remove(userInvite);
         }
 
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

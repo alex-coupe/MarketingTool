@@ -47,11 +47,7 @@ namespace DataAccess.Repositories
             _context.Templates.Remove(template);
         }
 
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
+        
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

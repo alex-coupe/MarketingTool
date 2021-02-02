@@ -46,11 +46,6 @@ namespace DataAccess.Repositories
             _context.TemplateHistory.Remove(templateHistory);
         }
 
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

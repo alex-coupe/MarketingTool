@@ -80,11 +80,6 @@ namespace DataAccess.Repositories
             _context.Campaigns.Remove(campaign);
         }
 
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();

@@ -80,11 +80,7 @@ namespace DataAccess.Repositories
             _context.RecipientSchemas.Remove(schema);
         }
 
-        public void SaveChanges()
-        {
-            _context.SaveChanges();
-        }
-
+      
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
