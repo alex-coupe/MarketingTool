@@ -78,9 +78,9 @@ namespace DataAccess.Repositories
                 .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<List> GetAsync(Expression<Func<List, bool>> predicate, int id)
+        public async Task<List> GetAsync(Expression<Func<List, bool>> predicate)
         {
-            return await _context.Lists.Where(predicate).Where(x => x.Id == id).Include(list => list.CreatingUser)
+            return await _context.Lists.Where(predicate).Include(list => list.CreatingUser)
                 .Include(list => list.ModifyingUser).FirstOrDefaultAsync();
         }
 

@@ -47,7 +47,7 @@ namespace Api.Controllers
         public async Task<ActionResult<List>> GetList(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var list = await _listRepository.GetAsync(x => x.ClientId == clientId, id);
+            var list = await _listRepository.GetAsync(x => x.ClientId == clientId && x.Id == id);
 
             if (list != null)
             {

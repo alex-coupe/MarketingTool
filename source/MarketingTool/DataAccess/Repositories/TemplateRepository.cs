@@ -98,9 +98,9 @@ namespace DataAccess.Repositories
                 .ToListAsync();
         }
 
-        public async Task<Template> GetAsync(Expression<Func<Template, bool>> predicate, int id)
+        public async Task<Template> GetAsync(Expression<Func<Template, bool>> predicate)
         {
-            return await _context.Templates.Where(predicate).Where(x => x.Id == id)
+            return await _context.Templates.Where(predicate)
                 .Include(template => template.CreatingUser)
                 .Include(template => template.ModifyingUser)
                 .FirstOrDefaultAsync();

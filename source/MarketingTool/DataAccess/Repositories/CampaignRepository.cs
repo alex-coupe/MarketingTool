@@ -66,10 +66,12 @@ namespace DataAccess.Repositories
               .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<Campaign> GetAsync(Expression<Func<Campaign, bool>> predicate, int id)
+        public async Task<Campaign> GetAsync(Expression<Func<Campaign, bool>> predicate)
         {
-            return await _context.Campaigns.Where(predicate).Where(x => x.Id == id).Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser).FirstOrDefaultAsync();
+            return await _context.Campaigns.Where(predicate)
+                .Include(list => list.CreatingUser)
+                .Include(list => list.ModifyingUser)
+                .FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

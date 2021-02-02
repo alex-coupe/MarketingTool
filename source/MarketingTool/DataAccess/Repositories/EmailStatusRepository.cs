@@ -68,9 +68,9 @@ namespace DataAccess.Repositories
             .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<EmailStatus> GetAsync(Expression<Func<EmailStatus, bool>> predicate, int id)
+        public async Task<EmailStatus> GetAsync(Expression<Func<EmailStatus, bool>> predicate)
         {
-            return await _context.EmailStatuses.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.EmailStatuses.Where(predicate).FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

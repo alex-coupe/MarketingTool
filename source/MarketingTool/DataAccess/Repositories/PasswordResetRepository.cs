@@ -89,9 +89,9 @@ namespace DataAccess.Repositories
                .ToListAsync();
         }
 
-        public async Task<PasswordReset> GetAsync(Expression<Func<PasswordReset, bool>> predicate, int id)
+        public async Task<PasswordReset> GetAsync(Expression<Func<PasswordReset, bool>> predicate)
         {
-            return await _context.PasswordResets.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.PasswordResets.Where(predicate).FirstOrDefaultAsync();
         }
     }
 }

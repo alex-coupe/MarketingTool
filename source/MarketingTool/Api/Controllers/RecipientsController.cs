@@ -42,7 +42,7 @@ namespace Api.Controllers
         public async Task<ActionResult<Recipient>> GetRecipient(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var schema = await _repository.GetAsync(x => x.ClientId == clientId, id);
+            var schema = await _repository.GetAsync(x => x.ClientId == clientId && x.Id == id);
 
             if (schema != null)
                 return Ok(schema);

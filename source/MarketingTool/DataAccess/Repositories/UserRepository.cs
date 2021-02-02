@@ -91,9 +91,9 @@ namespace DataAccess.Repositories
             return await _context.Users.Where(predicate).ToListAsync();
         }
 
-        public async Task<User> GetAsync(Expression<Func<User, bool>> predicate, int id)
+        public async Task<User> GetAsync(Expression<Func<User, bool>> predicate)
         {
-            return await _context.Users.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.Users.Where(predicate).FirstOrDefaultAsync();
         }
     }
 }

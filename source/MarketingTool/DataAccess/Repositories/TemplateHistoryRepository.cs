@@ -86,9 +86,9 @@ namespace DataAccess.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public async Task<TemplateHistory> GetAsync(Expression<Func<TemplateHistory, bool>> predicate, int id)
+        public async Task<TemplateHistory> GetAsync(Expression<Func<TemplateHistory, bool>> predicate)
         {
-            return await _context.TemplateHistory.Where(predicate).Where(x => x.Id == id)
+            return await _context.TemplateHistory.Where(predicate)
                 .Include(x => x.Template)
                 .FirstOrDefaultAsync();
         }

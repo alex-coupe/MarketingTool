@@ -69,9 +69,9 @@ namespace DataAccess.Repositories
              .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<Recipient> GetAsync(Expression<Func<Recipient, bool>> predicate, int id)
+        public async Task<Recipient> GetAsync(Expression<Func<Recipient, bool>> predicate)
         {
-            return await _context.Recipients.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.Recipients.Where(predicate).FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

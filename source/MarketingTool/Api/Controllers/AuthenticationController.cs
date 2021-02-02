@@ -35,9 +35,9 @@ namespace Api.Controllers
         [AllowAnonymous]
         [HttpPost]
         [Route("Login")]
-        public ActionResult Login([FromBody] LoginViewModel credentials)
+        public async Task<ActionResult> Login([FromBody] LoginViewModel credentials)
         {
-            var user = AuthenticateUser(credentials.EmailAddress, credentials.Password);
+            var user = await AuthenticateUser(credentials.EmailAddress, credentials.Password);
 
             if (user != null)
             {
@@ -82,7 +82,7 @@ namespace Api.Controllers
                  _userRepository.Add(user);
                 await _userRepository.SaveChangesAsync();
                
-               return Login(new LoginViewModel { EmailAddress = user.EmailAddress, Password = newRegistration.Password });     
+               return await Login(new LoginViewModel { EmailAddress = user.EmailAddress, Password = newRegistration.Password });     
             }
             
             return BadRequest(new ErrorMessageViewModel { ErrorMessage = "Error Creating Client" });
@@ -93,7 +93,7 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult> IssueReset([FromBody] EmailAddressViewModel request, [FromServices]PasswordResetService resetService)
         {
-            var user = _userRepository.Where(x => x.EmailAddress == request.EmailAddress).FirstOrDefault();
+            var user = await _userRepository.GetAsync(x => x.EmailAddress == request.EmailAddress);
 
             if (user != null)
             {
@@ -166,9 +166,9 @@ namespace Api.Controllers
             return token;
         }
 
-        private User AuthenticateUser(string email, string password)
+        private async Task<User> AuthenticateUser(string email, string password)
         {
-            var user = _userRepository.Where(x => x.EmailAddress == email).FirstOrDefault();
+            var user = await _userRepository.GetAsync(x => x.EmailAddress == email);
 
             if (user != null && CryptoHelper.Crypto.VerifyHashedPassword(user.Password, password))
             {

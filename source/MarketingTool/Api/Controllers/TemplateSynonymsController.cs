@@ -40,7 +40,7 @@ namespace Api.Controllers
         public async Task<ActionResult<TemplateSynonym>> GetTemplateSynonym(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var synonym = await _repository.GetAsync(x => x.ClientId == clientId, id);
+            var synonym = await _repository.GetAsync(x => x.ClientId == clientId && x.Id == id);
 
             if (synonym != null)
                 return Ok(synonym);

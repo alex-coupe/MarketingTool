@@ -42,7 +42,7 @@ namespace Api.Controllers
         public async Task<ActionResult<TemplateViewModel>> GetTemplate(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var template = await _templateRepository.GetAsync(x => x.ClientId == clientId,id);
+            var template = await _templateRepository.GetAsync(x => x.ClientId == clientId && x.Id == id);
 
             if (template != null)
             {

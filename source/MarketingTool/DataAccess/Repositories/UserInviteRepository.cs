@@ -63,9 +63,9 @@ namespace DataAccess.Repositories
              .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<UserInvite> GetAsync(Expression<Func<UserInvite, bool>> predicate, int id)
+        public async Task<UserInvite> GetAsync(Expression<Func<UserInvite, bool>> predicate)
         {
-            return await _context.UserInvites.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.UserInvites.Where(predicate).FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

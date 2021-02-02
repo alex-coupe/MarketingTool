@@ -12,7 +12,7 @@ namespace DataAccess.Repositories
 
         Task<IEnumerable<T>> GetAllAsync(Expression<Func<T, bool>> predicate);
 
-        Task<T> GetAsync(Expression<Func<T, bool>> predicate, int id);
+        Task<T> GetAsync(Expression<Func<T, bool>> predicate);
 
         void Add(T item);
         void Remove(int id);

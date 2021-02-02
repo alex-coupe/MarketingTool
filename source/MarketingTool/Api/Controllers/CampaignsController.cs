@@ -40,7 +40,7 @@ namespace Api.Controllers
         public async Task<ActionResult<CampaignViewModel>> GetCampaign(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var campaign = await _campaignRepository.GetAsync(x => x.ClientId == clientId, id);
+            var campaign = await _campaignRepository.GetAsync(x => x.ClientId == clientId && x.Id == id);
 
             if (campaign != null)
             {

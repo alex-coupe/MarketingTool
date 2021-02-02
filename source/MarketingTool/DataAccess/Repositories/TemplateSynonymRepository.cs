@@ -69,9 +69,9 @@ namespace DataAccess.Repositories
              .SingleOrDefaultAsync(x => x.Id == id);
         }
 
-        public async Task<TemplateSynonym> GetAsync(Expression<Func<TemplateSynonym, bool>> predicate, int id)
+        public async Task<TemplateSynonym> GetAsync(Expression<Func<TemplateSynonym, bool>> predicate)
         {
-            return await _context.TemplateSynonyms.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.TemplateSynonyms.Where(predicate).FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

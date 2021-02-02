@@ -92,9 +92,9 @@ namespace DataAccess.Repositories
               .ToListAsync();
         }
 
-        public async Task<SubscriptionLevel> GetAsync(Expression<Func<SubscriptionLevel, bool>> predicate, int id)
+        public async Task<SubscriptionLevel> GetAsync(Expression<Func<SubscriptionLevel, bool>> predicate)
         {
-            return await _context.SubscriptionLevels.Where(predicate).Where(x => x.Id == id).FirstOrDefaultAsync();
+            return await _context.SubscriptionLevels.Where(predicate).FirstOrDefaultAsync();
         }
     }
 }
