@@ -28,6 +28,10 @@ namespace UI.Helpers
                 var returnUrl = WebUtility.UrlEncode(new Uri(NavigationManager.Uri).PathAndQuery);
                 NavigationManager.NavigateTo($"/?returnUrl={returnUrl}");
             }
+            else if (authorize && AuthenticationService.User != null && AuthenticationService.User.IsArchived)
+            {
+                NavigationManager.NavigateTo("/archived");
+            }
             else
             {
 

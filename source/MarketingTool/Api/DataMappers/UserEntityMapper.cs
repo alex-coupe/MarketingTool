@@ -24,5 +24,20 @@ namespace Api.DataMappers
                
             }).ToList();
         }
+
+        public static void Map(this User inVal, out UserViewModel outVal)
+        {
+
+            outVal = new UserViewModel
+            {
+                Name = $"{inVal.FirstName} {inVal.LastName}",
+                UserId = inVal.Id,
+                ClientId = inVal.ClientId,
+                IsArchived = inVal.Archived,
+                RoleId = inVal.RoleId,
+                LastLogin = inVal.LastLogin
+
+            };
+        }
     }
 }

@@ -23,7 +23,7 @@
 
 @code {
 
-        LoginViewModel loginRequest = new LoginViewModel();
+    LoginViewModel loginRequest = new LoginViewModel();
 
     private string Error { get; set; }
 
@@ -40,6 +40,12 @@
         try
         {
             await AuthenticationService.Login(loginRequest);
+
+            if (AuthenticationService.User.IsArchived)
+            {
+                _navigationManager.NavigateTo("/archived");
+            }
+
             var returnUrl = _navigationManager.QueryString("returnUrl") ?? "/dashboard";
             _navigationManager.NavigateTo(returnUrl);
         }

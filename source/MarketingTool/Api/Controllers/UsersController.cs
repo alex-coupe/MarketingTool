@@ -39,13 +39,16 @@ namespace Api.Controllers
 
         [Authorize(Policy = "AdminUsers")]
         [HttpGet("{id}")]
-        public async Task<ActionResult<User>> GetUser(int id)
+        public async Task<ActionResult<UserViewModel>> GetUser(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
             var user = await _userRepository.GetAsync(x => x.ClientId == clientId && x.Id == id);
 
             if (user != null)
-                return Ok(user);
+            {
+                user.Map(out UserViewModel viewModel);
+                return Ok(viewModel);
+            }
 
             return NotFound();
         }
