@@ -2,6 +2,7 @@
 using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.Enums;
 using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -43,7 +44,7 @@ namespace Api.Controllers
             {
                 var token = GenerateJSONWebToken(user);
                 var userResponse = new UserViewModel { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), 
-                    Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, IsAdmin = user.Admin, IsArchived = user.Archived, Name = user.FirstName };
+                    Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, RoleId=user.RoleId, IsArchived = user.Archived, Name = user.FirstName };
                 return Ok(JsonSerializer.Serialize(userResponse));
             }
 
@@ -72,7 +73,7 @@ namespace Api.Controllers
                 {
                     FirstName = newRegistration.FirstName,
                     LastName = newRegistration.LastName,
-                    Admin = true,
+                    RoleId = (int)RolesEnum.Founder,
                     Archived = false,
                     EmailAddress = newRegistration.EmailAddress,
                     Password = CryptoHelper.Crypto.HashPassword(newRegistration.Password),
@@ -149,7 +150,7 @@ namespace Api.Controllers
             var signingCredentials = new SigningCredentials(secruityKey, SecurityAlgorithms.HmacSha256);
             var claims = new[]
             {
-                new Claim("Admin", user.Admin.ToString()),
+                new Claim("RoleId", user.RoleId.ToString()),
                 new Claim("Archived", user.Archived.ToString()),
                 new Claim("ClientId", user.ClientId.ToString()),
                 new Claim("UserId", user.Id.ToString()),

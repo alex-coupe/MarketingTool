@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "RootUsers")]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientsController : ControllerBase
@@ -20,7 +21,6 @@ namespace Api.Controllers
             _repository = repository;
         }
 
-        [Authorize]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Client>>> GetClients()
         {
@@ -28,7 +28,6 @@ namespace Api.Controllers
             return Ok(clients);
         }
 
-        [Authorize]
         [HttpGet("{id}")]
         public async Task<ActionResult<Client>> GetClient(int id)
         {
@@ -40,7 +39,6 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        [Authorize]
         [HttpPut]
         public async Task<ActionResult<Client>> PutClient(Client client)
         {
@@ -57,7 +55,6 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteClient(int id)
         {

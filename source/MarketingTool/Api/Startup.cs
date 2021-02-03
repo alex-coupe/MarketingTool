@@ -82,6 +82,12 @@ namespace ApplicationLayer
                 };
             });
 
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("RootUsers", policy => policy.RequireClaim("RoleId", "1").RequireClaim("Archived", "0"));
+                options.AddPolicy("AdminUsers", policy => policy.RequireClaim("RoleId", "2","3").RequireClaim("Archived", "0"));
+            });
+
             services.AddCors(options =>
             {
                 options.AddPolicy(name: MyAllowSpecificOrigins,

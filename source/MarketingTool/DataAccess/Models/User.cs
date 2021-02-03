@@ -31,7 +31,8 @@ namespace DataAccess.Models
         [Required]
         public string Password { get; set; }
 
-        public bool Admin { get; set; }
+        [Required]
+        public int RoleId { get; set; }
 
 
         public bool Archived { get; set; } = false;

@@ -17,7 +17,7 @@ namespace DataTransfer.ViewModels
 
         public string Name { get; set; }
 
-        public bool IsAdmin { get; set; }
+        public int RoleId { get; set; }
 
         public bool IsArchived { get; set; }
 

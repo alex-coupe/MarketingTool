@@ -17,9 +17,14 @@ namespace DataAccess.Models
             builder.ApplyConfiguration(new RecipientConfiguration());
 
             builder.Entity<EmailStatus>().HasData(new EmailStatus { Id = 1, Name = "Pending" }, new EmailStatus { Id = 2, Name = "Sent" }, new EmailStatus { Id = 3, Name = "Failed" });
+            builder.Entity<Role>().HasData(new Role { Id = 1, Name = "Root", Description = "Allows access to all API routes and all clients/users, for staff use only" },
+                new Role { Id = 2, Name = "Founder", Description = "Admin privileges but shows who registered the client" }, 
+                new Role { Id = 3, Name = "Admin", Description = "Admin privileges" },
+                new Role { Id = 4, Name = "User", Description = "Standard user who can have permissions edited by Admin/Founder" });
+
         }
 
-      
+        public DbSet<Role> Roles { get; set; }
         public DbSet<CampaignJobHistory> CampaignJobHistory { get; set; }
 
         public DbSet<UserInvite> UserInvites { get; set; }

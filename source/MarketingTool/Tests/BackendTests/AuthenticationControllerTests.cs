@@ -50,7 +50,7 @@ namespace MarketingToolTests.BackendTests
                 EmailAddress = "test@test.com",
                 FirstName = "Barry",
                 LastName = "Beaverton",
-                Admin = true,
+                RoleId = 2,
                 Archived = false,
                 ClientId = 1,
                 Password = CryptoHelper.Crypto.HashPassword("Password123")
@@ -61,7 +61,7 @@ namespace MarketingToolTests.BackendTests
                 EmailAddress = "garry@test.com",
                 FirstName = "Garry",
                 LastName = "Beaverton",
-                Admin = true,
+                RoleId = 4,
                 Archived = false,
                 ClientId = 1,
                 Password = CryptoHelper.Crypto.HashPassword("Testing123")

@@ -24,7 +24,7 @@ namespace Api.Controllers
             _userRepository = repository;
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminUsers")]
         [HttpGet]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
@@ -34,7 +34,7 @@ namespace Api.Controllers
             return Ok(users);
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminUsers")]
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
@@ -47,7 +47,7 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminUsers")]
         [Route("Invite")]
         [HttpPost]
         public async Task<ActionResult> PostUserInvite([FromBody] EmailAddressViewModel request, [FromServices] UserInviteService userInviteService)
@@ -98,7 +98,7 @@ namespace Api.Controllers
             return Unauthorized();
         }
 
-        [Authorize]
+        [Authorize(Policy = "AdminUsers")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteUser(int id)
         {

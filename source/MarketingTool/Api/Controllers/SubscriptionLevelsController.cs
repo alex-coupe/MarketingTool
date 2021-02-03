@@ -28,7 +28,7 @@ namespace Api.Controllers
             return Ok(subLevels);
         }
 
-        [Authorize]
+        [Authorize(Policy = "RootUsers")]
         [HttpGet("{id}")]
         public async Task<ActionResult<SubscriptionLevel>> GetSubscriptionLevel(int id)
         {
@@ -40,7 +40,7 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        [Authorize]
+        [Authorize(Policy = "RootUsers")]
         [HttpPost]
         public async Task<ActionResult<SubscriptionLevel>> PostSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
@@ -57,7 +57,7 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
+        [Authorize(Policy = "RootUsers")]
         [HttpPut]
         public async Task<ActionResult<SubscriptionLevel>> PutSubscriptionLevel(SubscriptionLevel subscriptionLevel)
         {
@@ -74,7 +74,7 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
+        [Authorize(Policy = "RootUsers")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> DeleteSubscriptionLevel(int id)
         {
