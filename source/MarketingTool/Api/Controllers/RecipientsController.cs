@@ -14,11 +14,11 @@ using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class RecipientsController : ControllerBase
     {
-        [Authorize(Policy = "NotArchived")]
         private IRepository<Recipient> _repository;
         private IRepository<RecipientSchema> _schemaRepository;
         public RecipientsController(IRepository<Recipient> repository, IRepository<RecipientSchema> schemaRepository)
