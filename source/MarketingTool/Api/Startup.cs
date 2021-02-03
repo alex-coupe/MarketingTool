@@ -86,11 +86,10 @@ namespace ApplicationLayer
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("RootUsers", policy => policy.RequireClaim("RoleId", RolesEnum.Root.ToString("d")));
-                
-                options.AddPolicy("AdminUsers", policy => policy.RequireClaim("RoleId", RolesEnum.Admin.ToString("d"), RolesEnum.Founder.ToString("d"))
-                .RequireClaim("PermissionId", PermissionsEnum.Global.ToString("d")));
 
-                options.AddPolicy("NotArchived", policy => policy.RequireClaim("Archived", "0"));
+                options.AddPolicy("AdminUsers", policy => policy.RequireClaim("RoleId", RolesEnum.Admin.ToString("d"), RolesEnum.Founder.ToString("d"), RolesEnum.Root.ToString("d")));
+
+                options.AddPolicy("NotArchived", policy => policy.RequireClaim("Archived", "False"));
 
                 options.AddPolicy("AddCampaign", policy => 
                 policy.RequireClaim("PermissionId", PermissionsEnum.AddCampaigns.ToString("d"), PermissionsEnum.Global.ToString("d")));

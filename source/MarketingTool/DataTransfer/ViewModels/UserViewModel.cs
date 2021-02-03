@@ -24,5 +24,7 @@ namespace DataTransfer.ViewModels
         public int UserId { get; set; }
 
         public int ClientId { get; set; }
+
+        public ICollection<UserPermission> Permissions {get; set;}
     }
 }

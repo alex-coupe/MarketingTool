@@ -45,7 +45,8 @@ namespace Api.Controllers
             {
                 var token = GenerateJSONWebToken(user);
                 var userResponse = new UserViewModel { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), 
-                    Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, RoleId=user.RoleId, IsArchived = user.Archived, Name = user.FirstName };
+                    Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, RoleId=user.RoleId, IsArchived = user.Archived, 
+                    Name = user.FirstName, Permissions = user.Permissions };
                 return Ok(JsonSerializer.Serialize(userResponse));
             }
 
@@ -159,7 +160,7 @@ namespace Api.Controllers
 
             foreach(var permission in user.Permissions)
             {
-                claims.Add(new Claim("Permission", permission.PermissionId.ToString()));
+                claims.Add(new Claim("PermissionId", permission.PermissionId.ToString()));
             }
            
 
