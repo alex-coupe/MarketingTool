@@ -47,19 +47,36 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
        
-        public async Task<IEnumerable<RecipientSchema>> GetAllAsync(Expression<Func<RecipientSchema, bool>> predicate)
+        public async Task<IEnumerable<RecipientSchema>> GetAllAsync(Expression<Func<RecipientSchema, bool>> predicate, string[] includes)
         {
-            return await _context.RecipientSchemas.Where(predicate)
-                .AsNoTracking()
-                .ToListAsync();
+            var models = _context.RecipientSchemas.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    models.Include(include);
+                }
+                return await models.ToListAsync();
+            }
+
+            return await models.AsNoTracking().ToListAsync();
         }
 
      
-        public async Task<RecipientSchema> GetAsync(Expression<Func<RecipientSchema, bool>> predicate)
+        public async Task<RecipientSchema> GetAsync(Expression<Func<RecipientSchema, bool>> predicate, string[] includes)
         {
-            return await _context.RecipientSchemas.Where(predicate)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            var model = _context.RecipientSchemas.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    model.Include(include);
+                }
+                return await model.FirstOrDefaultAsync();
+            }
+            return await model.AsNoTracking().FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

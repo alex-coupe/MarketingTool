@@ -47,20 +47,35 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }
 
-        public async Task<IEnumerable<Campaign>> GetAllAsync(Expression<Func<Campaign, bool>> predicate)
+        public async Task<IEnumerable<Campaign>> GetAllAsync(Expression<Func<Campaign, bool>> predicate, string[] includes)
         {
-            return await _context.Campaigns.Where(predicate)
-                .Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser)
-                .ToListAsync();
+            var models = _context.Campaigns.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    models.Include(include);
+                }
+                return await models.ToListAsync();
+            }
+
+            return await models.AsNoTracking().ToListAsync();
         }
                 
-        public async Task<Campaign> GetAsync(Expression<Func<Campaign, bool>> predicate)
+        public async Task<Campaign> GetAsync(Expression<Func<Campaign, bool>> predicate, string[] includes)
         {
-            return await _context.Campaigns.Where(predicate)
-                .Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser)
-                .FirstOrDefaultAsync();
+            var model = _context.Campaigns.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    model.Include(include);
+                }
+                return await model.FirstOrDefaultAsync();
+            }
+            return await model.AsNoTracking().FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

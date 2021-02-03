@@ -67,7 +67,7 @@ namespace MarketingToolTests.BackendTests
                 Password = CryptoHelper.Crypto.HashPassword("Testing123")
 
             }};
-            _userRepositoryMock.Setup(x => x.GetAllAsync(null)).ReturnsAsync(userList);
+            _userRepositoryMock.Setup(x => x.GetAllAsync(null, null)).ReturnsAsync(userList);
             _userRepositoryMock.Setup(x => x.SaveChangesAsync()).ReturnsAsync(1);
             _clientRepositoryMock.Setup(x => x.Add(It.IsAny<Client>()));
             

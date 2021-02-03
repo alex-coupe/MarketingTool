@@ -30,7 +30,7 @@ namespace Api.Controllers
         public async Task<ActionResult<IEnumerable<TemplateViewModel>>> GetTemplates()
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var templates = await _templateRepository.GetAllAsync(x => x.ClientId == clientId);
+            var templates = await _templateRepository.GetAllAsync(x => x.ClientId == clientId, new string[] {"CreatingUser", "ModifyingUser" });
 
             templates.Map(out List<TemplateViewModel> viewModel);
 
@@ -42,7 +42,7 @@ namespace Api.Controllers
         public async Task<ActionResult<TemplateViewModel>> GetTemplate(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var template = await _templateRepository.GetAsync(x => x.ClientId == clientId && x.Id == id);
+            var template = await _templateRepository.GetAsync(x => x.ClientId == clientId && x.Id == id, new string[] { "CreatingUser", "ModifyingUser" });
 
             if (template != null)
             {

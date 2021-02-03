@@ -57,18 +57,35 @@ namespace DataAccess.Repositories
             return _context.SaveChangesAsync();
         }
 
-        public async Task<IEnumerable<PasswordReset>> GetAllAsync(Expression<Func<PasswordReset, bool>> predicate)
+        public async Task<IEnumerable<PasswordReset>> GetAllAsync(Expression<Func<PasswordReset, bool>> predicate, string[] includes)
         {
-            return await _context.PasswordResets.Where(predicate)
-               .AsNoTracking()
-               .ToListAsync();
+            var models = _context.PasswordResets.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    models.Include(include);
+                }
+                return await models.ToListAsync();
+            }
+
+            return await models.AsNoTracking().ToListAsync();
         }
 
-        public async Task<PasswordReset> GetAsync(Expression<Func<PasswordReset, bool>> predicate)
+        public async Task<PasswordReset> GetAsync(Expression<Func<PasswordReset, bool>> predicate, string[] includes)
         {
-            return await _context.PasswordResets.Where(predicate)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            var model = _context.PasswordResets.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    model.Include(include);
+                }
+                return await model.FirstOrDefaultAsync();
+            }
+            return await model.AsNoTracking().FirstOrDefaultAsync();
         }
     }
 }

@@ -48,18 +48,35 @@ namespace DataAccess.Repositories
             _context.Entry(item).State = EntityState.Modified;
         }     
 
-        public async Task<IEnumerable<CampaignJobHistory>> GetAllAsync(Expression<Func<CampaignJobHistory, bool>> predicate)
+        public async Task<IEnumerable<CampaignJobHistory>> GetAllAsync(Expression<Func<CampaignJobHistory, bool>> predicate, string[] includes)
         {
-            return await _context.CampaignJobHistory.Where(predicate)
-                .AsNoTracking()
-                .ToListAsync();
+            var models = _context.CampaignJobHistory.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    models.Include(include);
+                }
+                return await models.ToListAsync();
+            }
+
+            return await models.AsNoTracking().ToListAsync();
         }
               
-        public async Task<CampaignJobHistory> GetAsync(Expression<Func<CampaignJobHistory, bool>> predicate)
+        public async Task<CampaignJobHistory> GetAsync(Expression<Func<CampaignJobHistory, bool>> predicate, string[] includes)
         {
-            return await _context.CampaignJobHistory.Where(predicate)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            var model = _context.CampaignJobHistory.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    model.Include(include);
+                }
+                return await model.FirstOrDefaultAsync();
+            }
+            return await model.AsNoTracking().FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

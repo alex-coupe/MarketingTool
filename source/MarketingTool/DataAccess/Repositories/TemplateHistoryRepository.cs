@@ -57,18 +57,35 @@ namespace DataAccess.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public async Task<TemplateHistory> GetAsync(Expression<Func<TemplateHistory, bool>> predicate)
+        public async Task<TemplateHistory> GetAsync(Expression<Func<TemplateHistory, bool>> predicate, string[] includes)
         {
-            return await _context.TemplateHistory.Where(predicate)
-                .Include(x => x.Template)
-                .FirstOrDefaultAsync();
+            var model = _context.TemplateHistory.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    model.Include(include);
+                }
+                return await model.FirstOrDefaultAsync();
+            }
+            return await model.AsNoTracking().FirstOrDefaultAsync();
         }
 
-        public async Task<IEnumerable<TemplateHistory>> GetAllAsync(Expression<Func<TemplateHistory, bool>> predicate)
+        public async Task<IEnumerable<TemplateHistory>> GetAllAsync(Expression<Func<TemplateHistory, bool>> predicate, string[] includes)
         {
-            return await _context.TemplateHistory.Where(predicate)
-                .Include(x => x.Template)
-                .ToListAsync();
+            var models = _context.TemplateHistory.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    models.Include(include);
+                }
+                return await models.ToListAsync();
+            }
+
+            return await models.AsNoTracking().ToListAsync();
         }
     }
 }

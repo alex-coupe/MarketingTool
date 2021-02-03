@@ -48,20 +48,35 @@ namespace DataAccess.Repositories
         }
 
     
-        public async Task<IEnumerable<List>> GetAllAsync(Expression<Func<List, bool>> predicate)
+        public async Task<IEnumerable<List>> GetAllAsync(Expression<Func<List, bool>> predicate, string[] includes)
         {
-            return await _context.Lists.Where(predicate)
-                .Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser)
-                .ToListAsync();
+            var models = _context.Lists.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    models.Include(include);
+                }
+                return await models.ToListAsync();
+            }
+
+            return await models.AsNoTracking().ToListAsync();
         }    
 
-        public async Task<List> GetAsync(Expression<Func<List, bool>> predicate)
+        public async Task<List> GetAsync(Expression<Func<List, bool>> predicate, string[] includes)
         {
-            return await _context.Lists.Where(predicate)
-                .Include(list => list.CreatingUser)
-                .Include(list => list.ModifyingUser)
-                .FirstOrDefaultAsync();
+            var model = _context.Lists.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    model.Include(include);
+                }
+                return await model.FirstOrDefaultAsync();
+            }
+            return await model.AsNoTracking().FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

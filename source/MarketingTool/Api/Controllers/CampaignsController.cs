@@ -30,7 +30,7 @@ namespace Api.Controllers
         public async Task<ActionResult<IEnumerable<CampaignViewModel>>> GetCampaigns()
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var campaigns = await _campaignRepository.GetAllAsync(x => x.ClientId == clientId);
+            var campaigns = await _campaignRepository.GetAllAsync(x => x.ClientId == clientId, new string[] {"CreatingUser", "ModifyingUser" });
             campaigns.Map(out List<CampaignViewModel> viewModel);
             return Ok(viewModel);
         }
@@ -40,7 +40,7 @@ namespace Api.Controllers
         public async Task<ActionResult<CampaignViewModel>> GetCampaign(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var campaign = await _campaignRepository.GetAsync(x => x.ClientId == clientId && x.Id == id);
+            var campaign = await _campaignRepository.GetAsync(x => x.ClientId == clientId && x.Id == id, new string[] { "CreatingUser", "ModifyingUser" });
 
             if (campaign != null)
             {

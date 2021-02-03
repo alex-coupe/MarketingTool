@@ -35,7 +35,7 @@ namespace Api.Controllers
         {
           
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var lists = await _listRepository.GetAllAsync(x => x.ClientId == clientId);
+            var lists = await _listRepository.GetAllAsync(x => x.ClientId == clientId, new string[] { "CreatingUser", "ModifyingUser" });
             
             lists.Map(out List<ListViewModel> viewModel);
 
@@ -47,7 +47,7 @@ namespace Api.Controllers
         public async Task<ActionResult<List>> GetList(int id)
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var list = await _listRepository.GetAsync(x => x.ClientId == clientId && x.Id == id);
+            var list = await _listRepository.GetAsync(x => x.ClientId == clientId && x.Id == id, new string[] { "CreatingUser", "ModifyingUser" });
 
             if (list != null)
             {

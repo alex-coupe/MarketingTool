@@ -48,19 +48,36 @@ namespace DataAccess.Repositories
         }
 
     
-        public async Task<IEnumerable<TemplateSynonym>> GetAllAsync(Expression<Func<TemplateSynonym, bool>> predicate)
+        public async Task<IEnumerable<TemplateSynonym>> GetAllAsync(Expression<Func<TemplateSynonym, bool>> predicate, string[] includes)
         {
-            return await _context.TemplateSynonyms.Where(predicate)
-                .AsNoTracking()
-                .ToListAsync();
+            var models = _context.TemplateSynonyms.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    models.Include(include);
+                }
+                return await models.ToListAsync();
+            }
+
+            return await models.AsNoTracking().ToListAsync();
         }
 
         
-        public async Task<TemplateSynonym> GetAsync(Expression<Func<TemplateSynonym, bool>> predicate)
+        public async Task<TemplateSynonym> GetAsync(Expression<Func<TemplateSynonym, bool>> predicate, string[] includes)
         {
-            return await _context.TemplateSynonyms.Where(predicate)
-                .AsNoTracking()
-                .FirstOrDefaultAsync();
+            var model = _context.TemplateSynonyms.Where(predicate);
+
+            if (includes != null)
+            {
+                foreach (var include in includes)
+                {
+                    model.Include(include);
+                }
+                return await model.FirstOrDefaultAsync();
+            }
+            return await model.AsNoTracking().FirstOrDefaultAsync();
         }
 
         public void Remove(int id)

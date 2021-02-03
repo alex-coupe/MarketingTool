@@ -46,7 +46,6 @@ namespace Api.Services
                 var _campaignJobHistoryRepository = scope.ServiceProvider.GetService<IRepository<CampaignJobHistory>>();
                 var _templateRepository = scope.ServiceProvider.GetService<IRepository<Template>>();
                 var _campaignsRepository = scope.ServiceProvider.GetService<IRepository<Campaign>>();
-                var _timestepRepository = scope.ServiceProvider.GetService<IRepository<Timestep>>();
                 var _recipientRepository = scope.ServiceProvider.GetService<IRepository<Recipient>>();
                 var _listRepository = scope.ServiceProvider.GetService<IRepository<List>>();
                 var _synonymRepository = scope.ServiceProvider.GetService<IRepository<TemplateSynonym>>();
