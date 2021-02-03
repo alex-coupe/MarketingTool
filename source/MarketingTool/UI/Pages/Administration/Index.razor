@@ -4,6 +4,8 @@
 
 @inject IAuthenticationService AuthenticationService
 @inject IDataService<UserInviteViewModel> _userInviteService
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<UserViewModel> _userService
 
 <h3>Administration</h3>
 
@@ -11,8 +13,8 @@
 {
     <h5>Invite Users</h5>
 
-    <EditForm Model="inviteRequest" OnValidSubmit="HandleInvite">
-        <label>Enter Your Email Address</label>
+    <EditForm Model="inviteRequest" OnValidSubmit="SendInvite">
+        <label>Enter Their Email Address</label>
         <InputText type="email" @bind-Value="inviteRequest.EmailAddress" />
         <button type="submit" class="btn btn-primary">Reset Password</button>
         <DataAnnotationsValidator />
@@ -25,16 +27,53 @@
     {
         <p class="text-success">Invite Sent Successfully!</p>
     }
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Last Login</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var user in Users)
+        {
+            <tr>
+                <td>@user.Name</td>
+                <td>@user.LastLogin?.ToString(new CultureInfo("en-GB"))</td>
+                <td>@ExtensionMethods.ConvertRoleIdToString(user.RoleId)</td>
+                <td><NavLink class="btn btn-primary" href="@($"/administration/edituser/{user.UserId}")">Edit Permissions</NavLink></td>
+                <td><button class="btn btn-danger">Archive User</button></td>
+            </tr>
+        }
+    </tbody>
+</table>
+
 }
+
+<h3>Edit Your Details</h3>
+
+<EditForm Model="userViewModel" OnValidSubmit="UpdateDetails">
+    <label>Enter Your Email Address</label>
+    <InputText type="email" @bind-Value="inviteRequest.EmailAddress" />
+    <button type="submit" class="btn btn-primary">Reset Password</button>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+</EditForm>
 
 @code {
     UserInviteViewModel inviteRequest = new UserInviteViewModel();
+
+    IEnumerable<UserViewModel> Users;
+
+    UserViewModel userViewModel;
 
     private bool InviteSent { get; set; } = false;
 
     private string Error { get; set; }
 
-    private async Task HandleInvite()
+    private async Task SendInvite()
     {
         try
         {
@@ -47,4 +86,39 @@
             StateHasChanged();
         }
     }
+
+    private async Task UpdateDetails()
+    {
+        try
+        {
+            await _userService.Put(userViewModel);
+            
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+            StateHasChanged();
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthenticationService.User.RoleId < (int)RolesEnum.User)
+        {
+
+            Users = new List<UserViewModel>();
+            try
+            {
+                Users = await _userService.GetAll();
+
+
+            }
+            catch (Exception ex)
+            {
+                Error = ex.Message;
+            }
+        }
+
+    }
+
 }

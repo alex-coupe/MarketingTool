@@ -43,10 +43,13 @@ namespace Api.Controllers
 
             if (user != null)
             {
+                user.LastLogin = DateTime.Now;
+               
                 var token = GenerateJSONWebToken(user);
                 var userResponse = new UserViewModel { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), 
                     Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, RoleId=user.RoleId, IsArchived = user.Archived, 
                     Name = user.FirstName, Permissions = user.Permissions };
+                await _userRepository.SaveChangesAsync();
                 return Ok(JsonSerializer.Serialize(userResponse));
             }
 

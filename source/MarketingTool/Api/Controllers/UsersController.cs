@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.DataMappers;
 
 namespace Api.Controllers
 {
@@ -28,12 +29,12 @@ namespace Api.Controllers
 
         [Authorize(Policy = "AdminUsers")]
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<User>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<UserViewModel>>> GetUsers()
         {
             var clientId = AuthHelper.GetClientId(HttpContext.User.Claims);
-            var users = await _userRepository.GetAllAsync(x => x.ClientId == clientId);
-
-            return Ok(users);
+            var users = await _userRepository.GetAllAsync(x => x.ClientId == clientId, new string[] {"Permissions" });
+            users.Map(out List<UserViewModel> usersViewModel);
+            return Ok(usersViewModel);
         }
 
         [Authorize(Policy = "AdminUsers")]

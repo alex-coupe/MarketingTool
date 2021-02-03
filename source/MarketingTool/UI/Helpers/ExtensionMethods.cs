@@ -21,6 +21,18 @@ namespace UI.Helpers
             return navigationManager.QueryString()[key];
         }
         
+        public static string ConvertRoleIdToString(int RoleId)
+        {
+            switch(RoleId)
+            {
+                case 1:return "Root User";
+                case 2:return "Founding User";
+                case 3: return "Admin User";
+                case 4: return "Standard User";
+                default: return "Unknown";
+
+            }
+        }
 
     }
 }

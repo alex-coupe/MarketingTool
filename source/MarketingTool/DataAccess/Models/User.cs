@@ -34,6 +34,7 @@ namespace DataAccess.Models
         [Required]
         public int RoleId { get; set; }
 
+        public DateTime? LastLogin { get; set; }
 
         public bool Archived { get; set; } = false;
 
