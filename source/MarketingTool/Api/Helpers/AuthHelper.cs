@@ -31,6 +31,5 @@ namespace Api.Helpers
             return bool.Parse(claims.Where(c => c.Type == "IsAdmin").FirstOrDefault().Value);
         }
 
-
     }
 }

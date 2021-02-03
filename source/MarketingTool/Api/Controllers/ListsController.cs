@@ -14,6 +14,7 @@ using Api.DataMappers;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class ListsController : ControllerBase
@@ -58,7 +59,7 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        [Authorize]
+        [Authorize(Policy = "AddList")]
         [HttpPost]
         public async Task<ActionResult<List>> PostList(ListViewModel viewModel)
         {
@@ -89,7 +90,7 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
+        [Authorize(Policy = "EditList")]
         [HttpPut]
         public async Task<ActionResult> PutList(ListViewModel viewModel)
         {
@@ -133,20 +134,6 @@ namespace Api.Controllers
 
             return BadRequest(validationResult.Errors);
         }
-
-
-
-        [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteList(int id)
-        {
-            _listRepository.Remove(id);
-
-            await _listRepository.SaveChangesAsync();
-
-            return NoContent();
-        }
-
 
     }
 }

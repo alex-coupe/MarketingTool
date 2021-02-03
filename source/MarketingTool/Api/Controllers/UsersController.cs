@@ -3,6 +3,7 @@ using Api.Services;
 using Api.Validators;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.Enums;
 using DataTransfer.ViewModels;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class UsersController : ControllerBase
@@ -62,10 +64,12 @@ namespace Api.Controllers
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
+            user.RoleId = (int)RolesEnum.User;
             UserValidator _validator = new UserValidator(_userRepository);
             var validationResult = await _validator.ValidateAsync(user);
             if (validationResult.IsValid)
             {
+               
                 _userRepository.Add(user);
 
                 await _userRepository.SaveChangesAsync();
@@ -81,6 +85,7 @@ namespace Api.Controllers
         {
             var userId = AuthHelper.GetUserId(HttpContext.User.Claims);
             var isAdmin = AuthHelper.CheckIfAdmin(HttpContext.User.Claims);
+
             if (user.Id == userId || isAdmin)
             {
                 UserValidator _validator = new UserValidator(_userRepository);
@@ -96,6 +101,31 @@ namespace Api.Controllers
             }
 
             return Unauthorized();
+        }
+
+        [Authorize(Policy = "AdminUsers")]
+        [Route("Archive")]
+        [Authorize]
+        [HttpPut]
+        public async Task<ActionResult<User>> ArchiveUser(User user)
+        {
+            var userId = AuthHelper.GetUserId(HttpContext.User.Claims);
+
+            if (user.Id != userId)
+            {
+                user.Archived = true;
+                UserValidator _validator = new UserValidator(_userRepository);
+                var validationResult = await _validator.ValidateAsync(user);
+                if (validationResult.IsValid)
+                {
+                    _userRepository.Edit(user);
+                    await _userRepository.SaveChangesAsync();
+
+                    return Ok(user);
+                }
+            }
+            return BadRequest(new ErrorMessageViewModel {ErrorMessage = "Cannot Archive Yourself" });
+ 
         }
 
         [Authorize(Policy = "AdminUsers")]

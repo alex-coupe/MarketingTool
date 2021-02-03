@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 namespace Api.Controllers
 {
     [Authorize(Policy = "RootUsers")]
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class ClientsController : ControllerBase

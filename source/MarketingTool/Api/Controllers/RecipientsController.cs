@@ -18,6 +18,7 @@ namespace Api.Controllers
     [ApiController]
     public class RecipientsController : ControllerBase
     {
+        [Authorize(Policy = "NotArchived")]
         private IRepository<Recipient> _repository;
         private IRepository<RecipientSchema> _schemaRepository;
         public RecipientsController(IRepository<Recipient> repository, IRepository<RecipientSchema> schemaRepository)
@@ -50,7 +51,7 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        [Authorize]
+        [Authorize(Policy = "AddRecipient")]
         [HttpPost]
         public async Task<ActionResult<Recipient>> PostRecipient(Recipient recipient)
         {
@@ -69,7 +70,7 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
+        [Authorize(Policy = "ImportRecipient")]
         [Route("ImportRecipients")]
         [HttpPost]
         public async Task<ActionResult> PostRecipientsAsync(IFormFile file, [FromServices]IConfiguration configuration)
@@ -105,7 +106,7 @@ namespace Api.Controllers
             return Ok(new { RejectedImports = rejectedImports, AcceptedImports = acceptedImports });
         }
 
-        [Authorize]
+        [Authorize(Policy = "EditRecipient")]
         [HttpPut]
         public async Task<ActionResult<Recipient>> PutRecipient(Recipient recipient)
         {

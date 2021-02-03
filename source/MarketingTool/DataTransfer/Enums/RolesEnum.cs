@@ -8,9 +8,9 @@ namespace DataTransfer.Enums
 {
     public enum RolesEnum
     {
-        Root,
-        Founder,
-        Admin,
-        User
+        Root = 1,
+        Founder = 2,
+        Admin = 3,
+        User = 4
     }
 }

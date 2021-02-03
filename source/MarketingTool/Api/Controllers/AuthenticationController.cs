@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -23,10 +24,10 @@ namespace Api.Controllers
     public class AuthenticationController : ControllerBase
     {
         private readonly IConfiguration _config;
-        private readonly IRepository<DataAccess.Models.User> _userRepository;
+        private readonly IRepository<User> _userRepository;
         private IRepository<PasswordReset> _passwordResetRepository;
 
-        public AuthenticationController(IConfiguration config, IRepository<DataAccess.Models.User> userRepository, IRepository<PasswordReset> passwordRepository )
+        public AuthenticationController(IConfiguration config, IRepository<User> userRepository, IRepository<PasswordReset> passwordRepository )
         {
             _config = config;
             _userRepository = userRepository;
@@ -144,18 +145,23 @@ namespace Api.Controllers
             return NoContent();
         }
 
-        private JwtSecurityToken GenerateJSONWebToken(DataAccess.Models.User user)
+        private JwtSecurityToken GenerateJSONWebToken(User user)
         {
             var secruityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]));
             var signingCredentials = new SigningCredentials(secruityKey, SecurityAlgorithms.HmacSha256);
-            var claims = new[]
+            var claims = new List<Claim>
             {
                 new Claim("RoleId", user.RoleId.ToString()),
                 new Claim("Archived", user.Archived.ToString()),
                 new Claim("ClientId", user.ClientId.ToString()),
                 new Claim("UserId", user.Id.ToString()),
-                new Claim("Email", user.EmailAddress)
             };
+
+            foreach(var permission in user.Permissions)
+            {
+                claims.Add(new Claim("Permission", permission.PermissionId.ToString()));
+            }
+           
 
             var token = new JwtSecurityToken(null,
                 null,
@@ -168,7 +174,7 @@ namespace Api.Controllers
 
         private async Task<User> AuthenticateUser(string email, string password)
         {
-            var user = await _userRepository.GetAsync(x => x.EmailAddress == email);
+            var user = await _userRepository.GetAsync(x => x.EmailAddress == email, new string[] { "Permissions" });
 
             if (user != null && CryptoHelper.Crypto.VerifyHashedPassword(user.Password, password))
             {

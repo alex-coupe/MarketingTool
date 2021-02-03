@@ -1,6 +1,7 @@
 using Api.Services;
 using DataAccess.Models;
 using DataAccess.Repositories;
+using DataTransfer.Enums;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -84,8 +85,49 @@ namespace ApplicationLayer
 
             services.AddAuthorization(options =>
             {
-                options.AddPolicy("RootUsers", policy => policy.RequireClaim("RoleId", "1").RequireClaim("Archived", "0"));
-                options.AddPolicy("AdminUsers", policy => policy.RequireClaim("RoleId", "2","3").RequireClaim("Archived", "0"));
+                options.AddPolicy("RootUsers", policy => policy.RequireClaim("RoleId", RolesEnum.Root.ToString("d"));
+                
+                options.AddPolicy("AdminUsers", policy => policy.RequireClaim("RoleId", RolesEnum.Admin.ToString("d"), RolesEnum.Founder.ToString("d"))
+                .RequireClaim("PermissionId", PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("NotArchived", policy => policy.RequireClaim("Archived", "0"));
+
+                options.AddPolicy("AddCampaign", policy => 
+                policy.RequireClaim("PermissionId", PermissionsEnum.AddCampaigns.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("EditCampaign", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.EditCampaigns.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("AddList", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.AddLists.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("EditList", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.EditLists.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("AddRecpient", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.AddRecipients.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("EditRecipient", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.EditRecipients.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("AddTemplate", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.AddTemplates.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("EditTemplate", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.EditTemplates.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("AddTemplateSynonym", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.AddTemplateSynonyms.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("EditTemplateSynonym", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.EditTemplateSynonyms.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("EditSchema", policy =>
+                policy.RequireClaim("PermissionId", PermissionsEnum.EditSchema.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
+                options.AddPolicy("ImportRecipient", policy =>
+               policy.RequireClaim("PermissionId", PermissionsEnum.ImportRecipients.ToString("d"), PermissionsEnum.Global.ToString("d")));
+
             });
 
             services.AddCors(options =>
@@ -117,6 +159,7 @@ namespace ApplicationLayer
             services.AddTransient<IRepository<User>, UserRepository>();
             services.AddTransient<IRepository<UserInvite>, UserInviteRepository>();
             services.AddTransient<IRepository<ListRecipient>, ListRecipientRepository>();
+            services.AddTransient<IRepository<UserPermission>, UserPermissionRepository>();
             services.AddSingleton<EmailService>();
             services.AddSingleton<PasswordResetService>();
             services.AddHostedService(provider => provider.GetService<PasswordResetService>());

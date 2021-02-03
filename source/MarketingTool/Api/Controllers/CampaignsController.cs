@@ -14,6 +14,7 @@ using Api.DataMappers;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class CampaignsController : ControllerBase
@@ -50,7 +51,8 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        [Authorize]
+
+        [Authorize(Policy = "AddCampaign")]
         [HttpPost]
         public async Task<ActionResult<Campaign>> PostCampaign(CampaignViewModel viewModel)
         {
@@ -70,7 +72,7 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
+        [Authorize(Policy = "EditCampaign")]
         [HttpPut]
         public async Task<ActionResult<Campaign>> PutCampaign(CampaignViewModel viewModel)
         {
@@ -91,17 +93,5 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-
-
-        [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteCampaign(int id)
-        {
-            _campaignRepository.Remove(id);
-
-            await _campaignRepository.SaveChangesAsync();
-
-            return NoContent();
-        }
     }
 }

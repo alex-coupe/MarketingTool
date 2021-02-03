@@ -39,6 +39,8 @@ namespace DataAccess.Models
         public virtual User CreatingUser { get; set; }
         public virtual User ModifyingUser { get; set; }
 
+        public bool Archived { get; set; } = false;
+
         public virtual ICollection<ListRecipient> ListRecipients { get; set; }
 
     }

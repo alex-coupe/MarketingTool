@@ -14,6 +14,7 @@ using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class RecipientSchemasController : ControllerBase
@@ -58,7 +59,7 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
+        [Authorize(Policy = "EditSchema")]
         [HttpPut]
         public async Task<ActionResult<RecipientSchema>> PutRecipientSchema(RecipientSchemaViewModel model)
         {
@@ -82,15 +83,6 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteSchema(int id)
-        {
-            _repository.Remove(id);
 
-            await _repository.SaveChangesAsync();
-
-            return NoContent();
-        }
     }
 }

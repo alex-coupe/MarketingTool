@@ -36,5 +36,7 @@ namespace DataAccess.Models
 
 
         public bool Archived { get; set; } = false;
+
+        public virtual ICollection<UserPermission> Permissions { get; set; }
     }
 }

@@ -13,6 +13,7 @@ using Api.DataMappers;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class TemplateHistoryController : ControllerBase

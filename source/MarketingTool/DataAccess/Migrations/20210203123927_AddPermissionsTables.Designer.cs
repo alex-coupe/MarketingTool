@@ -4,14 +4,16 @@ using DataAccess.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace DataAccess.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20210203123927_AddPermissionsTables")]
+    partial class AddPermissionsTables
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -643,28 +645,6 @@ namespace DataAccess.Migrations
                     b.ToTable("UserInvites");
                 });
 
-            modelBuilder.Entity("DataAccess.Models.UserPermission", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
-
-                    b.Property<int>("PermissionId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("PermissionId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserPermissions");
-                });
-
             modelBuilder.Entity("DataAccess.Models.Campaign", b =>
                 {
                     b.HasOne("DataAccess.Models.User", "CreatingUser")
@@ -759,25 +739,6 @@ namespace DataAccess.Migrations
                     b.Navigation("ModifyingUser");
 
                     b.Navigation("Template");
-                });
-
-            modelBuilder.Entity("DataAccess.Models.UserPermission", b =>
-                {
-                    b.HasOne("DataAccess.Models.Permission", "Permission")
-                        .WithMany()
-                        .HasForeignKey("PermissionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("DataAccess.Models.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Permission");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("DataAccess.Models.List", b =>

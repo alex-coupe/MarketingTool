@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class TemplateSynonymsController : ControllerBase
@@ -48,7 +49,7 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        [Authorize]
+        [Authorize(Policy = "AddTemplateSynonym")]
         [HttpPost]
         public async Task<ActionResult<TemplateSynonym>> PostTemplateSynonym(TemplateSynonym synonym)
         {
@@ -67,7 +68,7 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
+        [Authorize(Policy = "EditTemplateSynonym")]
         [HttpPut]
         public async Task<ActionResult<TemplateSynonym>> PutTemplateSynonym(TemplateSynonym synonym)
         {

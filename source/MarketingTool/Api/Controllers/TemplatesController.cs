@@ -15,6 +15,7 @@ using Api.DataMappers;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class TemplatesController : ControllerBase
@@ -53,7 +54,7 @@ namespace Api.Controllers
             return NotFound();
         }
 
-        [Authorize]
+        [Authorize(Policy = "AddTemplate")]
         [HttpPost]
         public async Task<ActionResult<Template>> PostTemplate(TemplateViewModel viewModel)
         {
@@ -73,7 +74,7 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
+        [Authorize(Policy = "EditTemplate")]
         [HttpPut]
         public async Task<ActionResult<TemplateViewModel>> PutTemplate(TemplateViewModel viewModel,[FromServices]IRepository<TemplateHistory> _historyRepository)
         {
@@ -96,15 +97,5 @@ namespace Api.Controllers
             return BadRequest(validationResult.Errors);
         }
 
-        [Authorize]
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> DeleteTemplate(int id)
-        {
-            _templateRepository.Remove(id);
-
-            await _templateRepository.SaveChangesAsync();
-
-            return NoContent();
-        }
     }
 }

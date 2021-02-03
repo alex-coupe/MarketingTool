@@ -12,6 +12,7 @@ using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
+    [Authorize(Policy = "NotArchived")]
     [Route("api/[controller]")]
     [ApiController]
     public class DashboardController : ControllerBase
