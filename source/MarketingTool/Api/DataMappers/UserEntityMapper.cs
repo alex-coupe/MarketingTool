@@ -19,9 +19,13 @@ namespace Api.DataMappers
                 ClientId = x.ClientId,
                 IsArchived = x.Archived,
                 RoleId = x.RoleId,
-                Permissions = x.Permissions,
+                Permissions = x.Permissions.Select(pm => new PermissionViewModel
+                {
+                    Id = pm.Permission.Id,
+                    Name = pm.Permission.Name,
+                    Description = pm.Permission.Description
+                }).ToList(),
                 LastLogin = x.LastLogin
-               
             }).ToList();
         }
 
@@ -35,8 +39,13 @@ namespace Api.DataMappers
                 ClientId = inVal.ClientId,
                 IsArchived = inVal.Archived,
                 RoleId = inVal.RoleId,
-                LastLogin = inVal.LastLogin
-
+                LastLogin = inVal.LastLogin,
+                Permissions = inVal.Permissions.Select(pm => new PermissionViewModel
+                {
+                     Id = pm.Permission.Id,
+                     Name = pm.Permission.Name,
+                     Description = pm.Permission.Description
+                 }).ToList()
             };
         }
     }

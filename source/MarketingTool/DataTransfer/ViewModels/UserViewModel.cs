@@ -27,6 +27,6 @@ namespace DataTransfer.ViewModels
 
         public DateTime? LastLogin { get; set; }
 
-        public ICollection<UserPermission> Permissions {get; set;}
+        public ICollection<PermissionViewModel> Permissions {get; set;}
     }
 }

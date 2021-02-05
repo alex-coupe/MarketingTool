@@ -1,8 +1,97 @@
 ﻿@page "/administration/edituser/{Id:int}"
 
-<h3>EditUser</h3>
+@attribute [Authorize]
+
+@inject IAuthenticationService AuthenticationService
+@inject IDataService<UserViewModel> _userService
+@inject NavigationManager _navigationManager
+
+<h3>Edit User</h3>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Role</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        <tr>
+            <td>@userViewModel.Name</td>
+            <td>@ExtensionMethods.ConvertRoleIdToString(userViewModel.RoleId)</td>
+            @if (AuthenticationService.User.UserId != Id)
+            {
+                <td><button class="btn btn-danger">Archive User</button></td>
+            }
+        </tr>
+
+    </tbody>
+</table>
+@if (AuthenticationService.User.UserId != Id || userViewModel.RoleId >= (int)RolesEnum.Admin)
+{
+    <label>Change Role</label>
+    <select>
+        <option>@ExtensionMethods.ConvertRoleIdToString(3)</option>
+        <option>@ExtensionMethods.ConvertRoleIdToString(4)</option>
+    </select>
+    <ul>
+        @foreach (var permission in userViewModel.Permissions)
+        {
+            <li>@permission.Name - @permission.Description</li>
+        }
+
+        @if (!userViewModel.Permissions.Any(x => x.Id == 1))
+        {
+            foreach (var permission in permissions)
+            {
+                if (!userViewModel.Permissions.Any(x => x.Id == permission.Id))
+                {
+                    <li>@permission.Name - @permission.Description - <button class="btn btn-success">Enable Permission</button></li>
+                }
+                else
+                {
+                    <li>@permission.Name - @permission.Description - <button class="btn btn-success">Disable Permission</button></li>
+                }
+            }
+        }
+
+    </ul>
+    <button class="btn btn-primary">Save</button>
+}
 
 @code {
     [Parameter]
     public int Id { get; set; }
+
+    List<PermissionViewModel> permissions = new List<PermissionViewModel>();
+
+
+    private string Error { get; set; }
+
+    UserViewModel userViewModel;
+    protected override async Task OnInitializedAsync()
+    {
+        if (AuthenticationService.User.RoleId == (int)RolesEnum.User)
+        {
+            _navigationManager.NavigateTo("/dashboard");
+        }
+        userViewModel = new UserViewModel();
+
+        try
+        {
+            userViewModel = await _userService.Get(Id);
+        }
+        catch (Exception ex)
+        {
+            Error = ex.Message;
+        }
+
+        permissions.Add(new PermissionViewModel
+        {
+            Id = 1,
+            Name = "Test",
+            Description = "Test"
+        });
+    }
 }

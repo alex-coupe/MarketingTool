@@ -16,6 +16,7 @@ using System.Security.Claims;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using Api.DataMappers;
 
 namespace Api.Controllers
 {
@@ -48,7 +49,7 @@ namespace Api.Controllers
                 var token = GenerateJSONWebToken(user);
                 var userResponse = new UserViewModel { TokenType = "Bearer", Token = new JwtSecurityTokenHandler().WriteToken(token), 
                     Expires = token.ValidTo, UserId = user.Id, ClientId = user.ClientId, RoleId=user.RoleId, IsArchived = user.Archived, 
-                    Name = user.FirstName, Permissions = user.Permissions };
+                    Name = user.FirstName, Permissions = user.Permissions.Map().ToList() };
                 await _userRepository.SaveChangesAsync();
                 return Ok(JsonSerializer.Serialize(userResponse));
             }
@@ -163,7 +164,7 @@ namespace Api.Controllers
 
             foreach(var permission in user.Permissions)
             {
-                claims.Add(new Claim("PermissionId", permission.PermissionId.ToString()));
+                claims.Add(new Claim("PermissionId", permission.Id.ToString()));
             }
            
 

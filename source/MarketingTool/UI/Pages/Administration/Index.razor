@@ -4,7 +4,6 @@
 
 @inject IAuthenticationService AuthenticationService
 @inject IDataService<UserInviteViewModel> _userInviteService
-@inject IAuthenticationService AuthenticationService
 @inject IDataService<UserViewModel> _userService
 
 <h3>Administration</h3>
@@ -28,27 +27,31 @@
         <p class="text-success">Invite Sent Successfully!</p>
     }
 
-<table class="table">
-    <thead>
-        <tr>
-            <th>Name</th>
-            <th>Last Login</th>
-            <th>Role</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach (var user in Users)
-        {
+    <table class="table">
+        <thead>
             <tr>
-                <td>@user.Name</td>
-                <td>@user.LastLogin?.ToString(new CultureInfo("en-GB"))</td>
-                <td>@ExtensionMethods.ConvertRoleIdToString(user.RoleId)</td>
-                <td><NavLink class="btn btn-primary" href="@($"/administration/edituser/{user.UserId}")">Edit Permissions</NavLink></td>
-                <td><button class="btn btn-danger">Archive User</button></td>
+                <th>Name</th>
+                <th>Last Login</th>
+                <th>Role</th>
             </tr>
-        }
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            @foreach (var user in Users)
+            {
+                <tr>
+                    <td>@user.Name</td>
+                    <td>@user.LastLogin?.ToString(new CultureInfo("en-GB"))</td>
+                    <td>@ExtensionMethods.ConvertRoleIdToString(user.RoleId)</td>
+
+                    @if (user.UserId != AuthenticationService.User.UserId)
+                    {
+                        <td><NavLink class="btn btn-primary" href="@($"/administration/edituser/{user.UserId}")">Edit Permissions</NavLink></td>
+                        <td><button class="btn btn-danger">Archive User</button></td>
+                    }
+                </tr>
+            }
+        </tbody>
+    </table>
 
 }
 
@@ -92,7 +95,7 @@
         try
         {
             await _userService.Put(userViewModel);
-            
+
         }
         catch (Exception ex)
         {
