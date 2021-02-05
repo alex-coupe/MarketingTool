@@ -1,9 +1,45 @@
 ﻿@page "/invite/{Token}"
 
+@inject IDataService<NewUserViewModel> _newUserService
+
 <h3>Signup</h3>
+
+<EditForm Model="viewModel" OnValidSubmit="HandleSubmit">
+    <label>Your First Name</label>
+    <InputText type="text" @bind-Value="viewModel.FirstName" />
+    <label>Your Last Name</label>
+    <InputText type="text" @bind-Value="viewModel.LastName" />
+    <label For="EmailField">Email Address</label>
+    <InputText type="email" @bind-Value="viewModel.EmailAddress" />
+    <label For="PasswordField">Password</label>
+    <InputText type="password" @bind-Value="viewModel.Password" />
+    <label For="PasswordField">Confirm Password</label>
+    <InputText type="password" @bind-Value="viewModel.ConfirmPassword" />
+    <button type="submit" class="btn btn-primary">Register</button>
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+</EditForm>
 
 @code {
     [Parameter]
     public string Token { get; set; }
+
+    NewUserViewModel viewModel = new NewUserViewModel();
+
+    public string Error { get; set; }
+
+    public async Task HandleSubmit()
+    {
+        try
+        {
+            viewModel.InviteToken = Token;
+            await _newUserService.PostNoReturnContent(viewModel);
+        }
+        catch(Exception ex)
+        {
+            Error = ex.Message;
+        }
+    }
+
 
 }

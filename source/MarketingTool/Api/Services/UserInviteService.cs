@@ -69,6 +69,7 @@ namespace Api.Services
                 {
                     var invitingUser = await _userRepository.GetAsync(x => x.Id == invite.InvitingUserId);
                     var invitingClient = await _clientRepository.GetAsync(x => x.Id == invitingUser.ClientId);
+                    invite.InviteSent = true;
                     _emailService.Send(new System.Net.Mail.MailAddress(invite.EmailAddress), new System.Net.Mail.MailMessage
                     {
                         Subject = "You've been invited",
@@ -76,9 +77,9 @@ namespace Api.Services
                         $"Click here to join {invite.Token} "
                     });
 
-                    invite.InviteSent = true;
-                    await _userInviteRepository.SaveChangesAsync();
+                    
                 }
+                await _userInviteRepository.SaveChangesAsync();
             }
             mutex = false;
         }

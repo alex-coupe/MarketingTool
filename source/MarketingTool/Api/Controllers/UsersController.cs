@@ -66,9 +66,31 @@ namespace Api.Controllers
 
         [Authorize]
         [HttpPost]
-        public async Task<ActionResult<User>> PostUser(User user)
+        public async Task<ActionResult<NewUserViewModel>> PostUser(NewUserViewModel newUser, [FromServices] IRepository<UserInvite> _userInviteRepository)
         {
-            user.RoleId = (int)RolesEnum.User;
+            if (newUser.Password != newUser.ConfirmPassword)
+                return BadRequest();
+
+            var invite = await _userInviteRepository.GetAsync(x => x.Token == newUser.InviteToken);
+
+            if (invite == null)
+                return BadRequest();
+
+            var invitingUser = await _userRepository.GetAsync(x => x.Id == invite.InvitingUserId);
+            if (invitingUser == null)
+                return BadRequest();
+
+            var user = new User
+            {
+                EmailAddress = newUser.EmailAddress,
+                FirstName = newUser.FirstName,
+                LastName = newUser.LastName,
+                Password = CryptoHelper.Crypto.HashPassword(newUser.Password),
+                RoleId = (int)RolesEnum.User,
+                Archived = false,
+                ClientId = invitingUser.ClientId
+            };
+                       
             UserValidator _validator = new UserValidator(_userRepository);
             var validationResult = await _validator.ValidateAsync(user);
             if (validationResult.IsValid)

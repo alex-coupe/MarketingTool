@@ -37,6 +37,7 @@ namespace UI
                 .AddScoped<IDataService<TemplateSynonymViewModel>, TemplateSynonymService>()
                 .AddScoped<IDataService<UserInviteViewModel>, UserInviteService>()
                 .AddScoped<IDataService<UserViewModel>, UserService>()
+                .AddScoped<IDataService<NewUserViewModel>, NewUserService>()
                 .AddScoped<ILocalStorageService, LocalStorageService>();
 
             builder.Services.AddScoped(x => {
